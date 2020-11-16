@@ -24,7 +24,7 @@ class Base:
 
     s = requests.session()
 
-    def __init__(self, env='ee'):
+    def __init__(self, env='stg'):
         self.env = env
 
     def cms_login(self, username='imwelly', vndorid='MX2'):

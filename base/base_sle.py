@@ -41,7 +41,7 @@ class Sle(Base):
         return r.status_code, r.json()
 
     #  NYSSC15F = 上海1.5分3
-    def bet(self, username='welly1',
+    def bet(self,
             drawId='2020111200738',
             gameId='NYSSC15F',
             platform='Desktop',
@@ -53,16 +53,15 @@ class Sle(Base):
             rebatePackage=None,
             stake=10,
             times=1,
-            unit='DOLLAR'):
+            unit='DOLLAR',
+            token=None):
 
         url = self.sle.url_bet()
-
-        _, get_token = self.get_token(username)
 
         headers = {
             'accept': 'application/json, text/plain, */*',
             'accept-language': 'zh-TW,zh;q=0.9,en-US;q=0.8,en;q=0.7',
-            'authorization': f"{get_token['token']}",
+            'authorization': f"{token}",
             'content-length': '222',
             'content-type': 'application/json',
             'origin': 'https://mx2.stgdevops.site',

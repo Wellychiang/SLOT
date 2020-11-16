@@ -20,16 +20,16 @@ class UrlCms:
 
 class UrlSle:
 
-    sle = 'https://mx2-api.stgdevops.site/mx2-ecp/api/v1/'
+    def __init__(self, env='stg'):
+        self.env = env
 
-    _sle_login = 'login'
-    _get_bet_token = 'games/NY/NY/NYSSC1F/launch'
+        sle = f'https://mx2-api.{env}devops.site/mx2-ecp/api/v1/'
 
-    sle_login = sle + _sle_login
-    sle_get_bet_token = sle + _get_bet_token
+        sle_login = 'login'
+        get_bet_token = 'games/NY/NY/NYSSC1F/launch'
 
-    def __init__(self):
-        pass
+        self.sle_login = sle + sle_login
+        self.sle_get_bet_token = sle + get_bet_token
 
     def url_login(self):
         return self.sle_login
