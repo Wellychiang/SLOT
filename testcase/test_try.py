@@ -199,6 +199,7 @@ def test_bet_for_game_platType(playTypes=('SIMPLE', '1'*20, '####', '我是中�
 @allure.feature(bet_feature)
 @allure.step('')
 @pytest.mark.Bet
+# sum|small = 16080, sum|big = 16790, sum|odd = 16792, sum|even = 16793
 def test_bet_for_game_betString(betStrings=('sum|small', '', '1'*20, '####', '我是中文', ' ', 'english')):
 
     for betString in betStrings:
@@ -235,7 +236,7 @@ def test_bet_for_game_betString(betStrings=('sum|small', '', '1'*20, '####', '�
 
 @allure.feature(bet_feature)
 @allure.step('')
-@pytest.mark.skip('Lower priority, comments can not see the different and invalid input can input')
+@pytest.mark.skip('Lower priority, comments can not see the different and even invalid input can input')
 def test_bet_for_game_comment(comments=('1'*99, '123', '#@$$%')):
 
     for comment in comments:
@@ -244,7 +245,7 @@ def test_bet_for_game_comment(comments=('1'*99, '123', '#@$$%')):
 
 @allure.feature(bet_feature)
 @allure.step('')
-@pytest.mark.d
+@pytest.mark.Bet
 def test_bet_for_game_playId(playIdd=range(1, 50),
                              playIds=(17, '', '1'*20, '####', '我是中文', ' ', 'english')):
 
@@ -382,10 +383,9 @@ def test_bet_for_game_stake(stakes=('10', '1'*20,  '', '####', '我是中文', '
 @allure.feature(bet_feature)
 @allure.step('')
 @pytest.mark.Bet
-def test_bet_for_game_times(timeses=(1, '', ' ', '1'*20, '####', '我是中文', 'english')):
+def test_bet_for_game_times(timeses=(3, '', ' ', '1'*20, '####', '我是中文', 'english')):
 
     for times in timeses:
-        print(times)
         if times in timeses[3:]:
             try:
                 bet(times=times, token=get_token['token'])
@@ -433,6 +433,35 @@ def test_bet_for_game_unit(units=('DOLLAR', '', ' ', '1'*20, '####', '刀惹', '
             pytest.assume(status_code == 200)
             pytest.assume(len(response) == 1)
             pytest.assume([len(str(i)) for i in response] == [16])
+
+
+@allure.feature(bet_feature)
+@allure.step('')
+@pytest.mark.dd
+def test_bet_for_thai(gameId='NYTHAIFFC',
+                      playType='STANDALONE',
+                      betStrings=('3dtop|000', '3droll|000'),
+                      playId=90001,
+                      playRateId=102328,   # 28 = top, 29 = roll
+                      rebatePackage=1900,
+                      stake=10,
+                      times=1):
+    """
+    betString:
+    3dtop|000 = 102328, 3d|small = 102329,  playId = 90001
+    2dtop|01 = 102330, 2d|bottom = 102331, playId = 90002
+    1dtop|1 = 102332, 1d|bottom = 102333 playId = 90003
+    """
+    for betString in betStrings:
+        bet(betString=betString,
+            gameId=gameId,
+            playType=playType,
+            playId=playId,
+            playRateId=playRateId,
+            rebatePackage=rebatePackage,
+            stake=stake,
+            times=times,
+            token=get_token['token'])
 
 
 

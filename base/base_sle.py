@@ -40,21 +40,22 @@ class Sle(Base):
 
         return r.status_code, r.json()
 
-    #  NYSSC15F = 上海1.5分3
+    #  NYSSC15F = 上海1.5分3, betString map playRateId
     def bet(self,
             drawId='2020111200738',
-            gameId='NYSSC15F',
+            gameId='NYSSC15F',          # Lottery species
             platform='Desktop',
             playType='SIMPLE',
-            betString='sum|small',
+            betString='sum|small',      # Bet option, changed this will effect playRateId
             comment='',
-            playId=17,
+            playId=17,                  # Lottery species's play option,
             playRateId=16080,
             rebatePackage=None,
-            stake=10,
-            times=1,
+            stake=10,                   # Bet moeny
+            times=1,                    # Bet how many times, like stake*1, this bet money is 10
             unit='DOLLAR',
-            token=None):
+            token=None,
+            more_data=None):
 
         url = self.sle.url_bet()
 
@@ -89,6 +90,9 @@ class Sle(Base):
                 'unit': unit,
             }]
         }
+
+        if more_data is not None:
+            data['txns'].append(more_data)
 
         r = requests.post(url, headers=headers, json=data, verify=False)
         log(f'\nResponse: {r.json()}')
