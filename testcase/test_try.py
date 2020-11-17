@@ -10,6 +10,8 @@ cms = Cms()
 sle = Sle()
 _, get_token = sle.get_token()
 
+bet_feature = 'Bet'
+
 
 @allure.feature('Cms')
 @pytest.mark.skip
@@ -80,7 +82,7 @@ def bet(drawId=int(time.strftime('%Y%m%d')+'00429'),
     return status_code, response
 
 
-@allure.feature('Bet')
+@allure.feature(bet_feature)
 @allure.step('')
 @pytest.mark.Bet
 def test_bet_for_rebate_packages(rebatePackages=(1980,
@@ -96,62 +98,62 @@ def test_bet_for_rebate_packages(rebatePackages=(1980,
 
     for rebatePackage in rebatePackages:
 
-        if rebatePackage == rebatePackages[2] or rebatePackage == rebatePackages[3]:
+        if rebatePackage in rebatePackages[2:4]:
             status_code, response = bet(rebatePackage=rebatePackage, token=get_token['token'])
 
-            assert response['status'] == 400
-            assert response['error'] == 'Bad Request'
-            assert response['message'] == 'Argument error-> argument name: rebate, message: invalid rebate'
-            assert response['errCode'] == 400
-            assert response['code'] == 'param.txns[].rebate.invalid'
-            assert response['values'] == []
+            pytest.assume(response['status'] == 400)
+            pytest.assume(response['error'] == 'Bad Request')
+            pytest.assume(response['message'] == 'Argument error-> argument name: rebate, message: invalid rebate')
+            pytest.assume(response['errCode'] == 400)
+            pytest.assume(response['code'] == 'param.txns[].rebate.invalid')
+            pytest.assume(response['values'] == [])
 
         elif rebatePackage in rebatePackages[4:]:
             try:
                 bet(rebatePackage=rebatePackage, token=get_token['token'])
             except ValueError as e:
                 log(f'I need three errors: {e}')
-                assert str(e) == 'Expecting value: line 1 column 1 (char 0)'
+                pytest.assume(str(e) == 'Expecting value: line 1 column 1 (char 0)')
         else:
             status_code, response = bet(rebatePackage=rebatePackage, token=get_token['token'])
 
-            assert status_code == 200
-            assert len(response) == 1
-            assert [len(str(i)) for i in response] == [16]
+            pytest.assume(status_code == 200)
+            pytest.assume(len(response) == 1)
+            pytest.assume([len(str(i)) for i in response] == [16])
 
 
-@allure.feature('Bet')
+@allure.feature(bet_feature)
 @allure.step('')
 @pytest.mark.Bet
 def test_bet_for_game_id(gameIds=('NYSSC3F', 'nyssc3f', '1'*20, '####', '我是中文', '', ' ', 'english')):
 
     for gameId in gameIds:
-        if gameId != gameIds[0] and gameId != gameIds[1]:
+        if gameId not in  gameIds[:2]:
             status_code, response = bet(gameId=gameId, token=get_token['token'])
 
-            assert response['status'] == 400
-            assert response['error'] == 'Bad Request'
-            assert response['message'] == 'Argument error-> argument name: gameid, message: invalid gameid'
-            assert response['errCode'] == 400
-            assert response['code'] == 'param.gameid.invalid'
-            assert response['values'] == []
+            pytest.assume(response['status'] == 400)
+            pytest.assume(response['error'] == 'Bad Request')
+            pytest.assume(response['message'] == 'Argument error-> argument name: gameid, message: invalid gameid')
+            pytest.assume(response['errCode'] == 400)
+            pytest.assume(response['code'] == 'param.gameid.invalid')
+            pytest.assume(response['values'] == [])
 
         elif gameId == gameIds[1]:
             try:
                 bet(gameId=gameId, token=get_token['token'])
             except Exception as e:
 
-                assert str(e) == 'Expecting value: line 1 column 1 (char 0)'
+                pytest.assume(str(e) == 'Expecting value: line 1 column 1 (char 0)')
 
         else:
             status_code, response = bet(gameId=gameId, token=get_token['token'])
 
-            assert status_code == 200
-            assert len(response) == 1
-            assert [len(str(i)) for i in response] == [16]
+            pytest.assume(status_code == 200)
+            pytest.assume(len(response) == 1)
+            pytest.assume([len(str(i)) for i in response] == [16])
 
 
-@allure.feature('Bet')
+@allure.feature(bet_feature)
 @allure.step('')
 @pytest.mark.skip('Lower priority')
 # Not done yet
@@ -161,19 +163,19 @@ def test_bet_for_game_platform(platforms=('1'*20, 'Hi,im welly', '我是', '', '
         if platform != platforms[5]:
             status_code, response = bet(platform=platform, token=get_token['token'])
 
-            assert status_code == 200
-            assert len(response) == 1
-            assert [len(str(i)) for i in response] == [16]
+            pytest.assume(status_code == 200)
+            pytest.assume(len(response) == 1)
+            pytest.assume([len(str(i)) for i in response] == [16])
 
         else:
             try:
                 bet(platform=platform, token=get_token['token'])
             except Exception as e:
 
-                assert str(e) == 'Expecting value: line 1 column 1 (char 0)'
+                pytest.assume(str(e) == 'Expecting value: line 1 column 1 (char 0)')
 
 
-@allure.feature('Bet')
+@allure.feature(bet_feature)
 @allure.step('')
 @pytest.mark.Bet
 def test_bet_for_game_platType(playTypes=('SIMPLE', '1'*20, '####', '我是中文', '', ' ', 'english'),):
@@ -184,63 +186,63 @@ def test_bet_for_game_platType(playTypes=('SIMPLE', '1'*20, '####', '我是中�
                 bet(playType=playType, token=get_token['token'])
             except Exception as e:
 
-                assert str(e) == 'Expecting value: line 1 column 1 (char 0)'
+                pytest.assume(str(e) == 'Expecting value: line 1 column 1 (char 0)')
 
         else:
             status_code, response = bet(playType=playType, token=get_token['token'])
 
-            assert status_code == 200
-            assert len(response) == 1
-            assert [len(str(i)) for i in response] == [16]
+            pytest.assume(status_code == 200)
+            pytest.assume(len(response) == 1)
+            pytest.assume([len(str(i)) for i in response] == [16])
 
 
-@allure.feature('Bet')
+@allure.feature(bet_feature)
 @allure.step('')
 @pytest.mark.Bet
 def test_bet_for_game_betString(betStrings=('sum|small', '', '1'*20, '####', '我是中文', ' ', 'english')):
 
     for betString in betStrings:
-        if betString != betStrings[0] and betString != betStrings[1]:
+        if betString not in betStrings[:2]:
             status_code, response = bet(betString=betString, token=get_token['token'])
 
-            assert status_code == 400
-            assert response['status'] == 400
-            assert response['error'] == 'Bad Request'
-            assert response['message'] == 'Argument error-> argument name: txn, message: invalid'
-            assert response['errCode'] == 400
-            assert response['code'] == 'param.txn.invalid'
-            assert response['values'] == []
+            pytest.assume(status_code == 400)
+            pytest.assume(response['status'] == 400)
+            pytest.assume(response['error'] == 'Bad Request')
+            pytest.assume(response['message'] == 'Argument error-> argument name: txn, message: invalid')
+            pytest.assume(response['errCode'] == 400)
+            pytest.assume(response['code'] == 'param.txn.invalid')
+            pytest.assume(response['values'] == [])
 
         elif betString == betStrings[1]:
             status_code, response = bet(betString=betString, token=get_token['token'])
 
-            assert status_code == 400
-            assert response['status'] == 400
-            assert response['error'] == 'Bad Request'
-            assert response['message'] == 'Argument error-> argument name: betstring, message: invalid betstring' \
-                                          f':  for game:NYSSC3F'
-            assert response['errCode'] == 400
-            assert response['code'] == 'param.txns[].betstring.invalid'
-            assert response['values'] == []
+            pytest.assume(status_code == 400)
+            pytest.assume(response['status'] == 400)
+            pytest.assume(response['error'] == 'Bad Request')
+            pytest.assume(response['message'] == 'Argument error-> argument name: betstring, message: invalid betstring' \
+                                                 ':  for game:NYSSC3F')
+            pytest.assume(response['errCode'] == 400)
+            pytest.assume(response['code'] == 'param.txns[].betstring.invalid')
+            pytest.assume(response['values'] == [])
 
         else:
             status_code, response = bet(betString=betString, token=get_token['token'])
 
-            assert status_code == 200
-            assert len(response) == 1
-            assert [len(str(i)) for i in response] == [16]
+            pytest.assume(status_code == 200)
+            pytest.assume(len(response) == 1)
+            pytest.assume([len(str(i)) for i in response] == [16])
 
 
-@allure.feature('Bet')
+@allure.feature(bet_feature)
 @allure.step('')
-@pytest.mark.skip('Lower priority')
-def test_bet_for_game_comment(comments=('', '123', 'gnetl')):
+@pytest.mark.skip('Lower priority, comments can not see the different and invalid input can input')
+def test_bet_for_game_comment(comments=('1'*99, '123', '#@$$%')):
 
     for comment in comments:
         bet(comment=comment, token=get_token['token'])
 
 
-@allure.feature('Bet')
+@allure.feature(bet_feature)
 @allure.step('')
 @pytest.mark.Bet
 def test_bet_for_game_playId(playIdd=range(1, 50),
@@ -248,140 +250,190 @@ def test_bet_for_game_playId(playIdd=range(1, 50),
 
     for playId in playIds:
 
-        if playId != playIds[0] and playId != playIds[1]:
+        if playId not in playIds[:2]:
             try:
                 bet(playId=playId, token=get_token['token'])
             except ValueError as e:
 
-                assert str(e) == 'Expecting value: line 1 column 1 (char 0)'
+                pytest.assume(str(e) == 'Expecting value: line 1 column 1 (char 0)')
 
         elif playId == playIds[1]:
 
             status_code, response = bet(playId=playId, token=get_token['token'])
 
-            assert status_code == 400
-            assert response['status'] == 400
-            assert response['error'] == 'Bad Request'
-            assert response['message'] == 'Argument error-> argument name: playid,' \
-                                          ' message: invalid playid: 0 for game:NYSSC3F'
-            assert response['errCode'] == 400
-            assert response['code'] == 'param.txns[].playid.invalid'
-            assert response['values'] == []
+            pytest.assume(status_code == 400)
+            pytest.assume(response['status'] == 400)
+            pytest.assume(response['error'] == 'Bad Request')
+            pytest.assume(response['message'] == 'Argument error-> argument name: playid,' \
+                                          ' message: invalid playid: 0 for game:NYSSC3F')
+            pytest.assume(response['errCode'] == 400)
+            pytest.assume(response['code'] == 'param.txns[].playid.invalid')
+            pytest.assume(response['values'] == [])
 
         else:
             status_code, response = bet(playId=playId, token=get_token['token'])
 
-            assert status_code == 200
-            assert len(response) == 1
-            assert [len(str(i)) for i in response] == [16]
+            pytest.assume(status_code == 200)
+            pytest.assume(len(response) == 1)
+            pytest.assume([len(str(i)) for i in response] == [16])
 
     for playid in playIdd:
 
         if playid in range(18, 23):
             status_code, response = bet(playId=playid, token=get_token['token'])
 
-            assert status_code == 400
-            assert response['status'] == 400
-            assert response['error'] == 'Bad Request'
-            assert response['message'] == 'Argument error-> argument name: playid, ' \
-                                          'message: playid not in playrate'
-            assert response['errCode'] == 400
-            assert response['code'] == 'param.txns[].playid.invalid'
-            assert response['values'] == []
+            pytest.assume(status_code == 400)
+            pytest.assume(response['status'] == 400)
+            pytest.assume(response['error'] == 'Bad Request')
+            pytest.assume(response['message'] == 'Argument error-> argument name: playid, '
+                                                 'message: playid not in playrate')
+            pytest.assume(response['errCode'] == 400)
+            pytest.assume(response['code'] == 'param.txns[].playid.invalid')
+            pytest.assume(response['values'] == [])
 
         elif playid != 17:
             status_code, response = bet(playId=playid, token=get_token['token'])
 
-            assert status_code == 400
-            assert response['status'] == 400
-            assert response['error'] == 'Bad Request'
-            assert response['message'] == 'Argument error-> argument name: playid,' \
-                                          f' message: invalid playid: {playid} for game:NYSSC3F'
-            assert response['errCode'] == 400
-            assert response['code'] == 'param.txns[].playid.invalid'
-            assert response['values'] == []
+            pytest.assume(status_code == 400)
+            pytest.assume(response['status'] == 400)
+            pytest.assume(response['error'] == 'Bad Request')
+            pytest.assume(response['message'] == 'Argument error-> argument name: playid,'
+                                                 ' message: invalid playid: {playid} for game:NYSSC3F')
+            pytest.assume(response['errCode'] == 400)
+            pytest.assume(response['code'] == 'param.txns[].playid.invalid')
+            pytest.assume(response['values'] == [])
 
         else:
-            pass
+            status_code, response = bet(playId=playid, token=get_token['token'])
+
+            pytest.assume(status_code == 200)
+            pytest.assume(len(response) == 1)
+            pytest.assume([len(str(i)) for i in response] == [16])
 
 
-@allure.feature('Bet')
+@allure.feature(bet_feature)
 @allure.step('')
 @pytest.mark.Bet
 def test_bet_for_game_playRateId(playRateIds=range(16080, 16090),
-                                 playRateIdd=('', '1'*20, '####', '我是中文', ' ', 'english'),
-                                 rebatePackage=1980,
-                                 stake=10,
-                                 times=1,
-                                 unit='DOLLAR'):
+                                 playRateIdd=('', '1'*20, '####', '我是中文', ' ', 'english')):
 
     for playRateId in playRateIds:
         if playRateId != playRateIds[0]:
 
             status_code, response = bet(playRateId=playRateId, token=get_token['token'])
 
-            assert status_code == 400
-            assert response['status'] == 400
-            assert response['error'] == 'Bad Request'
-            assert response['message'] == 'Argument error-> argument name: txn, ' \
-                                          'message: invalid'
-            assert response['errCode'] == 400
-            assert response['code'] == 'param.txn.invalid'
-            assert response['values'] == []
+            pytest.assume(status_code == 400)
+            pytest.assume(response['status'] == 400)
+            pytest.assume(response['error'] == 'Bad Request')
+            pytest.assume(response['message'] == 'Argument error-> argument name: txn, '
+                                                 'message: invalid')
+            pytest.assume(response['errCode'] == 400)
+            pytest.assume(response['code'] == 'param.txn.invalid')
+            pytest.assume(response['values'] == [])
 
         else:
             status_code, response = bet(playRateId=playRateId, token=get_token['token'])
 
-            assert status_code == 200
-            assert len(response) == 1
-            assert [len(str(i)) for i in response] == [16]
+            pytest.assume(status_code == 200)
+            pytest.assume(len(response) == 1)
+            pytest.assume([len(str(i)) for i in response] == [16])
 
     for playrateid in playRateIdd:
         try:
             bet(playRateId=playrateid, token=get_token['token'])
 
         except ValueError as e:
-            assert str(e) == 'Expecting value: line 1 column 1 (char 0)'
+            pytest.assume(str(e) == 'Expecting value: line 1 column 1 (char 0)')
 
 
-@allure.feature('Bet')
+@allure.feature(bet_feature)
 @allure.step('')
 @pytest.mark.Bet
-def test_bet_for_game_stake(stakes=('10', '', '1'*20, '####', '我是中文', ' ', 'english'),
-                            times=1,
-                            unit='DOLLAR'):
+def test_bet_for_game_stake(stakes=('10', '1'*20,  '', '####', '我是中文', ' ', 'english')):
 
     for stake in stakes:
-        log(stake)
-        if stake == stakes[2]:
+        if stake == stakes[1]:
 
             status_code, response = bet(stake=stake, token=get_token['token'])
 
-            assert status_code == 400
-            assert response['status'] == 400
-            assert response['error'] == 'Bad Request'
-            assert response['message'] == 'Argument error-> argument name: risk, ' \
-                                          'message: not pass risk validation'
-            assert response['errCode'] == 400
-            assert response['code'] == 'risk.exceed.by.player.total.stake'
-            assert response['values'] == [50000]
+            pytest.assume(status_code == 400)
+            pytest.assume(response['status'] == 400)
+            pytest.assume(response['error'] == 'Bad Request')
+            pytest.assume(response['message'] == 'Argument error-> argument name: risk, '
+                                                 'message: not pass risk validation')
+            pytest.assume(response['errCode'] == 400)
+            pytest.assume(response['code'] == 'risk.exceed.by.player.total.stake')
+            pytest.assume(response['values'] == [50000])
 
-        elif stake != stakes[0] and stake != stakes[2]:
+        elif stake not in stakes[:2]:
             try:
                 bet(stake=stake, token=get_token['token'])
             except ValueError as e:
-                log(str(e))
-                assert str(e) == 'Expecting value: line 1 column 1 (char 0)'
+                pytest.assume(str(e) == 'Expecting value: line 1 column 1 (char 0)')
 
         else:
             status_code, response = bet(stake=stake, token=get_token['token'])
 
-            assert status_code == 200
-            assert len(response) == 1
-            assert [len(str(i)) for i in response] == [16]
+            pytest.assume(status_code == 200)
+            pytest.assume(len(response) == 1)
+            pytest.assume([len(str(i)) for i in response] == [16])
 
 
+@allure.feature(bet_feature)
+@allure.step('')
+@pytest.mark.Bet
+def test_bet_for_game_times(timeses=(1, '', ' ', '1'*20, '####', '我是中文', 'english')):
 
+    for times in timeses:
+        print(times)
+        if times in timeses[3:]:
+            try:
+                bet(times=times, token=get_token['token'])
+
+            except ValueError as e:
+
+                pytest.assume(str(e) == 'Expecting value: line 1 column 1 (char 0)')
+
+        elif times in timeses[1:3]:
+            status_code, response = bet(times=times, token=get_token['token'])
+
+            pytest.assume(status_code == 400)
+            pytest.assume(response['status'] == 400)
+            pytest.assume(response['error'] == 'Bad Request')
+            pytest.assume(response['message'] == 'Argument error-> argument name: times, message: invalid times')
+            pytest.assume(response['errCode'] == 400)
+            pytest.assume(response['code'] == 'param.txns[].times.invalid')
+            pytest.assume(response['values'] == [])
+
+        else:
+            status_code, response = bet(times=times, token=get_token['token'])
+
+            pytest.assume(status_code == 200)
+            pytest.assume(len(response) == 1)
+            pytest.assume([len(str(i)) for i in response] == [16])
+
+
+@allure.feature(bet_feature)
+@allure.step('')
+@pytest.mark.d
+def test_bet_for_game_unit(units=('DOLLAR', '', ' ', '1'*20, '####', '刀惹', 'english'.upper())):
+
+    for unit in units:
+        print(unit)
+        if unit != units[0]:
+            try:
+                bet(unit=unit, token=get_token['token'])
+
+            except ValueError as e:
+                print(str(e))
+
+                pytest.assume(str(e) == 'Expecting value: line 1 column 1 (char 0)')
+        else:
+            status_code, response = bet(unit=unit, token=get_token['token'])
+
+            pytest.assume(status_code == 200)
+            pytest.assume(len(response) == 1)
+            pytest.assume([len(str(i)) for i in response] == [16])
 
 
 
