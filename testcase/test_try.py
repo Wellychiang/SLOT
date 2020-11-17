@@ -244,7 +244,7 @@ def test_bet_for_game_comment(comments=('1'*99, '123', '#@$$%')):
 
 @allure.feature(bet_feature)
 @allure.step('')
-@pytest.mark.Bet
+@pytest.mark.d
 def test_bet_for_game_playId(playIdd=range(1, 50),
                              playIds=(17, '', '1'*20, '####', '我是中文', ' ', 'english')):
 
@@ -298,7 +298,7 @@ def test_bet_for_game_playId(playIdd=range(1, 50),
             pytest.assume(response['status'] == 400)
             pytest.assume(response['error'] == 'Bad Request')
             pytest.assume(response['message'] == 'Argument error-> argument name: playid,'
-                                                 ' message: invalid playid: {playid} for game:NYSSC3F')
+                                                 f' message: invalid playid: {playid} for game:NYSSC3F')
             pytest.assume(response['errCode'] == 400)
             pytest.assume(response['code'] == 'param.txns[].playid.invalid')
             pytest.assume(response['values'] == [])
