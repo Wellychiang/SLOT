@@ -415,11 +415,10 @@ def test_bet_for_game_times(timeses=(1, '', ' ', '1'*20, '####', '我是中文',
 
 @allure.feature(bet_feature)
 @allure.step('')
-@pytest.mark.d
+@pytest.mark.Bet
 def test_bet_for_game_unit(units=('DOLLAR', '', ' ', '1'*20, '####', '刀惹', 'english'.upper())):
 
     for unit in units:
-        print(unit)
         if unit != units[0]:
             try:
                 bet(unit=unit, token=get_token['token'])
