@@ -8,6 +8,7 @@ import re
 
 cms = Cms()
 sle = Sle()
+_, get_token = sle.get_token()
 
 
 @allure.feature('Cms')
@@ -93,8 +94,6 @@ def test_bet_for_rebate_packages(rebatePackages=(1980,
                                                  ' ',
                                                  'english'),):
 
-    _, get_token = sle.get_token()
-
     for rebatePackage in rebatePackages:
 
         if rebatePackage == rebatePackages[2] or rebatePackage == rebatePackages[3]:
@@ -107,12 +106,7 @@ def test_bet_for_rebate_packages(rebatePackages=(1980,
             assert response['code'] == 'param.txns[].rebate.invalid'
             assert response['values'] == []
 
-        elif rebatePackage == rebatePackages[4] \
-                or rebatePackage == rebatePackages[5] \
-                or rebatePackage == rebatePackages[6]\
-                or rebatePackage == rebatePackages[7]\
-                or rebatePackage == rebatePackages[8]\
-                or rebatePackage == rebatePackages[9]:
+        elif rebatePackage in rebatePackages[4:]:
             try:
                 bet(rebatePackage=rebatePackage, token=get_token['token'])
             except ValueError as e:
@@ -120,15 +114,16 @@ def test_bet_for_rebate_packages(rebatePackages=(1980,
                 assert str(e) == 'Expecting value: line 1 column 1 (char 0)'
         else:
             status_code, response = bet(rebatePackage=rebatePackage, token=get_token['token'])
-            assert len(response) == 1
+
             assert status_code == 200
+            assert len(response) == 1
+            assert [len(str(i)) for i in response] == [16]
 
 
 @allure.feature('Bet')
 @allure.step('')
 @pytest.mark.Bet
 def test_bet_for_game_id(gameIds=('NYSSC3F', 'nyssc3f', '1'*20, '####', '我是中文', '', ' ', 'english')):
-    _, get_token = sle.get_token()
 
     for gameId in gameIds:
         if gameId != gameIds[0] and gameId != gameIds[1]:
@@ -151,8 +146,9 @@ def test_bet_for_game_id(gameIds=('NYSSC3F', 'nyssc3f', '1'*20, '####', '我是�
         else:
             status_code, response = bet(gameId=gameId, token=get_token['token'])
 
-            assert len(response) == 1
             assert status_code == 200
+            assert len(response) == 1
+            assert [len(str(i)) for i in response] == [16]
 
 
 @allure.feature('Bet')
@@ -160,14 +156,14 @@ def test_bet_for_game_id(gameIds=('NYSSC3F', 'nyssc3f', '1'*20, '####', '我是�
 @pytest.mark.skip('Lower priority')
 # Not done yet
 def test_bet_for_game_platform(platforms=('1'*20, 'Hi,im welly', '我是', '', ' ', '1'*21)):
-    _, get_token = sle.get_token()
 
     for platform in platforms:
         if platform != platforms[5]:
             status_code, response = bet(platform=platform, token=get_token['token'])
 
-            assert len(response) == 1
             assert status_code == 200
+            assert len(response) == 1
+            assert [len(str(i)) for i in response] == [16]
 
         else:
             try:
@@ -181,7 +177,6 @@ def test_bet_for_game_platform(platforms=('1'*20, 'Hi,im welly', '我是', '', '
 @allure.step('')
 @pytest.mark.Bet
 def test_bet_for_game_platType(playTypes=('SIMPLE', '1'*20, '####', '我是中文', '', ' ', 'english'),):
-    _, get_token = sle.get_token()
 
     for playType in playTypes:
         if playType != playTypes[0]:
@@ -194,21 +189,21 @@ def test_bet_for_game_platType(playTypes=('SIMPLE', '1'*20, '####', '我是中�
         else:
             status_code, response = bet(playType=playType, token=get_token['token'])
 
-            assert len(response) == 1
             assert status_code == 200
+            assert len(response) == 1
+            assert [len(str(i)) for i in response] == [16]
 
 
 @allure.feature('Bet')
 @allure.step('')
 @pytest.mark.Bet
 def test_bet_for_game_betString(betStrings=('sum|small', '', '1'*20, '####', '我是中文', ' ', 'english')):
-    _, get_token = sle.get_token()
 
     for betString in betStrings:
         if betString != betStrings[0] and betString != betStrings[1]:
             status_code, response = bet(betString=betString, token=get_token['token'])
 
-            assert status_code == 200
+            assert status_code == 400
             assert response['status'] == 400
             assert response['error'] == 'Bad Request'
             assert response['message'] == 'Argument error-> argument name: txn, message: invalid'
@@ -219,12 +214,13 @@ def test_bet_for_game_betString(betStrings=('sum|small', '', '1'*20, '####', '�
         elif betString == betStrings[1]:
             status_code, response = bet(betString=betString, token=get_token['token'])
 
-            assert status_code == 200
+            assert status_code == 400
             assert response['status'] == 400
             assert response['error'] == 'Bad Request'
-            assert response['message'] == 'Argument error-> argument name: betstring, message: invalid betstring'
+            assert response['message'] == 'Argument error-> argument name: betstring, message: invalid betstring' \
+                                          f':  for game:NYSSC3F'
             assert response['errCode'] == 400
-            assert response['code'] == 'param.txns[].drawid.invalid'
+            assert response['code'] == 'param.txns[].betstring.invalid'
             assert response['values'] == []
 
         else:
@@ -232,13 +228,13 @@ def test_bet_for_game_betString(betStrings=('sum|small', '', '1'*20, '####', '�
 
             assert status_code == 200
             assert len(response) == 1
+            assert [len(str(i)) for i in response] == [16]
 
 
 @allure.feature('Bet')
 @allure.step('')
 @pytest.mark.skip('Lower priority')
 def test_bet_for_game_comment(comments=('', '123', 'gnetl')):
-    _, get_token = sle.get_token()
 
     for comment in comments:
         bet(comment=comment, token=get_token['token'])
@@ -249,14 +245,13 @@ def test_bet_for_game_comment(comments=('', '123', 'gnetl')):
 @pytest.mark.Bet
 def test_bet_for_game_playId(playIdd=range(1, 50),
                              playIds=(17, '', '1'*20, '####', '我是中文', ' ', 'english')):
-    _, get_token = sle.get_token()
 
     for playId in playIds:
 
         if playId != playIds[0] and playId != playIds[1]:
             try:
                 bet(playId=playId, token=get_token['token'])
-            except Exception as e:
+            except ValueError as e:
 
                 assert str(e) == 'Expecting value: line 1 column 1 (char 0)'
 
@@ -276,11 +271,11 @@ def test_bet_for_game_playId(playIdd=range(1, 50),
         else:
             status_code, response = bet(playId=playId, token=get_token['token'])
 
-            assert len(response) == 1
             assert status_code == 200
+            assert len(response) == 1
+            assert [len(str(i)) for i in response] == [16]
 
     for playid in playIdd:
-        status_code, response = bet(playId=playid, token=get_token['token'])
 
         if playid in range(18, 23):
             status_code, response = bet(playId=playid, token=get_token['token'])
@@ -319,7 +314,6 @@ def test_bet_for_game_playRateId(playRateIds=range(16080, 16090),
                                  stake=10,
                                  times=1,
                                  unit='DOLLAR'):
-    _, get_token = sle.get_token()
 
     for playRateId in playRateIds:
         if playRateId != playRateIds[0]:
@@ -334,24 +328,59 @@ def test_bet_for_game_playRateId(playRateIds=range(16080, 16090),
             assert response['errCode'] == 400
             assert response['code'] == 'param.txn.invalid'
             assert response['values'] == []
+
+        else:
+            status_code, response = bet(playRateId=playRateId, token=get_token['token'])
+
+            assert status_code == 200
+            assert len(response) == 1
+            assert [len(str(i)) for i in response] == [16]
+
     for playrateid in playRateIdd:
         try:
             bet(playRateId=playrateid, token=get_token['token'])
 
-        except Exception as e:
+        except ValueError as e:
             assert str(e) == 'Expecting value: line 1 column 1 (char 0)'
 
 
 @allure.feature('Bet')
 @allure.step('')
-@pytest.mark.d
-def test_bet_for_game_stake(stakes=(10, 0, 2500),
+@pytest.mark.Bet
+def test_bet_for_game_stake(stakes=('10', '', '1'*20, '####', '我是中文', ' ', 'english'),
                             times=1,
                             unit='DOLLAR'):
-    _, get_token = sle.get_token()
 
     for stake in stakes:
-        bet(stake=stake, token=get_token['token'])
+        log(stake)
+        if stake == stakes[2]:
+
+            status_code, response = bet(stake=stake, token=get_token['token'])
+
+            assert status_code == 400
+            assert response['status'] == 400
+            assert response['error'] == 'Bad Request'
+            assert response['message'] == 'Argument error-> argument name: risk, ' \
+                                          'message: not pass risk validation'
+            assert response['errCode'] == 400
+            assert response['code'] == 'risk.exceed.by.player.total.stake'
+            assert response['values'] == [50000]
+
+        elif stake != stakes[0] and stake != stakes[2]:
+            try:
+                bet(stake=stake, token=get_token['token'])
+            except ValueError as e:
+                log(str(e))
+                assert str(e) == 'Expecting value: line 1 column 1 (char 0)'
+
+        else:
+            status_code, response = bet(stake=stake, token=get_token['token'])
+
+            assert status_code == 200
+            assert len(response) == 1
+            assert [len(str(i)) for i in response] == [16]
+
+
 
 
 
