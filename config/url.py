@@ -1,21 +1,28 @@
 class UrlCms:
 
-    cms = 'https://sle-boapi.stgdevops.site/sle-cms/'
+    def __init__(self, env='stg'):
+        self.env = env
 
-    _cms_newtokens = 'newTokens'
-    _cms_txn_reports = 'txnreports'
+        cms = f'https://sle-boapi.{env}devops.site/'
 
-    cms_newtokens = cms + _cms_newtokens
-    cms_txn_reports = cms + _cms_txn_reports
+        sle_cms = 'sle-cms/'
+        newtokens = sle_cms + 'newTokens'
+        txn_reports = sle_cms + 'txnreports'
+        draws = sle_cms + 'draws/'
+        MX2 = draws + 'MX2/'
 
-    def __init__(self):
-        pass
+        self.newtokens = cms + newtokens
+        self.txn_reports = cms + txn_reports
+        self.MX2 = cms + MX2
 
     def url_login(self):
-        return self.cms_newtokens
+        return self.newtokens
 
     def url_txn_reports(self):
-        return self.cms_txn_reports
+        return self.txn_reports
+
+    def url_MX2(self, gameId):
+        return self.MX2 + gameId
 
 
 class UrlSle:
@@ -25,23 +32,27 @@ class UrlSle:
 
         sle = f'https://mx2-api.{env}devops.site/mx2-ecp/api/v1/'
 
-        sle_login = 'login'
+        login = 'login'
         get_bet_token = 'games/NY/NY/NYSSC1F/launch'
+        self.login = sle + login
+        self.get_bet_token = sle + get_bet_token
 
-        self.sle_login = sle + sle_login
-        self.sle_get_bet_token = sle + get_bet_token
+        sle_portal = f'https://sle-api.{env}devops.site/sle-portal/v2/'
+
+        txns = 'txns'
+        draw = 'draw/'
+        active_and_previous = f'{draw}activeandprevious/'
+        self.txns = sle_portal + txns
+        self.active_and_previous = sle_portal + active_and_previous
 
     def url_login(self):
-        return self.sle_login
+        return self.login
 
     def url_get_bet_token(self):
-        return self.sle_get_bet_token
+        return self.get_bet_token
 
-    sle_game_hall = 'https://sle-api.stgdevops.site/sle-portal/v2/'
+    def url_txns(self):
+        return self.txns
 
-    _sle_bet = 'txns'
-
-    sle_bet = sle_game_hall + _sle_bet
-
-    def url_bet(self):
-        return self.sle_bet
+    def url_active_and_previous(self, gameId):
+        return f'{self.active_and_previous}{gameId}'

@@ -8,6 +8,7 @@ import re
 
 cms = Cms()
 sle = Sle()
+
 _, get_token = sle.get_token()
 
 bet_feature = 'Bet'
@@ -44,7 +45,8 @@ def bet(drawId=int(time.strftime('%Y%m%d')+'00429'),
         stake=10,
         times=1,
         unit='DOLLAR',
-        token=None):
+        token=None,
+        more_data=None):
 
     status_code, response = sle.bet(drawId,
                                     gameId,
@@ -58,7 +60,8 @@ def bet(drawId=int(time.strftime('%Y%m%d')+'00429'),
                                     stake,
                                     times,
                                     unit,
-                                    token)
+                                    token,
+                                    more_data)
     # 先打一次錯誤的drawid, response會丟給我正確的, 再打
     drawid = re.findall('id (.*) !', response['message'])
 
@@ -81,6 +84,37 @@ def bet(drawId=int(time.strftime('%Y%m%d')+'00429'),
                                         token)
     return status_code, response
 
+def bet2(
+        gameId='NYSSC3F',  # NYSSC3F, NYSSC15F
+        platform='Desktop',
+        playType='SIMPLE',
+        betString='sum|small',
+        comment='',
+        playId=17,
+        playRateId=16080,
+        rebatePackage=1980,
+        stake=10,
+        times=1,
+        unit='DOLLAR',
+        token=None,
+        more_data=None):
+
+    response = sle.active_and_previous(gameId)
+    drawId = response['current']['drawId']
+    status_code, response = sle.bet(drawId,
+                                    gameId,
+                                    platform,
+                                    playType,
+                                    betString,
+                                    comment,
+                                    playId,
+                                    playRateId,
+                                    rebatePackage,
+                                    stake,
+                                    times,
+                                    unit,
+                                    token,
+                                    more_data)
 
 @allure.feature(bet_feature)
 @allure.step('')
@@ -438,30 +472,51 @@ def test_bet_for_game_unit(units=('DOLLAR', '', ' ', '1'*20, '####', '刀惹', '
 @allure.feature(bet_feature)
 @allure.step('')
 @pytest.mark.dd
-def test_bet_for_thai(gameId='NYTHAIFFC',
-                      playType='STANDALONE',
+def test_bet_for_thai(gameId='NYSSC3F',
+                      playType='SIMPLE',
                       betStrings=('3dtop|000', '3droll|000'),
-                      playId=90001,
-                      playRateId=102328,   # 28 = top, 29 = roll
+                      betString=('sum|small'),
+                      playId=17,
+                      playRateId=16791,   # 28 = top, 29 = roll
                       rebatePackage=1900,
                       stake=10,
                       times=1):
     """
+    Thaihappy:
     betString:
     3dtop|000 = 102328, 3d|small = 102329,  playId = 90001
     2dtop|01 = 102330, 2d|bottom = 102331, playId = 90002
     1dtop|1 = 102332, 1d|bottom = 102333 playId = 90003
     """
-    for betString in betStrings:
-        bet(betString=betString,
-            gameId=gameId,
-            playType=playType,
-            playId=playId,
-            playRateId=playRateId,
-            rebatePackage=rebatePackage,
-            stake=stake,
-            times=times,
-            token=get_token['token'])
+    more_data = {
+        'betString': 'sum|big',
+        'gameId': gameId,
+        'playType': playType,
+        'playId': playId,
+        'playRateId': '16790',
+        'rebatePackage': rebatePackage,
+        'stake': stake,
+        'times': times,
+        'unit': 'DOLLAR'
+    }
 
+    # for betString in betStrings:
+    bet2(betString=betString,
+        gameId=gameId,
+        playType=playType,
+        playId=playId,
+        playRateId=playRateId,
+        rebatePackage=rebatePackage,
+        stake=stake,
+        times=times,
+        token=get_token['token'],
+        more_data=more_data)
+
+
+@pytest.mark.d
+def test_s():
+
+    # sle.active_and_previous('NYTHAIFFC')
+    cms.MX2()
 
 

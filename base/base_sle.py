@@ -57,7 +57,7 @@ class Sle(Base):
             token=None,
             more_data=None):
 
-        url = self.sle.url_bet()
+        url = self.sle.url_txns()
 
         headers = {
             'accept': 'application/json, text/plain, */*',
@@ -98,3 +98,12 @@ class Sle(Base):
         log(f'\nResponse: {r.json()}')
 
         return r.status_code, r.json()
+
+    def active_and_previous(self, gameId):
+
+        url = self.sle.url_active_and_previous(gameId)
+
+        r = self.s.get(url)
+
+        log(r.json())
+        return r.json()
