@@ -126,6 +126,7 @@ def test_bet_for_game_id(gameIds=('NYSSC3F', 'nyssc3f', '1'*20, '####', '我是�
             pytest.assume(response['values'] == [])
 
         elif gameId in gameIds[1] or gameIds[3] or gameIds[5]:
+            print('IM the kinggg', gameId)
             try:
                 bet(gameId=gameId, token=get_token['token'])
             except Exception as e:
