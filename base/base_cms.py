@@ -4,15 +4,16 @@ from config.url import UrlCms
 
 class Cms(Base):
 
-    cms = UrlCms
+    cms = UrlCms()
 
+    # 注單明細查詢
     def txn_reports(self, username='imwelly',
                     limit='25',
                     offset='0',
                     prize_cmp='get',
-                    tm_end=None,
+                    tm_end='1605196799999',
                     tm_mode='txntime',
-                    tm_start=None):
+                    tm_start='1605110400000'):
 
         url = self.cms.url_txn_reports()
 
@@ -38,21 +39,18 @@ class Cms(Base):
             'tmMode': tm_mode,
             'tmEnd': tm_end,
             'tmStart': tm_start,
-
-            # 'tmEnd': '1605196799999',
-            # 'tmStart': '1605110400000',
-
         }
         r = self.s.get(url, headers=headers, data=data)
         log.info(f'Response: {r.json()}')
 
         return r.status_code, r.json()
 
+    # 開獎管理查詢 (imwelly帳號無法查詢, 是因為是輸入獎號帳號)
     def MX2(self,
             gameId='NYTHAIFFC',
-            startBefore=1605694387959,
-            drawIdString=202011181092,
-            username='imwelly'):
+            startBefore=1605752781581,  # 開獎日期
+            drawIdString=None,  # 獎號 (可以為None)
+            username='wellyadmin'):
 
         url = self.cms.url_MX2(gameId)
         _, get_token = self.cms_login(username)
@@ -75,8 +73,8 @@ class Cms(Base):
             'startBefore': startBefore,
             'drawIdString': drawIdString,
         }
-
+        print(url)
         r = self.s.get(url, headers=headers, params=params)
         log(r.json())
 
-        return r.json()
+        return r.status_code, r.json()

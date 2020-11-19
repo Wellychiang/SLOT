@@ -5,15 +5,15 @@ class UrlCms:
 
         cms = f'https://sle-boapi.{env}devops.site/'
 
-        sle_cms = 'sle-cms/'
-        newtokens = sle_cms + 'newTokens'
-        txn_reports = sle_cms + 'txnreports'
-        draws = sle_cms + 'draws/'
-        MX2 = draws + 'MX2/'
+        sle_cms =               'sle-cms/'
+        newtokens =             sle_cms + 'newTokens'
+        txn_reports =           sle_cms + 'txnreports'
+        draws =                 sle_cms + 'draws/'
+        MX2 =                   draws + 'MX2/'
 
-        self.newtokens = cms + newtokens
-        self.txn_reports = cms + txn_reports
-        self.MX2 = cms + MX2
+        self.newtokens =        cms + newtokens
+        self.txn_reports =      cms + txn_reports
+        self.MX2 =              cms + MX2
 
     def url_login(self):
         return self.newtokens
@@ -30,20 +30,20 @@ class UrlSle:
     def __init__(self, env='stg'):
         self.env = env
 
-        sle = f'https://mx2-api.{env}devops.site/mx2-ecp/api/v1/'
+        sle =                       f'https://mx2-api.{env}devops.site/mx2-ecp/api/v1/'
 
-        login = 'login'
-        get_bet_token = 'games/NY/NY/NYSSC1F/launch'
-        self.login = sle + login
-        self.get_bet_token = sle + get_bet_token
+        login =                     'login'
+        get_bet_token =             'games/NY/NY/NYSSC1F/launch'
+        self.login =                sle + login
+        self.get_bet_token =        sle + get_bet_token
 
-        sle_portal = f'https://sle-api.{env}devops.site/sle-portal/v2/'
+        sle_portal =                f'https://sle-api.{env}devops.site/sle-portal/v2/'
 
-        txns = 'txns'
-        draw = 'draw/'
-        active_and_previous = f'{draw}activeandprevious/'
-        self.txns = sle_portal + txns
-        self.active_and_previous = sle_portal + active_and_previous
+        txns =                      'txns'
+        draw =                      'draw/'
+        active_and_previous =       f'{draw}activeandprevious/'
+        self.txns =                 sle_portal + txns
+        self.active_and_previous =  sle_portal + active_and_previous
 
     def url_login(self):
         return self.login

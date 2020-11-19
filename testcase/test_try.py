@@ -5,6 +5,7 @@ import pytest
 import allure
 import time
 import re
+from pprint import pprint
 
 cms = Cms()
 sle = Sle()
@@ -33,59 +34,7 @@ def test_cms():
     print(f'response: {len(response["data"])}')
 
 
-def bet(drawId=int(time.strftime('%Y%m%d')+'00429'),
-        gameId='NYSSC3F',  # NYSSC3F, NYSSC15F
-        platform='Desktop',
-        playType='SIMPLE',
-        betString='sum|small',
-        comment='',
-        playId=17,
-        playRateId=16080,
-        rebatePackage=1980,
-        stake=10,
-        times=1,
-        unit='DOLLAR',
-        token=None,
-        more_data=None):
-
-    status_code, response = sle.bet(drawId,
-                                    gameId,
-                                    platform,
-                                    playType,
-                                    betString,
-                                    comment,
-                                    playId,
-                                    playRateId,
-                                    rebatePackage,
-                                    stake,
-                                    times,
-                                    unit,
-                                    token,
-                                    more_data)
-    # 先打一次錯誤的drawid, response會丟給我正確的, 再打
-    drawid = re.findall('id (.*) !', response['message'])
-
-    if 'Argument error-> argument name: drawid, message: Current draw id' in response['message']:
-        draw = drawid[0]
-
-        log(f'drawId: {drawId}')
-        status_code, response = sle.bet(draw,
-                                        gameId,
-                                        platform,
-                                        playType,
-                                        betString,
-                                        comment,
-                                        playId,
-                                        playRateId,
-                                        rebatePackage,
-                                        stake,
-                                        times,
-                                        unit,
-                                        token)
-    return status_code, response
-
-def bet2(
-        gameId='NYSSC3F',  # NYSSC3F, NYSSC15F
+def bet(gameId='NYSSC3F',  # NYSSC3F, NYSSC15F
         platform='Desktop',
         playType='SIMPLE',
         betString='sum|small',
@@ -115,6 +64,9 @@ def bet2(
                                     unit,
                                     token,
                                     more_data)
+
+    return status_code, response
+
 
 @allure.feature(bet_feature)
 @allure.step('')
@@ -158,11 +110,12 @@ def test_bet_for_rebate_packages(rebatePackages=(1980,
 
 @allure.feature(bet_feature)
 @allure.step('')
-@pytest.mark.Bet
+@pytest.mark.d
 def test_bet_for_game_id(gameIds=('NYSSC3F', 'nyssc3f', '1'*20, '####', '我是中文', '', ' ', 'english')):
-
+    # bet(gameId='english', token=get_token['token'])
     for gameId in gameIds:
-        if gameId not in  gameIds[:2]:
+        if gameId not in gameIds[:2]:
+            print(gameId)
             status_code, response = bet(gameId=gameId, token=get_token['token'])
 
             pytest.assume(response['status'] == 400)
@@ -172,7 +125,7 @@ def test_bet_for_game_id(gameIds=('NYSSC3F', 'nyssc3f', '1'*20, '####', '我是�
             pytest.assume(response['code'] == 'param.gameid.invalid')
             pytest.assume(response['values'] == [])
 
-        elif gameId == gameIds[1]:
+        elif gameId in gameIds[1] or gameIds[3] or gameIds[5]:
             try:
                 bet(gameId=gameId, token=get_token['token'])
             except Exception as e:
@@ -501,7 +454,7 @@ def test_bet_for_thai(gameId='NYSSC3F',
     }
 
     # for betString in betStrings:
-    bet2(betString=betString,
+    bet(betString=betString,
         gameId=gameId,
         playType=playType,
         playId=playId,
@@ -513,10 +466,19 @@ def test_bet_for_thai(gameId='NYSSC3F',
         more_data=more_data)
 
 
-@pytest.mark.d
-def test_s():
+@pytest.mark.dd
+def test_s(gameId='NYTHAIFFC',
+           startBefore=int(float(time.time())*1000),   # 開獎日期
+           drawIdString=202011181092,                  # 獎號 (可以為None, 會變成查詢所有開獎)
+           username='wellyadmin'):
+
 
     # sle.active_and_previous('NYTHAIFFC')
-    cms.MX2()
+    status_code, response = cms.MX2(gameId=gameId,
+                                    startBefore=startBefore,
+                                    drawIdString=drawIdString,
+                                    username=username,)
+
+    pprint(response)
 
 

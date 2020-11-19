@@ -6,7 +6,7 @@ class UserInfo:
     cms_user_info = {'imwelly': {'username': 'imwelly',
                                  'pwd': '6e97679a803cee7c930f1bc8d5fa42a5098f901d'},
                      'wellyadmin': {'username': 'wellyadmin',
-                                    'pwd': 'ff9ff7ef892f14187c3dede2c848c94843e6e69e'},
+                                    'pwd': '64e89cab6f9b5560931d87399d916faf08e95c49'},
                      'welly2': {'username': 'welly2',
                                 'pwd': '3578165f887bbdf37a15e1e62c919e7471c73d1b'}}
 
