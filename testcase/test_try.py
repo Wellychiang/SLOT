@@ -111,11 +111,10 @@ def test_bet_for_rebate_packages(rebatePackages=(1980,
 @allure.feature(bet_feature)
 @allure.step('')
 @pytest.mark.d
-def test_bet_for_game_id(gameIds=('NYSSC3F', 'nyssc3f', '1'*20, '####', '我是中文', '', ' ', 'english')):
+def test_bet_for_game_id(gameIds=('NYSSC3F', 'nyssc3f', '####', '', '1'*20, '我是中文', ' ', 'english')):
     # bet(gameId='english', token=get_token['token'])
     for gameId in gameIds:
-        if gameId not in gameIds[:2]:
-            print(gameId)
+        if gameId not in gameIds[:4]:
             status_code, response = bet(gameId=gameId, token=get_token['token'])
 
             pytest.assume(response['status'] == 400)
@@ -125,12 +124,10 @@ def test_bet_for_game_id(gameIds=('NYSSC3F', 'nyssc3f', '1'*20, '####', '我是�
             pytest.assume(response['code'] == 'param.gameid.invalid')
             pytest.assume(response['values'] == [])
 
-        elif gameId in gameIds[1] or gameIds[3] or gameIds[5]:
-            print('IM the kinggg', gameId)
+        elif gameId in gameIds[1:4]:
             try:
                 bet(gameId=gameId, token=get_token['token'])
             except Exception as e:
-
                 pytest.assume(str(e) == 'Expecting value: line 1 column 1 (char 0)')
 
         else:
