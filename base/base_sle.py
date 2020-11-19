@@ -3,6 +3,7 @@ from config.url import UrlCms, UrlSle
 import requests
 
 
+
 class Sle(Base):
 
     sle = UrlSle()
@@ -99,7 +100,8 @@ class Sle(Base):
 
         return r.status_code, r.json()
 
-    def active_and_previous(self, gameId):
+    #
+    def active_and_previous(self, gameId) -> str:
 
         url = self.sle.url_active_and_previous(gameId)
 

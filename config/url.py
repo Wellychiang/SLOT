@@ -10,10 +10,12 @@ class UrlCms:
         txn_reports =           sle_cms + 'txnreports'
         draws =                 sle_cms + 'draws/'
         MX2 =                   draws + 'MX2/'
+        preset =                sle_cms + 'preset'
 
         self.newtokens =        cms + newtokens
         self.txn_reports =      cms + txn_reports
         self.MX2 =              cms + MX2
+        self.preset =           cms + preset
 
     def url_login(self):
         return self.newtokens
@@ -23,6 +25,9 @@ class UrlCms:
 
     def url_MX2(self, gameId):
         return self.MX2 + gameId
+
+    def url_preset(self):
+        return self.preset
 
 
 class UrlSle:

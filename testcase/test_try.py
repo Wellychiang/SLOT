@@ -110,7 +110,7 @@ def test_bet_for_rebate_packages(rebatePackages=(1980,
 
 @allure.feature(bet_feature)
 @allure.step('')
-@pytest.mark.d
+@pytest.mark.Bet
 def test_bet_for_game_id(gameIds=('NYSSC3F', 'nyssc3f', '####', '', '1'*20, '我是中文', ' ', 'english')):
     # bet(gameId='english', token=get_token['token'])
     for gameId in gameIds:
@@ -465,18 +465,98 @@ def test_bet_for_thai(gameId='NYSSC3F',
 
 
 @pytest.mark.dd
-def test_s(gameId='NYTHAIFFC',
-           startBefore=int(float(time.time())*1000),   # 開獎日期
-           drawIdString=202011181092,                  # 獎號 (可以為None, 會變成查詢所有開獎)
-           username='wellyadmin'):
+def cms_lottery_draw_management(gameId='NYTHAIFFC',
+                                startBefore=int(float(time.time())*1000),   # 開獎日期
+                                drawIdString=202011181092,                  # 獎號 (可以為None, 會變成查詢所有開獎)
+                                username='wellyadmin'):
 
-
-    # sle.active_and_previous('NYTHAIFFC')
     status_code, response = cms.MX2(gameId=gameId,
                                     startBefore=startBefore,
                                     drawIdString=drawIdString,
                                     username=username,)
 
-    pprint(response)
+    return response
+
+
+@pytest.mark.d
+def test_for_scenario(result='1|2|3|4|5',   # 自行開獎結果
+                      gameId='NYSSC3F',
+                      playType='SIMPLE',
+                      betString='sum|small',
+                      playId=17,
+                      playRateId=16791,   # 28 = top, 29 = roll
+                      rebatePackage=1900,
+                      stake=10,
+                      times=1):
+
+    current_response = wait_for_bet_and_return_previous_or_current(gameId)
+
+    log(f'Start bet')
+    _, response = bet(betString=betString,
+                      gameId=gameId,
+                      playType=playType,
+                      playId=playId,
+                      playRateId=playRateId,
+                      rebatePackage=rebatePackage,
+                      stake=stake,
+                      times=times,
+                      token=get_token['token'])
+
+    log('Start to draw the lottery')
+
+    cms.preset(drawId=current_response['current']['drawId'],
+               gameId=gameId,
+               result=result,)
+
+    response = cms_lottery_draw_management(gameId=gameId,
+                                           startBefore=int(float(time.time()) * 1000),
+                                           drawIdString=current_response['current']['drawIdString'],
+                                           username='wellyadmin')
+
+    log(f'Show management response: {response["data"]}')
+
+
+# 等到開獎倒數十秒, 並返回drawid等等, 小於十秒就等到下個round
+def wait_for_bet_and_return_previous_or_current(gameId):
+
+    while True:
+        response = sle.active_and_previous(gameId)
+        count_down = response['current']['countdown']
+
+        if count_down < 13000:
+            time.sleep(13)
+            log(f'Start to wait the new round')
+
+        elif count_down >= 13000:
+            start = time.time()
+            log(f'Count down second: {int((count_down - 10000) / 1000)}')
+
+            # sleep 到剩下十秒
+            time.sleep(int((count_down-10000) / 1000))
+            end = time.time()
+
+            result = start - end
+
+            log(f'Start: {start}\nEnd: {end}')
+            log(f'Result: {result}')
+
+            return response
+
+
+@pytest.mark.dd
+def lottery_draw(drawId=None,
+                  gameId="NYSSC3F",
+                  result="1|2|3|4|5"):
+
+    cms.preset(drawId,
+               gameId,
+               result)
+
+
+
+
+
+
+
 
 

@@ -16,7 +16,6 @@ class Cms(Base):
                     tm_start='1605110400000'):
 
         url = self.cms.url_txn_reports()
-
         _, get_token = self.cms_login(username)
 
         headers = {
@@ -41,7 +40,7 @@ class Cms(Base):
             'tmStart': tm_start,
         }
         r = self.s.get(url, headers=headers, data=data)
-        log.info(f'Response: {r.json()}')
+        log(f'Response: {r.json()}')
 
         return r.status_code, r.json()
 
@@ -75,6 +74,42 @@ class Cms(Base):
         }
         print(url)
         r = self.s.get(url, headers=headers, params=params)
-        log(r.json())
+        log(str(r.json()).encode('utf8').decode('cp950', 'ignore'))
 
         return r.status_code, r.json()
+
+    # 自行開獎, 只能用imwelly帳號 (輸入獎號帳號)
+    def preset(self,
+               drawId=2020111900340,
+               gameId="NYSSC3F",
+               result="1|2|3|4|5",
+               username='imwelly'):
+
+        url = self.cms.url_preset()
+        _, get_token = self.cms_login(username)
+
+        headers = {
+            'accept': '*/*',
+            'accept-language': 'zh-TW,zh;q=0.9,en-US;q=0.8,en;q=0.7',
+            'authorization': get_token['token'],
+            'content-length': '64',
+            'content-type': 'application/json;charset=UTF-8',
+            'origin': 'https://sle-bo.stgdevops.site',
+            'referer': 'https://sle-bo.stgdevops.site/',
+            'sec-fetch-dest': 'empty',
+            'sec-fetch-mode': 'cors',
+            'sec-fetch-site': 'same-site',
+            'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) '
+                          'Chrome/86.0.4240.198 Safari/537.36',
+        }
+
+        data = {
+            'drawId':  drawId,
+            'gameId':  gameId,
+            'result':  result
+        }
+
+        r = self.s.post(url, headers=headers, json=data)
+
+        log(r.status_code)
+        return r.status_code
