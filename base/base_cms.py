@@ -72,7 +72,7 @@ class Cms(Base):
             'startBefore': startBefore,
             'drawIdString': drawIdString,
         }
-        print(url)
+        log(url)
         r = self.s.get(url, headers=headers, params=params)
         log(str(r.json()).encode('utf8').decode('cp950', 'ignore'))
 

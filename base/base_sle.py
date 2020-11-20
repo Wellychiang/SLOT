@@ -3,7 +3,6 @@ from config.url import UrlCms, UrlSle
 import requests
 
 
-
 class Sle(Base):
 
     sle = UrlSle()
