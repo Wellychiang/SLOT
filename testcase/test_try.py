@@ -36,7 +36,7 @@ def test_cms():
 def bet(gameId='NYSSC3F',  # NYSSC3F, NYSSC15F
         platform='Desktop',
         playType='SIMPLE',
-        betString='sum|small',
+        betString='sum,small',
         comment='',
         playId=17,
         playRateId=16080,
@@ -71,15 +71,15 @@ def bet(gameId='NYSSC3F',  # NYSSC3F, NYSSC15F
 @allure.step('')
 @pytest.mark.Bet
 def test_bet_for_rebate_packages(token, rebatePackages=(1980,
-                                                 1800,
-                                                 1981,
-                                                 1799,
-                                                 '1'*20,
-                                                 '####',
-                                                 '我是中文',
-                                                 '',
-                                                 ' ',
-                                                 'english'),):
+                                                        1800,
+                                                        1981,
+                                                        1799,
+                                                        '1'*20,
+                                                        '####',
+                                                        '我是中文',
+                                                        '',
+                                                        ' ',
+                                                        'english'),):
 
     for rebatePackage in rebatePackages:
 
@@ -184,7 +184,7 @@ def test_bet_for_game_platType(token, playTypes=('SIMPLE', '1'*20, '####', '我�
 @allure.step('')
 @pytest.mark.Bet
 # sum|small = 16080, sum|big = 16790, sum|odd = 16792, sum|even = 16793
-def test_bet_for_game_betString(token, betStrings=('sum|small', '', '1'*20, '####', '我是中文', ' ', 'english')):
+def test_bet_for_game_betString(token, betStrings=('sum,small', '', '1'*20, '####', '我是中文', ' ', 'english')):
 
     for betString in betStrings:
         if betString not in betStrings[:2]:
@@ -426,20 +426,20 @@ def test_bet_for_game_unit(token, units=('DOLLAR', '', ' ', '1'*20, '####', '刀
 @allure.feature(bet_feature)
 @allure.step('')
 @pytest.mark.dd
-def test_bet_for_two_bet_slit(token,
-                              gameId='NYSSC3F',
-                              playType='SIMPLE',
-                              betString='sum|small',
-                              playId=17,
-                              playRateId=16791,   # 28 = top, 29 = roll
-                              rebatePackage=1900,
-                              stake=10,
-                              times=1):
+def bet_for_two_bet_slit(token,
+                         gameId='NYSSC3F',
+                         playType='SIMPLE',
+                         betString='sum,small',
+                         playId=17,
+                         playRateId=16791,
+                         rebatePackage=1900,
+                         stake=10,
+                         times=1):
     """
-    Use two txn bodys to post in one interface, and get two bet slip.
+    Use two txn arguments in request body to post in one interface, and get two bet slip.
     """
     more_data = {
-        'betString': 'sum|big',
+        'betString': 'sum,big',
         'gameId': gameId,
         'playType': playType,
         'playId': playId,
@@ -461,7 +461,6 @@ def test_bet_for_two_bet_slit(token,
         times=times,
         token=token,
         more_data=more_data)
-
 
 
 if __name__ == '__main__':

@@ -1,0 +1,121 @@
+from testcase.test_try import bet, bet_feature, cms, sle, time
+from base import log
+import pytest
+import allure
+
+
+@allure.feature(bet_feature)
+@allure.step('')
+@pytest.mark.dd
+def tes_bet_for_Thai_happy(token,
+                            gameId='NYTHAIFFC',
+                            playType='STANDALONE',
+                            betString='1dtop,1',
+                            playId=90003,
+                            playRateId=102332,
+                            rebatePackage=1900,
+                            stake=10,
+                            times=1):
+    """
+    Thaihappy:
+        betString = playRateId
+        3dtop|000 = 102328, 3d|roll = 102329,  playId = 90001
+        2dtop|01 = 102330, 2d|bottom = 102331, playId = 90002
+        1dtop|1 = 102332, 1d|bottom = 102333 playId = 90003
+    """
+
+    status_code, response = bet(gameId=gameId,
+                                playType=playType,
+                                betString=betString,
+                                playId=playId,
+                                playRateId=playRateId,
+                                rebatePackage=rebatePackage,
+                                stake=stake,
+                                times=times,
+                                token=token)
+
+
+@pytest.mark.dd
+def tes_for_scenario(token,
+                      result='410112,317,058,233,205,05',   # 自行開獎結果
+                      gameId='NYTHAIFFC',
+                      playType='STANDALONE',
+                      betStrings=('1dtop,1', '1dtop,2'),
+                      playId=90003,
+                      playRateId=102332,
+                      rebatePackage=1900,
+                      stake=3,
+                      times=1):
+
+    current_response = wait_for_bet_and_return_previous_or_current(gameId)
+
+    log(f'Start bet')
+    for betString in betStrings:
+        _, response = bet(betString=betString,
+                          gameId=gameId,
+                          playType=playType,
+                          playId=playId,
+                          playRateId=playRateId,
+                          rebatePackage=rebatePackage,
+                          stake=stake,
+                          times=times,
+                          token=token)
+        if len(response) != 1:
+            raise ValueError('Bet failed')
+
+    log('Start to draw the lottery')
+
+    # Lottery draw
+    status_code = cms.preset(drawId=current_response['current']['drawId'],
+                             gameId=gameId,
+                             result=result,)
+
+    if status_code != 200:
+        raise ValueError(f'Failed with lottery draw , put status code: {status_code}')
+
+    response = cms.pnl_grp()
+    for records in response['groupRecords']:
+        for record in records['records']:
+            pass
+
+
+# 等到開獎倒數十秒, 就返回drawid等等, 小於十秒就等到下個round (十秒為預留給開獎的時間)
+def wait_for_bet_and_return_previous_or_current(gameId):
+
+    while True:
+        response = sle.active_and_previous(gameId)
+        count_down = response['current']['countdown']
+
+        if count_down < 13000:
+            time.sleep(13)
+            log(f'Start to wait the new round')
+
+        elif count_down >= 13000:
+            start = time.time()
+            log(f'Count down second: {int((count_down - 10000) / 1000)}')
+
+            # sleep 到剩下5秒
+            time.sleep(int((count_down-5000) / 1000))
+            end = time.time()
+
+            result = start - end
+
+            log(f'Start: {start}\nEnd: {end}')
+            log(f'Result: {result}')
+
+            return response
+
+
+@pytest.mark.d
+def tes_search_classification_report():
+    response = cms.pnl_grp()
+    response = response['groupRecords']
+
+    for records in response['groupRecords']:
+        print(records)
+        # for record in records['records']:
+        #     log(record['gameName'])
+        #     log(record['betCount'])
+        #     log(record['stake'])
+        #     log(record['validBet'])
+        #     log(record['prizeWon'])

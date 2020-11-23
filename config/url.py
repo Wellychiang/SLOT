@@ -7,15 +7,17 @@ class UrlCms:
 
         sle_cms =               'sle-cms/'
         newtokens =             sle_cms + 'newTokens'
-        txn_reports =           sle_cms + 'txnreports'
+        txn_reports =           sle_cms + 'txnreports/'
         draws =                 sle_cms + 'draws/'
         MX2 =                   draws + 'MX2/'
         preset =                sle_cms + 'preset'
+        pnl_grp =               txn_reports + 'pnl/grp'
 
         self.newtokens =        cms + newtokens
         self.txn_reports =      cms + txn_reports
         self.MX2 =              cms + MX2
         self.preset =           cms + preset
+        self.pnl_grp =          cms + pnl_grp
 
     def url_login(self):
         return self.newtokens
@@ -29,6 +31,9 @@ class UrlCms:
     def url_preset(self):
         return self.preset
 
+    def url_pnl_grp(self):
+        return self.pnl_grp
+
 
 class UrlSle:
 
@@ -41,6 +46,7 @@ class UrlSle:
         get_bet_token =             'games/NY/NY/NYSSC1F/launch'
         self.login =                sle + login
         self.get_bet_token =        sle + get_bet_token
+
 
         sle_portal =                f'https://sle-api.{env}devops.site/sle-portal/v2/'
 

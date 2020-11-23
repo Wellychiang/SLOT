@@ -1,6 +1,4 @@
-from base.base import Base, log
-from config.url import UrlCms, UrlSle
-import requests
+from base import Base, log, UrlSle
 
 
 class Sle(Base):
@@ -46,7 +44,7 @@ class Sle(Base):
             gameId='NYSSC15F',          # Lottery species
             platform='Desktop',
             playType='SIMPLE',
-            betString='sum|small',      # Bet option, changed this will effect playRateId
+            betString='sum,small',      # Bet option, changed this will effect playRateId
             comment='',
             playId=17,                  # Lottery species's play option,
             playRateId=16080,
@@ -74,13 +72,15 @@ class Sle(Base):
                           '(KHTML, like Gecko) Chrome/86.0.4240.193 Mobile Safari/537.36',
             'x-vendor-id': 'MX2',
         }
+
+        betString = betString.split(',')
         data = {
             'drawId': drawId,
             'gameId': gameId,
             'platform': platform,
             'playType': playType,
             'txns': [{
-                'betString': betString,
+                'betString': '|'.join(betString),
                 'comment': comment,
                 'playId': playId,
                 'playRateId': playRateId,
@@ -94,13 +94,13 @@ class Sle(Base):
         if more_data is not None:
             data['txns'].append(more_data)
 
-        r = requests.post(url, headers=headers, json=data, verify=False)
+        r = self.s.post(url, headers=headers, json=data, verify=False)
         log(f'\nResponse: {r.json()}')
 
         return r.status_code, r.json()
 
-    #
-    def active_and_previous(self, gameId) -> str:
+    # display the active and previous game info
+    def active_and_previous(self, gameId):
 
         url = self.sle.url_active_and_previous(gameId)
 
