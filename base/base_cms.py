@@ -149,5 +149,5 @@ class Cms(Base):
 
         r = self.s.get(url, headers=headers, params=params)
 
-        log(r.json())
+        log(str(r.json()).encode('utf8').decode('cp950', 'ignore'))
         return r.json()

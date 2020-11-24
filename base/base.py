@@ -2,6 +2,7 @@ import requests
 from config.url import UrlCms, UrlSle
 from config.userinfo import UserInfo
 import logging
+import time
 
 
 log_path = 'log\log.log'
@@ -96,3 +97,15 @@ class Base:
         r = self.s.post(url, headers=headers, json=data, verify=False)
         log(f'Response: {r.json()}')
         return r.status_code, r.json()
+
+    def start_time_and_end_time(self, start_m, start_d, end_m, end_d):
+        strftimes = (time.strftime('%Y') + f'-{start_m}-{start_d} 00:00:00', time.strftime('%Y') + f'-{end_m}-{end_d} 23:59:59')
+
+        for strftime in strftimes:
+            strptime = time.strptime(strftime, '%Y-%m-%d %H:%M:%S')
+            if strftime == strftimes[0]:
+                todays_start = time.mktime(strptime)
+            else:
+                todays_end = time.mktime(strptime)
+
+        return str(int(todays_start))+'000', str(int(todays_end))+'999'

@@ -1,12 +1,9 @@
 from testcase.test_try import bet, bet_feature, cms, sle, time
-from base import log
+from base import log, Base
 import pytest
 import allure
 
 
-@allure.feature(bet_feature)
-@allure.step('')
-@pytest.mark.dd
 def tes_bet_for_Thai_happy(token,
                             gameId='NYTHAIFFC',
                             playType='STANDALONE',
@@ -33,50 +30,6 @@ def tes_bet_for_Thai_happy(token,
                                 stake=stake,
                                 times=times,
                                 token=token)
-
-
-@pytest.mark.dd
-def tes_for_scenario(token,
-                      result='410112,317,058,233,205,05',   # 自行開獎結果
-                      gameId='NYTHAIFFC',
-                      playType='STANDALONE',
-                      betStrings=('1dtop,1', '1dtop,2'),
-                      playId=90003,
-                      playRateId=102332,
-                      rebatePackage=1900,
-                      stake=3,
-                      times=1):
-
-    current_response = wait_for_bet_and_return_previous_or_current(gameId)
-
-    log(f'Start bet')
-    for betString in betStrings:
-        _, response = bet(betString=betString,
-                          gameId=gameId,
-                          playType=playType,
-                          playId=playId,
-                          playRateId=playRateId,
-                          rebatePackage=rebatePackage,
-                          stake=stake,
-                          times=times,
-                          token=token)
-        if len(response) != 1:
-            raise ValueError('Bet failed')
-
-    log('Start to draw the lottery')
-
-    # Lottery draw
-    status_code = cms.preset(drawId=current_response['current']['drawId'],
-                             gameId=gameId,
-                             result=result,)
-
-    if status_code != 200:
-        raise ValueError(f'Failed with lottery draw , put status code: {status_code}')
-
-    response = cms.pnl_grp()
-    for records in response['groupRecords']:
-        for record in records['records']:
-            pass
 
 
 # 等到開獎倒數十秒, 就返回drawid等等, 小於十秒就等到下個round (十秒為預留給開獎的時間)
@@ -106,16 +59,109 @@ def wait_for_bet_and_return_previous_or_current(gameId):
             return response
 
 
-@pytest.mark.d
-def tes_search_classification_report():
-    response = cms.pnl_grp()
-    response = response['groupRecords']
+def bet_and_draw(token=None,
+                 result='410112,317,058,233,205,05',   # 自行開獎結果
+                 gameId='NYTHAIFFC',
+                 playType='STANDALONE',
+                 betStrings=('1dtop,1', '1dtop,2'),
+                 playId=90003,
+                 playRateId=102332,
+                 rebatePackage=1900,
+                 stake=3,
+                 times=1):
+
+    current_response = wait_for_bet_and_return_previous_or_current(gameId)
+
+    log(f'Start bet')
+    for betString in betStrings:
+        _, response = bet(betString=betString,
+                          gameId=gameId,
+                          playType=playType,
+                          playId=playId,
+                          playRateId=playRateId,
+                          rebatePackage=rebatePackage,
+                          stake=stake,
+                          times=times,
+                          token=token)
+        if len(response) != 1:
+            raise ValueError('Bet failed')
+
+    log('Start to draw the lottery')
+
+    # Lottery draw
+    status_code = cms.preset(drawId=current_response['current']['drawId'],
+                             gameId=gameId,
+                             result=result,)
+
+    if status_code != 200:
+        raise ValueError(f'Failed with lottery draw , put status code: {status_code}')
+
+    return response
+
+
+def search_classification_report(gameId, end, start, userId, username):
+    response = cms.pnl_grp(end=end,
+                           start=start,
+                           userId=userId,
+                           username=username)
 
     for records in response['groupRecords']:
-        print(records)
-        # for record in records['records']:
-        #     log(record['gameName'])
-        #     log(record['betCount'])
-        #     log(record['stake'])
-        #     log(record['validBet'])
-        #     log(record['prizeWon'])
+        for info in records['records']:
+            if info['gameId'] == gameId:
+                log(f'\nGame name:      {info["gameName"]}')
+                log(f'Grp:              {info["grp"]}')
+                log(f'Bet count:        {info["betCount"]}')
+                log(f'Stake:            {info["stake"]}')
+                log(f'Validate bet:     {info["validBet"]}')
+                log(f'Won prize:        {info["prizeWon"]}\n')
+
+    return records['records']
+
+
+@pytest.mark.dd
+def est_get_together(username='welly1',
+                      result='410112,317,058,233,205,05',  # 自行開獎結果
+                      gameId='NYTHAIFFC',
+                      playType='STANDALONE',
+                      betStrings=('1dtop,1', '1dtop,2'),
+                      playId=90003,
+                      playRateId=102332,
+                      rebatePackage=1900,
+                      stake=3,
+                      times=1,
+                      report_start_month=11,
+                      report_start_day=24,
+                      report_end_month=11,
+                      report_end_day=24):
+    # _, get_token = sle.get_token(username=username)
+    #
+    # response = bet_and_draw(token=get_token['token'],
+    #                         result=result,
+    #                         gameId=gameId,
+    #                         playType=playType,
+    #                         betStrings=betStrings,
+    #                         playId=playId,
+    #                         playRateId=playRateId,
+    #                         rebatePackage=rebatePackage,
+    #                         stake=stake,
+    #                         times=times,)
+    # log(response)
+
+    todays_start, todays_end = Base().start_time_and_end_time(report_start_month,
+                                                              report_start_day,
+                                                              report_end_month,
+                                                              report_end_day)
+
+    infos = search_classification_report(gameId=gameId,
+                                         end=todays_end,
+                                         start=todays_start,
+                                         userId=f'SL3{username}',
+                                         username='wellyadmin')
+    for info in infos:
+        pytest.assume(info['gameName'] == '泰国快乐彩')
+        pytest.assume(betStrings[0][:2].title() in info['grp'])
+        pytest.assume(betStrings[1][:2].title() in info['grp'])
+        pytest.assume(info['betCount'] == len(betStrings))
+        pytest.assume(info['stake'] == stake)
+        pytest.assume(info['validBet'] == stake)
+        pytest.assume(info['prizeWon'] == f'{stake * 3.2:.4f}')
