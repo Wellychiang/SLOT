@@ -1,14 +1,15 @@
-from base.base import log, Base
-from base.base_cms import Cms
-from base.base_sle import Sle
-import pytest
-import allure
-import time
-import re
-from pprint import pprint
-
-cms = Cms()
-sle = Sle()
+# from base.base import log, Base
+# from base.base_cms import Cms
+# from base.base_sle import Sle
+# import pytest
+# import allure
+# import time
+# import re
+# from pprint import pprint
+#
+# cms = Cms()
+# sle = Sle()
+from testcase import Base, log, cms, sle, pytest, allure, time, re, pprint
 
 
 bet_feature = 'Bet'
@@ -48,6 +49,12 @@ def bet(gameId='NYSSC3F',  # NYSSC3F, NYSSC15F
         more_data=None):
 
     response = sle.active_and_previous(gameId)
+    if response['current']['countdown'] <= 3000:
+        wait_time = ((response['current']['countdown'] / 1000) + 3)
+
+        log(f'\nCount down time is too short to verify, wait for the next lottery draw.\nCount down: {wait_time}')
+        time.sleep(wait_time)
+
     drawId = response['current']['drawId']
     status_code, response = sle.bet(drawId,
                                     gameId,
@@ -234,6 +241,13 @@ def test_bet_for_game_playId(token,
                              playIdd=range(1, 50),
                              playIds=(17, '', '1'*20, '####', '我是中文', ' ', 'english')):
 
+    response = sle.active_and_previous('NYSSC3F')
+    if response['current']['countdown'] <= 16000:
+        wait_time = ((response['current']['countdown']/1000) + 5)
+
+        log(f'\nCount down time is too short to verify, wait for the next lottery draw.\nCount down: {wait_time}')
+        time.sleep(wait_time)
+
     for playId in playIds:
 
         if playId not in playIds[:2]:
@@ -265,7 +279,8 @@ def test_bet_for_game_playId(token,
 
     for playid in playIdd:
 
-        if playid in range(18, 23):
+        if playid in range(18, 28):
+            log(f'Play id in 18 ~ 27: {playid}')
             status_code, response = bet(playId=playid, token=token)
 
             pytest.assume(status_code == 400)
@@ -278,6 +293,7 @@ def test_bet_for_game_playId(token,
             pytest.assume(response['values'] == [])
 
         elif playid != 17:
+            log(f'Play id: {playid}')
             status_code, response = bet(playId=playid, token=token)
 
             pytest.assume(status_code == 400)
@@ -290,6 +306,7 @@ def test_bet_for_game_playId(token,
             pytest.assume(response['values'] == [])
 
         else:
+            log('Im play id 17, I should be success')
             status_code, response = bet(playId=playid, token=token)
 
             pytest.assume(status_code == 200)

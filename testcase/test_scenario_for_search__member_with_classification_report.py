@@ -1,18 +1,101 @@
-from testcase.test_try import bet, bet_feature, cms, sle, time
-from base import log, Base
-import pytest
-import allure
+# from testcase.test_try import bet, bet_feature, cms, sle, time
+# from base import log, Base
+# import pytest
+# import allure
+
+from testcase import cms, sle, time, log, Base, pytest
+from testcase.test_try import bet, bet_feature
 
 
-def tes_bet_for_Thai_happy(token,
-                            gameId='NYTHAIFFC',
-                            playType='STANDALONE',
-                            betString='1dtop,1',
-                            playId=90003,
-                            playRateId=102332,
-                            rebatePackage=1900,
-                            stake=10,
-                            times=1):
+
+@pytest.mark.d
+def test_get_together(username='yahoo',
+                      result='410112,317,058,233,205,05',  # 自行開獎結果
+                      gameId='NYTHAIFFC',
+                      playType='STANDALONE',
+                      betStrings=('1dtop,1', '1dtop,2'),
+                      playId=90003,
+                      playRateId=102332,
+                      rebatePackage=1900,
+                      stake=3,
+                      times=1,
+                      report_start_month=11,
+                      report_start_day=24,
+                      report_end_month=11,
+                      report_end_day=24):
+    # _, get_token = sle.get_token(username=username)
+    #
+    # response = bet_and_draw(token=get_token['token'],
+    #                         result=result,
+    #                         gameId=gameId,
+    #                         playType=playType,
+    #                         betStrings=betStrings,
+    #                         playId=playId,
+    #                         playRateId=playRateId,
+    #                         rebatePackage=rebatePackage,
+    #                         stake=stake,
+    #                         times=times,)
+    # log(response)
+
+    todays_start, todays_end = Base().start_time_and_end_time(report_start_month,
+                                                              report_start_day,
+                                                              report_end_month,
+                                                              report_end_day)
+
+    infos = search_classification_report(gameId=gameId,
+                                         end=todays_end,
+                                         start=todays_start,
+                                         userId=f'SL3{username}',
+                                         username='wellyadmin')
+
+    log(f'Infos length: {len(infos)}')
+
+    for info_length in range(len(infos)):
+        for info in infos[info_length]:
+            print(info['gameName'])
+
+
+    # for info in infos:
+    #     pytest.assume(info['gameName'] == '泰国快乐彩')
+    #     pytest.assume(betStrings[0][:2].title() in info['grp'])
+    #     pytest.assume(betStrings[1][:2].title() in info['grp'])
+    #     pytest.assume(info['betCount'] == len(betStrings))
+    #     pytest.assume(info['stake'] == len(betStrings))
+    #     pytest.assume(info['validBet'] == stake)
+    #     pytest.assume(info['prizeWon'] == f'{stake * 3.2:.4f}')
+    # for i in infos:
+    #     print(i)
+    # print(len(infos))
+
+
+def search_classification_report(gameId, end, start, userId, username):
+    response = cms.pnl_grp(end=end,
+                           start=start,
+                           userId=userId,
+                           username=username)
+    index = []
+    for records in response['groupRecords']:
+        for info in records['records']:
+            if info['gameId'] == gameId:
+                log(f'\nGame name:      {info["gameName"]}')
+                log(f'Grp:              {info["grp"]}')
+                log(f'Bet count:        {info["betCount"]}')
+                log(f'Stake:            {info["stake"]}')
+                log(f'Validate bet:     {info["validBet"]}')
+                log(f'Won prize:        {info["prizeWon"]}\n')
+            index.append(records['records'])
+    return index
+
+
+def reproduce_bet(token,
+                gameId='NYTHAIFFC',
+                playType='STANDALONE',
+                betString='1dtop,1',
+                playId=90003,
+                playRateId=102332,
+                rebatePackage=1900,
+                stake=10,
+                times=1):
     """
     Thaihappy:
         betString = playRateId
@@ -59,14 +142,14 @@ def wait_for_bet_and_return_previous_or_current(gameId):
             return response
 
 
-def bet_and_draw(token=None,
+def bet_and_draw(token,
                  result='410112,317,058,233,205,05',   # 自行開獎結果
-                 gameId='NYTHAIFFC',
+                 gameId='NYTHAI3FC',
                  playType='STANDALONE',
-                 betStrings=('1dtop,1', '1dtop,2'),
-                 playId=90003,
-                 playRateId=102332,
-                 rebatePackage=1900,
+                 betStrings=('3droll,012',),
+                 playId=90001,
+                 playRateId=102377,
+                 rebatePackage=1870,
                  stake=3,
                  times=1):
 
@@ -99,69 +182,9 @@ def bet_and_draw(token=None,
     return response
 
 
-def search_classification_report(gameId, end, start, userId, username):
-    response = cms.pnl_grp(end=end,
-                           start=start,
-                           userId=userId,
-                           username=username)
-
-    for records in response['groupRecords']:
-        for info in records['records']:
-            if info['gameId'] == gameId:
-                log(f'\nGame name:      {info["gameName"]}')
-                log(f'Grp:              {info["grp"]}')
-                log(f'Bet count:        {info["betCount"]}')
-                log(f'Stake:            {info["stake"]}')
-                log(f'Validate bet:     {info["validBet"]}')
-                log(f'Won prize:        {info["prizeWon"]}\n')
-
-    return records['records']
 
 
-@pytest.mark.dd
-def est_get_together(username='welly1',
-                      result='410112,317,058,233,205,05',  # 自行開獎結果
-                      gameId='NYTHAIFFC',
-                      playType='STANDALONE',
-                      betStrings=('1dtop,1', '1dtop,2'),
-                      playId=90003,
-                      playRateId=102332,
-                      rebatePackage=1900,
-                      stake=3,
-                      times=1,
-                      report_start_month=11,
-                      report_start_day=24,
-                      report_end_month=11,
-                      report_end_day=24):
-    # _, get_token = sle.get_token(username=username)
-    #
-    # response = bet_and_draw(token=get_token['token'],
-    #                         result=result,
-    #                         gameId=gameId,
-    #                         playType=playType,
-    #                         betStrings=betStrings,
-    #                         playId=playId,
-    #                         playRateId=playRateId,
-    #                         rebatePackage=rebatePackage,
-    #                         stake=stake,
-    #                         times=times,)
-    # log(response)
 
-    todays_start, todays_end = Base().start_time_and_end_time(report_start_month,
-                                                              report_start_day,
-                                                              report_end_month,
-                                                              report_end_day)
 
-    infos = search_classification_report(gameId=gameId,
-                                         end=todays_end,
-                                         start=todays_start,
-                                         userId=f'SL3{username}',
-                                         username='wellyadmin')
-    for info in infos:
-        pytest.assume(info['gameName'] == '泰国快乐彩')
-        pytest.assume(betStrings[0][:2].title() in info['grp'])
-        pytest.assume(betStrings[1][:2].title() in info['grp'])
-        pytest.assume(info['betCount'] == len(betStrings))
-        pytest.assume(info['stake'] == stake)
-        pytest.assume(info['validBet'] == stake)
-        pytest.assume(info['prizeWon'] == f'{stake * 3.2:.4f}')
+
+

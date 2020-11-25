@@ -65,5 +65,5 @@ class UrlSle:
     def url_txns(self):
         return self.txns
 
-    def url_active_and_previous(self, gameId):
-        return f'{self.active_and_previous}{gameId}'
+    def url_active_and_previous(self, bet_name):
+        return f'{self.active_and_previous}{bet_name}'
