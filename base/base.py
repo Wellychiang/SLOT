@@ -18,7 +18,7 @@ file_handler = logging.FileHandler(log_path)
 file_handler.setFormatter(formatter)
 logger.addHandler(file_handler)
 
-log = logger.info
+log = lambda x: logger.info(str(x).encode('cp950', 'replace').decode('cp950', 'ignore'))
 
 
 class Base:
