@@ -8,11 +8,8 @@ from testcase.test_try import bet, bet_feature
 
 
 
-@pytest.mark.d
-def test_winning_both(winning_one_draw,
-                      lose_both_draw,
-                      username='autowelly001',
-                      result='410112,317,058,233,205,05',  # 自行開獎結果
+@pytest.mark.dd
+def test_winning_both(username='autowelly001',
                       gameId='NYTHAIFFC',
                       playType='STANDALONE',
                       betStrings=('1dtop,1', '1dtop,2'),   # 需要用list或tuple, bet and draw funtion是用forloop展開
@@ -22,14 +19,14 @@ def test_winning_both(winning_one_draw,
                       stake=3,
                       times=1,
                       report_start_month=11,
-                      report_start_day=26,
+                      report_start_day=27,
                       report_end_month=11,
-                      report_end_day=26,
+                      report_end_day=27,
                       assert_gameName='泰国快乐彩',
                       assert_grp='1D头',
                       assert_pnl=13.6000,
                       assert_pnlRate=2.2000,
-                      how_many_wins=''):
+                      how_many_wins=2):
     _, get_token = sle.get_token(username=username)
 
     # 一個帳號投兩筆
@@ -42,6 +39,7 @@ def test_winning_both(winning_one_draw,
                              stake=stake,
                              times=times,
                             token=get_token['token'])
+
 
     infos = search_classification_report(gameId=gameId,
                                          userId=f'SL3{username}',
@@ -62,59 +60,58 @@ def test_winning_both(winning_one_draw,
         pytest.assume(info['stake'] == stake * len(betStrings))
         pytest.assume(info['validBet'] == stake * len(betStrings))
 
-        if how_many_wins == 'win_both':
+        if how_many_wins == 2:
             win_bet = 2
             pytest.assume(str(info['prizeWon']) in f'{stake * win_bet * 3.2:.4f}')
-        elif how_many_wins == 'lose_both':
+        elif how_many_wins == 0:
             win_bet = 0
             pytest.assume(str(info['prizeWon']) in f'{stake * win_bet * 3.2:.4f}')
-        elif how_many_wins == 'win_one':
+        elif how_many_wins == 1:
             win_bet = 1
             pytest.assume(str(info['prizeWon']) in f'{stake * win_bet * 3.2:.4f}')
 
-        assert info['gameId'] == gameId
-        assert info['grp'] == assert_grp[-1]
-        assert info['betCount'] == len(betStrings)
-        assert info['stake'] == stake * len(betStrings)
-        assert info['validBet'] == stake * len(betStrings)
 
+@pytest.mark.dd
+def test_winning_one_draw(username='autowelly004',
+                            result='410112,317,058,233,205,05',  # 自行開獎結果
+                              gameId='NYTHAIFFC',
+                              playType='STANDALONE',
+                              betStrings=('1dtop,1', '1dtop,6'),   # 需要用list或tuple, bet and draw funtion是用forloop展開
+                              playId=90003,
+                              playRateId=102332,
+                              rebatePackage=1980,
+                              stake=3,
+                              times=1,
+                              report_start_month=11,
+                              report_start_day=27,
+                              report_end_month=11,
+                              report_end_day=27,
+                              assert_gameName='泰国快乐彩',
+                              assert_grp='1D头',
+                              assert_pnl=3.6000,
+                              assert_pnlRate=0.6000,
+                              how_many_wins=1):
 
-@pytest.fixture()
-def winning_one_draw(username='autowelly002',
-                      gameId='NYTHAIFFC',
-                      playType='STANDALONE',
-                      betStrings=('1dtop,1', '1dtop,6'),   # 需要用list或tuple, bet and draw funtion是用forloop展開
-                      playId=90003,
-                      playRateId=102332,
-                      rebatePackage=1880,
-                      stake=3,
-                      times=1,
-                      report_start_month=11,
-                      report_start_day=26,
-                      report_end_month=11,
-                      report_end_day=26,
-                      assert_gameName='泰国快乐彩',
-                      assert_grp='1D头',
-                      assert_pnl=3.6000,
-                      assert_pnlRate=0.6000,
-                      how_many_wins=2):
-    bet_search_and_verify(username=username,
-                          gameId=gameId,
-                          playType=playType,
-                          betStrings=betStrings,
-                          playId=playId,
-                          playRateId=playRateId,
-                          rebatePackage=rebatePackage,
-                          stake=stake,
-                          times=times,
-                          report_start_month=report_start_month,
-                          report_start_day=report_start_day,
-                          report_end_month=report_end_month,
-                          report_end_day=report_end_day,
-                          assert_gameName=assert_gameName,
-                          assert_grp=assert_grp,
-                          assert_pnl=assert_pnl,
-                          assert_pnlRate=assert_pnlRate, )
+    wait_and_lottery_draw(result=result, gameId=gameId, count_down_second=8)
+
+    bet_search_and_verify_report(username=username,
+                                  gameId=gameId,
+                                  playType=playType,
+                                  betStrings=betStrings,
+                                  playId=playId,
+                                  playRateId=playRateId,
+                                  rebatePackage=rebatePackage,
+                                  stake=stake,
+                                  times=times,
+                                  report_start_month=report_start_month,
+                                  report_start_day=report_start_day,
+                                  report_end_month=report_end_month,
+                                  report_end_day=report_end_day,
+                                  assert_gameName=assert_gameName,
+                                  assert_grp=assert_grp,
+                                  assert_pnl=assert_pnl,
+                                  assert_pnlRate=assert_pnlRate,
+                                  how_many_wins=how_many_wins)
 
 
 @pytest.fixture()
@@ -124,54 +121,74 @@ def lose_both_draw(username='autowelly003',
                       betStrings=('1dtop,6', '1dtop,7'),   # 需要用list或tuple, bet and draw funtion是用forloop展開
                       playId=90003,
                       playRateId=102332,
-                      rebatePackage=1880,
+                      rebatePackage=1980,
                       stake=3,
                       times=1,
                       report_start_month=11,
-                      report_start_day=26,
+                      report_start_day=27,
                       report_end_month=11,
-                      report_end_day=26,
+                      report_end_day=27,
                       assert_gameName='泰国快乐彩',
                       assert_grp='1D头',
                       assert_pnl=-6.0000,
-                      assert_pnlRate=-1.0000):
-    bet_search_and_verify(username=username,
-                            gameId=gameId,
-                            playType=playType,
-                            betStrings=betStrings,
-                            playId=playId,
-                            playRateId=playRateId,
-                            rebatePackage=rebatePackage,
-                            stake=stake,
-                            times=times,
-                            report_start_month=report_start_month,
-                            report_start_day=report_start_day,
-                            report_end_month=report_end_month,
-                            report_end_day=report_end_day,
-                            assert_gameName=assert_gameName,
-                            assert_grp=assert_grp,
-                            assert_pnl=assert_pnl,
-                            assert_pnlRate=assert_pnlRate,)
+                      assert_pnlRate=-1.0000,
+                      how_many_wins=0):
+    log('Im lose both')
+    bet_search_and_verify_report(username=username,
+                                    gameId=gameId,
+                                    playType=playType,
+                                    betStrings=betStrings,
+                                    playId=playId,
+                                    playRateId=playRateId,
+                                    rebatePackage=rebatePackage,
+                                    stake=stake,
+                                    times=times,
+                                    report_start_month=report_start_month,
+                                    report_start_day=report_start_day,
+                                    report_end_month=report_end_month,
+                                    report_end_day=report_end_day,
+                                    assert_gameName=assert_gameName,
+                                    assert_grp=assert_grp,
+                                    assert_pnl=assert_pnl,
+                                    assert_pnlRate=assert_pnlRate,
+                                    how_many_wins=how_many_wins)
+    log('Im lose both end')
 
 
-def bet_search_and_verify(username='autowelly002',
-                          gameId='NYTHAIFFC',
-                          playType='STANDALONE',
-                          betStrings=('1dtop,1', '1dtop,6'),   # 需要用list或tuple, bet and draw funtion是用forloop展開
-                          playId=90003,
-                          playRateId=102332,
-                          rebatePackage=1880,
-                          stake=3,
-                          times=1,
-                          report_start_month=11,
-                          report_start_day=26,
-                          report_end_month=11,
-                          report_end_day=26,
-                          assert_gameName='泰国快乐彩',
-                          assert_grp='1D头',
-                          assert_pnl=3.6000,
-                          assert_pnlRate=2.2000,
-                          how_many_wins=2):
+def bet_search_and_verify_report(username='autowelly004',
+                                  gameId='NYTHAIFFC',
+                                  playType='STANDALONE',
+                                  betStrings=('1dtop,1', '1dtop,6'),   # 需要用list或tuple, bet and draw funtion是用forloop展開
+                                  playId=90003,
+                                  playRateId=102332,
+                                  rebatePackage=1880,
+                                  stake=3,
+                                  times=1,
+                                  report_start_month=11,
+                                  report_start_day=26,
+                                  report_end_month=11,
+                                  report_end_day=26,
+                                  assert_gameName='泰国快乐彩',
+                                  assert_grp='1D头',
+                                  assert_pnl=3.6000,
+                                  assert_pnlRate=2.2000,
+                                  how_many_wins=2):
+
+    infos = search_classification_report(gameId=gameId,
+                                         userId=f'SL3{username}',
+                                         report_start_month=report_start_month,
+                                         report_start_day=report_start_day,
+                                         report_end_month=report_end_month,
+                                         report_end_day=report_end_day, )
+
+    for info in infos:
+        if len(info) != 0:
+            pass
+            # 可以嘗試直接更換username
+            # 用舊的資料對比
+        else:
+            pass
+
     _, get_token = sle.get_token(username=username)
 
     # 一個帳號投兩筆
@@ -184,8 +201,7 @@ def bet_search_and_verify(username='autowelly002',
                             stake=stake,
                             times=times,
                             token=get_token['token'])
-
-    yield
+    time.sleep(8)
     # 分類報表
     infos = search_classification_report(gameId=gameId,
                                          userId=f'SL3{username}',
@@ -194,9 +210,21 @@ def bet_search_and_verify(username='autowelly002',
                                          report_end_month=report_end_month,
                                          report_end_day=report_end_day,)
 
-    log(f'Infos length: {len(infos)}')
+    retry_times = 0
+    while len(infos) == 0:
+        retry_times += 1
+        time.sleep(1)
+        infos = search_classification_report(gameId=gameId,
+                                             userId=f'SL3{username}',
+                                             report_start_month=report_start_month,
+                                             report_start_day=report_start_day,
+                                             report_end_month=report_end_month,
+                                             report_end_day=report_end_day, )
+        if retry_times == 5:
+            raise ValueError('Its nothing in report')
 
     for info in infos:
+
         pytest.assume(info['gameId'] == gameId)
         pytest.assume(info['gameName'] == assert_gameName)
         pytest.assume(info['grp'] == assert_grp)
@@ -216,12 +244,13 @@ def bet_search_and_verify(username='autowelly002',
             pytest.assume(str(info['prizeWon']) in f'{stake * win_bet * 3.2:.4f}')
 
 
-def search_classification_report(gameId,
-                                 userId,
-                                 report_start_month,
-                                 report_start_day,
-                                 report_end_month,
-                                 report_end_day,):
+
+def search_classification_report(gameId='NYTHAIFFC',
+                                 userId='SL3autowelly004',
+                                 report_start_month=11,
+                                 report_start_day=27,
+                                 report_end_month=11,
+                                 report_end_day=27,):
 
     todays_start, todays_end = Base().start_time_and_end_time(report_start_month,
                                                               report_start_day,
@@ -277,6 +306,7 @@ def for_loop_bet_and_verify(token,
                           stake=stake,
                           times=times,
                           token=token)
+        time.sleep(1)
         if len(response) != 1:
             raise ValueError('Bet failed')
 
@@ -298,7 +328,7 @@ def wait_for_bet_and_return_previous_or_current(gameId, sleep_time):
             start = time.time()
             log(f'Count down second: {int((count_down - int(f"{sleep_time}000")) / 1000)}')
 
-            # sleep 到剩下5秒
+            # sleep 到剩下幾秒秒
             time.sleep(int((count_down-int(f'{sleep_time}000')) / 1000))
             end = time.time()
 
@@ -310,12 +340,12 @@ def wait_for_bet_and_return_previous_or_current(gameId, sleep_time):
             return response
 
 
-@pytest.mark.dd
-def test_lottery_draw(result='410112,317,058,233,205,05',   # 自行開獎結果
-                         gameId='NYTHAI3FC',
-                         current_drawId=None):
 
-    current_response = wait_for_bet_and_return_previous_or_current(gameId, 10)
+def wait_and_lottery_draw(result='410112,317,058,233,205,05',   # 自行開獎結果
+                             gameId='NYTHAI3FC',
+                             count_down_second=5):
+
+    current_response = wait_for_bet_and_return_previous_or_current(gameId, count_down_second)
 
     # Lottery draw
     status_code = cms.preset(drawId=current_response['current']['drawId'],
@@ -326,25 +356,6 @@ def test_lottery_draw(result='410112,317,058,233,205,05',   # 自行開獎結果
         raise ValueError(f'Failed with lottery draw , put status code: {status_code}')
 
 
-@pytest.fixture()
-def ima():
-    print('a')
-    yield
-    print('enda')
-
-@pytest.fixture()
-def imb():
-    print('b')
-    b = 'beeeeta'
-    yield b
-    print('endb')
-
-@pytest.mark.d
-def test_imc(ima, imb):
-    print('c')
-    b = imb
-    print(b)
-    print('endc')
 
 
 

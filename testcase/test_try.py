@@ -49,7 +49,7 @@ def bet(gameId='NYSSC3F',  # NYSSC3F, NYSSC15F
         more_data=None):
 
     response = sle.active_and_previous(gameId)
-    if response['current']['countdown'] <= 3000:
+    if response['current']['countdown'] <= 1000:
         wait_time = ((response['current']['countdown'] / 1000) + 3)
 
         log(f'\nCount down time is too short to verify, wait for the next lottery draw.\nCount down: {wait_time}')
