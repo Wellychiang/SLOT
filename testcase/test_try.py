@@ -352,12 +352,12 @@ def test_bet_for_game_playRateId(token,
 
 @allure.feature(bet_feature)
 @allure.step('')
-@pytest.mark.Bet
+@pytest.mark.skip('RD check now')
 def test_bet_for_game_stake(token,
-                            stakes=('10', '1'*20,  '', '####', '我是中文', ' ', 'english')):
+                            stakes=('10', '1'*20, '0.2', '', '####', '我是中文', ' ', 'english')):
 
     for stake in stakes:
-        if stake == stakes[1]:
+        if stake == stakes[1] or stake == stakes[2]:
 
             status_code, response = bet(stake=stake, token=token)
 
@@ -370,7 +370,7 @@ def test_bet_for_game_stake(token,
             pytest.assume(response['code'] == 'risk.exceed.by.player.total.stake')
             pytest.assume(response['values'] == [50000])
 
-        elif stake not in stakes[:2]:
+        elif stake not in stakes[:3]:
             try:
                 bet(stake=stake, token=token)
             except ValueError as e:
@@ -442,7 +442,7 @@ def test_bet_for_game_unit(token, units=('DOLLAR', '', ' ', '1'*20, '####', '刀
 
 @allure.feature(bet_feature)
 @allure.step('')
-@pytest.mark.dd
+@pytest.mark.Bet
 def bet_for_two_bet_slit(token,
                          gameId='NYSSC3F',
                          playType='SIMPLE',

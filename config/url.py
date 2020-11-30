@@ -40,7 +40,7 @@ class UrlSle:
     def __init__(self, env='stg'):
         self.env = env
 
-        sle =                       f'https://mx2-api.{env}devops.site/mx2-ecp/api/v1/'
+        sle = f'https://mx2-api.{env}devops.site/mx2-ecp/api/v1/'
 
         login =                     'login'
         get_bet_token =             'games/NY/NY/NYSSC1F/launch'
@@ -48,7 +48,7 @@ class UrlSle:
         self.get_bet_token =        sle + get_bet_token
 
 
-        sle_portal =                f'https://sle-api.{env}devops.site/sle-portal/v2/'
+        sle_portal = f'https://sle-api.{env}devops.site/sle-portal/v2/'
 
         txns =                      'txns'
         draw =                      'draw/'

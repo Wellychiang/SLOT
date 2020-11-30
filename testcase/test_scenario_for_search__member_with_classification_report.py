@@ -4,7 +4,7 @@
 # import allure
 
 from testcase import cms, sle, time, log, Base, pytest, allure
-from testcase.test_try import bet, bet_feature
+from testcase.test_try import bet
 
 now_month = time.strftime('%m')
 now_day = time.strftime('%d')
@@ -164,21 +164,26 @@ def bet_search_and_verify_report(username: list = ('autowelly004', 'clsreport01'
                                               report_end_month=report_end_month,
                                               report_end_day=report_end_day, )
 
-    # 從拿到的分類報表檢查, 若是有資料便換個帳號, 直到找到帳號資料為0的, 才好判斷(DB不能用清, 新vendor不知道狀況)
+    # 從拿到的分類報表檢查, 若是有資料便換個帳號, 直到找到帳號資料為0的, 才好判斷
     change_button = 0
     while len(list_infos) != 0:
         change_button += 1
-        log(f'Use username: {username[change_button]}')
         list_infos = search_classification_report(gameId=gameId,
                                                   userId=f'SL3{username[change_button]}',
                                                   report_start_month=report_start_month,
                                                   report_start_day=report_start_day,
                                                   report_end_month=report_end_month,
                                                   report_end_day=report_end_day, )
-    # 流到剩下八秒後, 先開獎再投
+
+    log(f'Use user: {username[change_button]}')
+
+    # 流到剩下八秒後, 先開獎
     wait_and_lottery_draw(result=result, gameId=gameId, count_down_second=8)
 
     _, get_token = sle.get_token(username=username[change_button])
+
+    # launch, 投注 及他們自己之間都需要間隔1秒或以上, 不然會觸發duplicate
+    time.sleep(1.5)
 
     # 一個帳號投兩筆
     for_loop_bet_and_verify(gameId=gameId,
@@ -290,10 +295,10 @@ def for_loop_bet_and_verify(token,
                           stake=stake,
                           times=times,
                           token=token)
-        a = time.time()
-        time.sleep(2)
-        b = time.time()
-        log(f'Spend time: {a-b}')
+        start = time.time()
+        time.sleep(1.5)
+        end = time.time()
+        log(f'Spend time: {start-end}')
         if len(response) != 1:
             raise ValueError('Bet failed')
 
