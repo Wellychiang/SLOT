@@ -352,7 +352,7 @@ def test_bet_for_game_playRateId(token,
 
 @allure.feature(bet_feature)
 @allure.step('')
-@pytest.mark.skip('RD check now')
+@pytest.mark.Bet
 def test_bet_for_game_stake(token,
                             stakes=('10', '1'*20, '0.2', '', '####', '我是中文', ' ', 'english')):
 
@@ -367,8 +367,8 @@ def test_bet_for_game_stake(token,
             pytest.assume(response['message'] == 'Argument error-> argument name: risk, '
                                                  'message: not pass risk validation')
             pytest.assume(response['errCode'] == 400)
-            pytest.assume(response['code'] == 'risk.exceed.by.player.total.stake')
-            pytest.assume(response['values'] == [50000])
+            pytest.assume(response['code'] == 'risk.exceed.by.player.single.stake')
+            pytest.assume(response['values'] == [50000, 1])
 
         elif stake not in stakes[:3]:
             try:
