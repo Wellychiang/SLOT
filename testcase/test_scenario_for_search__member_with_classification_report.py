@@ -3,13 +3,15 @@
 # import pytest
 # import allure
 
-from testcase import cms, sle, time, log, Base, pytest
+from testcase import cms, sle, time, log, Base, pytest, allure
 from testcase.test_try import bet, bet_feature
 
 now_month = time.strftime('%m')
 now_day = time.strftime('%d')
 
 
+@allure.feature('Scenario for bet and classification report')
+@allure.step('')
 def test_winning_both(username=('autowelly001', 'clsreport01', 'clsreport04', 'yahoo'),
                       result='410112,317,058,233,205,05',
                       gameId='NYTHAIFFC',
@@ -51,6 +53,8 @@ def test_winning_both(username=('autowelly001', 'clsreport01', 'clsreport04', 'y
 
 
 
+@allure.feature('Scenario for bet and classification report')
+@allure.step('')
 def test_winning_one_draw(username=('autowelly002', 'clsreport02', 'clsreport05'),
                           result='410112,317,058,233,205,05',  # 自行開獎結果
                           gameId='NYTHAIFFC',
@@ -91,6 +95,8 @@ def test_winning_one_draw(username=('autowelly002', 'clsreport02', 'clsreport05'
                                  how_many_wins=how_many_wins)
 
 
+@allure.feature('Scenario for bet and classification report')
+@allure.step('')
 def test_lose_both_draw(username=('autowelly003', 'clsreport03', 'clsreport06'),
                         result='410112,317,058,233,205,05',
                            gameId='NYTHAIFFC',
