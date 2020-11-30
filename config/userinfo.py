@@ -25,6 +25,13 @@ class UserInfo:
     autowelly002 = 'autowelly002'
     autowelly003 = 'autowelly003'
     autowelly004 = 'autowelly004'
+    clsreport01 = 'clsreport01'
+    clsreport02 = 'clsreport02'
+    clsreport03 = 'clsreport03'
+    clsreport04 = 'clsreport04'
+    clsreport05 = 'clsreport05'
+    clsreport06 = 'clsreport06'
+
 
     sle_user_info = {welly1:        {'username': welly1,
                                      'pwd': '21e7692cef417d7be81d44054f9b3c1bb5dc7f30'},
@@ -40,8 +47,18 @@ class UserInfo:
                                      'pwd': '0c23de608f7b9e9096fe2def1c8c8d2dfd6b4603'},
                      autowelly004:  {'username': autowelly004,
                                      'pwd': '59bcde24bf38a52ab665ca013d6d82c85f6dd977'},
-                     'welly16': {'username': 'welly16',
-                                'pwd': '21e7692cef417d7be81d44054f9b3c1bb5dc7f30'},
+                     clsreport01: {'username': clsreport01,
+                                   'pwd': '55234cbc1b3c6f7a076b9b0bba8fd9e3150e3ae7'},
+                     clsreport02: {'username': clsreport02,
+                                   'pwd': 'b784bbd85c2e8682aef64e23514ba2cef5f21314'},
+                     clsreport03: {'username': clsreport03,
+                                   'pwd': 'ee507b6bf3151e3d86ea109fe83b23b548ff789c'},
+                     clsreport04: {'username': clsreport04,
+                                   'pwd': '8068a7ec5d3dd8a9bfe17885610b6b45489d838c'},
+                     clsreport05: {'username': clsreport05,
+                                   'pwd': '679677c297f5bd9355e79ff86a736761103e56df'},
+                     clsreport06: {'username': clsreport06,
+                                   'pwd': 'a8c2029ed8feb5cfcc60386127d32f7e73a25a72'},
                      }
 
     def sle_username(self):
