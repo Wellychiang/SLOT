@@ -9,15 +9,18 @@ class UrlCms:
         newtokens =             sle_cms + 'newTokens'
         txn_reports =           sle_cms + 'txnreports/'
         draws =                 sle_cms + 'draws/'
-        MX2 =                   draws + 'MX2/'
         preset =                sle_cms + 'preset'
+        MX2 =                   draws + 'MX2/'
+
         pnl_grp =               txn_reports + 'pnl/grp'
+        pnl_draw =              txn_reports + 'pnl/draw'
 
         self.newtokens =        cms + newtokens
         self.txn_reports =      cms + txn_reports
         self.MX2 =              cms + MX2
         self.preset =           cms + preset
         self.pnl_grp =          cms + pnl_grp
+        self.pnl_draw =         cms + pnl_draw
 
     def url_login(self):
         return self.newtokens
@@ -33,6 +36,9 @@ class UrlCms:
 
     def url_pnl_grp(self):
         return self.pnl_grp
+
+    def ulr_pnl_draw(self):
+        return self.pnl_draw
 
 
 class UrlSle:

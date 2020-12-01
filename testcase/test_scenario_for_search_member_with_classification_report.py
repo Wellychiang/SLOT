@@ -4,7 +4,7 @@
 # import allure
 
 from testcase import cms, sle, time, log, Base, pytest, allure
-from testcase.test_try import bet
+from testcase.bet_base import bet, wait_and_lottery_draw, for_loop_bet_and_verify
 
 now_month = time.strftime('%m')
 now_day = time.strftime('%d')
@@ -208,7 +208,7 @@ def bet_search_and_verify_report(username: list = ('autowelly004', 'clsreport01'
     for info in list_infos:
         log('Success iterable')
         if len(info) != 0:
-            log('im a normal assertion')
+            log('Success to go on a assertion')
             pytest.assume(info['gameId'] == gameId)
             pytest.assume(info['gameName'] == assert_gameName)
             pytest.assume(info['grp'] == assert_grp)
@@ -228,7 +228,7 @@ def bet_search_and_verify_report(username: list = ('autowelly004', 'clsreport01'
             elif how_many_wins == 0:
                 win_bet = 0
                 pytest.assume(str(info['prizeWon']) in f'{stake * win_bet * 3.2:.4f}')
-                log('Im loose both')
+                log('I loose both')
 
         else:
             raise ValueError('Nothing in the clsreport')
@@ -264,82 +264,3 @@ def search_classification_report(gameId='NYTHAIFFC',
 
                 index.append(record_list)
     return index
-
-
-def for_loop_bet_and_verify(token,
-                            gameId='NYTHAI3FC',
-                            playType='STANDALONE',
-                            betStrings=('3droll,012',),
-                            playId=90001,
-                            playRateId=102377,
-                            rebatePackage=1870,
-                            stake=3,
-                            times=1):
-    """
-    Thaihappy:
-        betString = playRateId
-        3dtop|000 = 102328, 3d|roll = 102329,  playId = 90001
-        2dtop|01 = 102330, 2d|bottom = 102331, playId = 90002
-        1dtop|1 = 102332, 1d|bottom = 102333 playId = 90003
-    """
-
-    log(f'Start bet')
-    for betString in betStrings:
-
-        _, response = bet(betString=betString,
-                          gameId=gameId,
-                          playType=playType,
-                          playId=playId,
-                          playRateId=playRateId,
-                          rebatePackage=rebatePackage,
-                          stake=stake,
-                          times=times,
-                          token=token)
-        start = time.time()
-        time.sleep(1.5)
-        end = time.time()
-        log(f'Spend time: {start-end}')
-        if len(response) != 1:
-            raise ValueError('Bet failed')
-
-    return response
-
-
-# 等到開獎倒數幾秒, 就返回drawid等等, 小於13秒就等到下個round (十秒為預留給開獎的時間)
-def wait_for_bet_and_return_previous_or_current(gameId, sleep_time):
-    while True:
-        response = sle.active_and_previous(gameId)
-        count_down = response['current']['countdown']
-
-        if count_down < 13000:
-            time.sleep(13)
-            log(f'Start to wait the new round')
-
-        elif count_down >= 13000:
-            start = time.time()
-            log(f'Count down second: {int((count_down - int(f"{sleep_time}000")) / 1000)}')
-
-            # sleep 到剩下幾秒秒
-            time.sleep(int((count_down - int(f'{sleep_time}000')) / 1000))
-            end = time.time()
-
-            result = start - end
-
-            log(f'Start: {start}\nEnd: {end}')
-            log(f'Result: {result}')
-
-            return response
-
-
-def wait_and_lottery_draw(result='410112,317,058,233,205,05',  # 自行開獎結果
-                          gameId='NYTHAI3FC',
-                          count_down_second=5):
-    current_response = wait_for_bet_and_return_previous_or_current(gameId, count_down_second)
-
-    # Lottery draw
-    status_code = cms.preset(drawId=current_response['current']['drawId'],
-                             gameId=gameId,
-                             result=result, )
-
-    if status_code != 200:
-        raise ValueError(f'Failed with lottery draw , put status code: {status_code}')

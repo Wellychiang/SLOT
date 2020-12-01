@@ -10,7 +10,7 @@
 # cms = Cms()
 # sle = Sle()
 from testcase import Base, log, cms, sle, pytest, allure, time, re, pprint
-
+from testcase.bet_base import bet
 
 bet_feature = 'Bet'
 
@@ -32,46 +32,6 @@ def test_cms():
 
     """Not done"""
     print(f'response: {len(response["data"])}')
-
-
-def bet(gameId='NYSSC3F',  # NYSSC3F, NYSSC15F
-        platform='Desktop',
-        playType='SIMPLE',
-        betString='sum,small',
-        comment='',
-        playId=17,
-        playRateId=16080,
-        rebatePackage=1980,
-        stake=10,
-        times=1,
-        unit='DOLLAR',
-        token=None,
-        more_data=None):
-
-    response = sle.active_and_previous(gameId)
-    if response['current']['countdown'] <= 1000:
-        wait_time = ((response['current']['countdown'] / 1000) + 3)
-
-        log(f'\nCount down time is too short to verify, wait for the next lottery draw.\nCount down: {wait_time}')
-        time.sleep(wait_time)
-
-    drawId = response['current']['drawId']
-    status_code, response = sle.bet(drawId,
-                                    gameId,
-                                    platform,
-                                    playType,
-                                    betString,
-                                    comment,
-                                    playId,
-                                    playRateId,
-                                    rebatePackage,
-                                    stake,
-                                    times,
-                                    unit,
-                                    token,
-                                    more_data)
-
-    return status_code, response
 
 
 @allure.feature(bet_feature)

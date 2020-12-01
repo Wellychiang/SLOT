@@ -1,4 +1,5 @@
 from base.base_sle import Sle
+from testcase import cms, Base, log
 import pytest
 
 sle = Sle()

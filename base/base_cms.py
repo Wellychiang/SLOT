@@ -151,3 +151,46 @@ class Cms(Base):
 
         log(r.json())
         return r.json()
+
+    # 單期盈虧報表
+    def pnl_draw(self,
+                 all='false',
+                 drawIdString='202011300983',
+                 end='1606838399999',
+                 gameId='',
+                 limit='100',
+                 offset='0',
+                 start='1606752000000',
+                 username='wellyadmin'
+                 ):
+
+        url = self.cms.url_pnl_draw()
+        _, get_token = self.cms_login(username)
+
+        headers = {
+            'accept': '*/*',
+            'accept-encoding': 'gzip, deflate, br',
+            'accept-language': 'zh-TW,zh;q=0.9,en-US;q=0.8,en;q=0.7',
+            'authorization': get_token['token'],
+            'origin': 'https://sle-bo.stgdevops.site',
+            'referer': 'https://sle-bo.stgdevops.site/',
+            'sec-fetch-dest': 'empty',
+            'sec-fetch-mode': 'cors',
+            'sec-fetch-site': 'same-site',
+            'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) '
+                          'Chrome/86.0.4240.198 Safari/537.36',
+        }
+
+        params = {
+            'all': all,
+            'drawIdString': drawIdString,
+            'end': end,
+            'gameId': gameId,
+            'limit': limit,
+            'offset': offset,
+            'start': start,
+        }
+
+        r = self.s.get(url, headers=headers, params=params)
+        log(r.json())
+        return r.json
