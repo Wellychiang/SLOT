@@ -41,6 +41,7 @@ def bet(gameId='NYSSC3F',  # NYSSC3F, NYSSC15F
     return status_code, response
 
 
+# count down < 1, will wait 3 second till next round
 def for_loop_bet_and_verify(token,
                             gameId='NYTHAI3FC',
                             playType='STANDALONE',
@@ -100,11 +101,11 @@ def wait_for_bet_and_return_previous_or_current(gameId, sleep_time):
         response = sle.active_and_previous(gameId)
         count_down = response['current']['countdown']
 
-        if count_down < 13000:
+        if count_down < 20000:
             time.sleep(13)
             log(f'Start to wait a new round')
 
-        elif count_down >= 13000:
+        elif count_down >= 20000:
             start = time.time()
             log(f'Count down second: {int((count_down - int(f"{sleep_time}000")) / 1000)}')
 

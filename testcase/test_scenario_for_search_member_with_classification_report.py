@@ -257,10 +257,12 @@ def search_classification_report(gameId='NYTHAIFFC',
                 log(f"Grp(玩法):             {record_list['grp']}")
                 log(f"Pnl(盈虧):             {record_list['pnl']}")
                 log(f"Pnl rate(利潤率):      {record_list['pnlRate']}")
-                log(f"Bet account:          {record_list['betCount']}")
+                log(f"Bet count:            {record_list['betCount']}")
                 log(f"Stake:                {record_list['stake']}")
                 log(f"Valid bet:            {record_list['validBet']}")
                 log(f"Prize won:            {record_list['prizeWon']}")
+            else:
+                raise ValueError('gameId is not correct')
 
                 index.append(record_list)
     return index

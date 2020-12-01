@@ -31,6 +31,9 @@ class UserInfo:
     clsreport04 = 'clsreport04'
     clsreport05 = 'clsreport05'
     clsreport06 = 'clsreport06'
+    spreport01 = 'spreport01'
+    spreport02 = 'spreport02'
+    spreport03 = 'spreport03'
 
 
     sle_user_info = {welly1:        {'username': welly1,
@@ -59,6 +62,12 @@ class UserInfo:
                                    'pwd': '679677c297f5bd9355e79ff86a736761103e56df'},
                      clsreport06: {'username': clsreport06,
                                    'pwd': 'a8c2029ed8feb5cfcc60386127d32f7e73a25a72'},
+                     spreport01: {'username': spreport01,
+                                  'pwd': 'c2f4bc4830c2ec293eda61fddbabb9dd3ba478aa'},
+                     spreport02: {'username': spreport02,
+                                  'pwd': 'f9bc7df343501139d9b383d786498763e9c7b23d'},
+                     spreport03: {'username': spreport03,
+                                  'pwd': 'aee05fb17e1377e6b05ff24ca2bd636a6b736907'}
                      }
 
     def sle_username(self):

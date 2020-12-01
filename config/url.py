@@ -16,7 +16,7 @@ class UrlCms:
         pnl_draw =              txn_reports + 'pnl/draw'
 
         self.newtokens =        cms + newtokens
-        self.txn_reports =      cms + txn_reports
+        self.txn_reports =      cms + txn_reports.strip('/')
         self.MX2 =              cms + MX2
         self.preset =           cms + preset
         self.pnl_grp =          cms + pnl_grp
@@ -37,7 +37,7 @@ class UrlCms:
     def url_pnl_grp(self):
         return self.pnl_grp
 
-    def ulr_pnl_draw(self):
+    def url_pnl_draw(self):
         return self.pnl_draw
 
 

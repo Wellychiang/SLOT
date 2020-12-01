@@ -7,13 +7,15 @@ class Cms(Base):
     cms = UrlCms()
 
     # 注單明細查詢
-    def txn_reports(self, username='imwelly',
+    def txn_reports(self,
+                    username='imwelly',
                     limit='25',
                     offset='0',
-                    prize_cmp='get',
+                    prize_cmp='gte',
                     tm_end='1605196799999',
                     tm_mode='txntime',
-                    tm_start='1605110400000'):
+                    tm_start='1605110400000',
+                    drawIdString=None):
 
         url = self.cms.url_txn_reports()
         _, get_token = self.cms_login(username)
@@ -31,15 +33,16 @@ class Cms(Base):
                           'Chrome/86.0.4240.193 Safari/537.36',
         }
 
-        data = {
+        params = {
             'limit': limit,
             'offset': offset,
             'prizeCmp': prize_cmp,
             'tmMode': tm_mode,
             'tmEnd': tm_end,
             'tmStart': tm_start,
+            'drawIdString': drawIdString
         }
-        r = self.s.get(url, headers=headers, data=data)
+        r = self.s.get(url, headers=headers, params=params)
         log(f'Response: {r.json()}')
 
         return r.status_code, r.json()
@@ -154,22 +157,20 @@ class Cms(Base):
 
     # 單期盈虧報表
     def pnl_draw(self,
-                 all='false',
-                 drawIdString='202011300983',
+                 all=False,
+                 drawIdString='20201201230',
                  end='1606838399999',
                  gameId='',
                  limit='100',
                  offset='0',
                  start='1606752000000',
-                 username='wellyadmin'
-                 ):
+                 username='wellyadmin'):
 
         url = self.cms.url_pnl_draw()
         _, get_token = self.cms_login(username)
 
         headers = {
             'accept': '*/*',
-            'accept-encoding': 'gzip, deflate, br',
             'accept-language': 'zh-TW,zh;q=0.9,en-US;q=0.8,en;q=0.7',
             'authorization': get_token['token'],
             'origin': 'https://sle-bo.stgdevops.site',
@@ -193,4 +194,4 @@ class Cms(Base):
 
         r = self.s.get(url, headers=headers, params=params)
         log(r.json())
-        return r.json
+        return r.json()

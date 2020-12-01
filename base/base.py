@@ -98,8 +98,13 @@ class Base:
         log(f'Response: {r.json()}')
         return r.status_code, r.json()
 
-    def start_time_and_end_time(self, start_m, start_d, end_m, end_d):
-        strftimes = (time.strftime('%Y') + f'-{start_m}-{start_d} 00:00:00', time.strftime('%Y') + f'-{end_m}-{end_d} 23:59:59')
+    # 轉換成可用的timestamp
+    def start_time_and_end_time(self, start_m,
+                                start_d,
+                                end_m,
+                                end_d):
+        strftimes = (time.strftime('%Y') + f'-{start_m}-{start_d} 00:00:00',
+                     time.strftime('%Y') + f'-{end_m}-{end_d} 23:59:59')
 
         for strftime in strftimes:
             strptime = time.strptime(strftime, '%Y-%m-%d %H:%M:%S')
