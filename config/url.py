@@ -5,22 +5,27 @@ class UrlCms:
 
         cms = f'https://sle-boapi.{env}devops.site/'
 
-        sle_cms =               'sle-cms/'
-        newtokens =             sle_cms + 'newTokens'
-        txn_reports =           sle_cms + 'txnreports/'
-        draws =                 sle_cms + 'draws/'
-        preset =                sle_cms + 'preset'
-        MX2 =                   draws + 'MX2/'
+        sle_cms =                   'sle-cms/'
+        newtokens =                 sle_cms + 'newTokens'
+        txn_reports =               sle_cms + 'txnreports/'
+        draws =                     sle_cms + 'draws/'
+        preset =                    sle_cms + 'preset'
+        little_game_report =        sle_cms + 'littleGame/report/records'
+        little_game_patch =         sle_cms + 'littleGame'
+        MX2 =                       draws + 'MX2/'
 
-        pnl_grp =               txn_reports + 'pnl/grp'
-        pnl_draw =              txn_reports + 'pnl/draw'
 
-        self.newtokens =        cms + newtokens
-        self.txn_reports =      cms + txn_reports.strip('/')
-        self.MX2 =              cms + MX2
-        self.preset =           cms + preset
-        self.pnl_grp =          cms + pnl_grp
-        self.pnl_draw =         cms + pnl_draw
+        pnl_grp =                   txn_reports + 'pnl/grp'
+        pnl_draw =                  txn_reports + 'pnl/draw'
+
+        self.newtokens =            cms + newtokens
+        self.txn_reports =          cms + txn_reports.strip('/')
+        self.MX2 =                  cms + MX2
+        self.preset =               cms + preset
+        self.pnl_grp =              cms + pnl_grp
+        self.pnl_draw =             cms + pnl_draw
+        self.little_game_report =   cms + little_game_report
+        self.little_game_patch =    cms + little_game_patch
 
     def url_login(self):
         return self.newtokens
@@ -39,6 +44,12 @@ class UrlCms:
 
     def url_pnl_draw(self):
         return self.pnl_draw
+
+    def url_little_game_report(self):
+        return self.little_game_report
+
+    def url_little_game_patch(self):
+        return self.little_game_patch
 
 
 class UrlSle:
@@ -59,8 +70,12 @@ class UrlSle:
         txns =                      'txns'
         draw =                      'draw/'
         active_and_previous =       f'{draw}activeandprevious/'
+        little_game_create =        'littleGame/create'
+        little_game_play =          'littleGame/play'
         self.txns =                 sle_portal + txns
         self.active_and_previous =  sle_portal + active_and_previous
+        self.little_game_create =   sle_portal + little_game_create
+        self.little_game_play =     sle_portal + little_game_play
 
     def url_login(self):
         return self.login
@@ -73,3 +88,9 @@ class UrlSle:
 
     def url_active_and_previous(self, bet_name):
         return f'{self.active_and_previous}{bet_name}'
+
+    def url_little_game_create(self):
+        return self.little_game_create
+
+    def url_little_game_play(self):
+        return self.little_game_play

@@ -77,7 +77,7 @@ class Cms(Base):
         }
         log(url)
         r = self.s.get(url, headers=headers, params=params)
-        log(str(r.json()).encode('utf8').decode('cp950', 'ignore'))
+        log(f"Response: {str(r.json()).encode('utf8').decode('cp950', 'ignore')}")
 
         return r.json()
 
@@ -115,8 +115,8 @@ class Cms(Base):
         }
 
         r = self.s.post(url, headers=headers, json=data)
-
         log(r.status_code)
+
         return r.status_code
 
     # 分類報表
@@ -152,7 +152,8 @@ class Cms(Base):
 
         r = self.s.get(url, headers=headers, params=params)
 
-        log(r.json())
+        log(f'Response: {r.json()}')
+
         return r.json()
 
     # 單期盈虧報表
@@ -193,5 +194,100 @@ class Cms(Base):
         }
 
         r = self.s.get(url, headers=headers, params=params)
-        log(r.json())
+        log(f'Response: {r.json()}')
+
         return r.json()
+
+    # 小遊戲 > 遊戲紀錄
+    def little_game_report(self,
+                           username='wellyadmin',
+                           endTime='1606924799999',
+                           limit='25',
+                           offset='0',
+                           startTime='1606838400000',
+                           userId=None,
+                           roomId=None,
+                           vendorId='MX2',
+                           ):
+
+        url = self.cms.url_little_game_report()
+
+        _, get_token = self.cms_login(username)
+
+        headers = {
+            'accept': '*/*',
+            'accept-language': 'zh-TW,zh;q=0.9,en-US;q=0.8,en;q=0.7',
+            'authorization': get_token['token'],
+            'origin': 'https://sle-bo.stgdevops.site',
+            'referer': 'https://sle-bo.stgdevops.site/',
+            'sec-fetch-dest': 'empty',
+            'sec-fetch-mode': 'cors',
+            'sec-fetch-site': 'same-site',
+            'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) '
+                          'Chrome/86.0.4240.198 Safari/537.36',
+        }
+
+        params = {
+            'endTime': endTime,
+            'limit': limit,
+            'offset': offset,
+            'startTime': startTime,
+            'userId': userId,
+            'roomId': roomId,
+            'vendorId': vendorId,
+        }
+
+        r = self.s.get(url, headers=headers, params=params)
+        log(f'Response: {r.json()}')
+
+        return r.json()
+
+    # Patch != True, get report
+    def little_game_patch(self,
+                          username='wellyadmin',
+                          commission=5,
+                          patch=True,):
+        url = self.cms.url_little_game_patch()
+
+        _, get_token = self.cms_login(username)
+
+        headers = {
+            'accept': '*/*',
+            'accept-language': 'zh-TW,zh;q=0.9,en-US;q=0.8,en;q=0.7',
+            'authorization': get_token['token'],
+            'origin': 'https://sle-bo.stgdevops.site',
+            'referer': 'https://sle-bo.stgdevops.site/',
+            'sec-fetch-dest': 'empty',
+            'sec-fetch-mode': 'cors',
+            'sec-fetch-site': 'same-site',
+            'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) '
+                          'Chrome/86.0.4240.198 Safari/537.36',
+        }
+
+        if patch:
+            data = {
+                "vendorId": "MX2",
+                "data":
+                    [{"commission": commission, "betAmountItems":
+                        ["10", "40", "100", "150", "300", "500", "800", "9990", "1234560"],
+                      "status": "NORMAL", "gameId": "SC"},
+                     {"commission": "31.7", "betAmountItems":
+                         ["10", "20", "40", "90", "150", "500", "800", "1600", "3200"],
+                      "status": "NORMAL", "gameId": "RPS"},
+                     {"commission": "11.7", "betAmountItems":
+                         ["20", "50", "110", "150", "300", "490", "800", "1600", "9999990"],
+                      "status": "NORMAL", "gameId": "HL"}]
+        }
+            r = self.s.patch(url, headers=headers, json=data)
+            log(f'\nResponse: {r.status_code}')
+
+            return r.status_code
+        else:
+            data = {
+                'vendorId': 'MX2'
+            }
+
+            r = self.s.get(url, headers=headers, data=data)
+            log(f'\nResponse: {r.json()}')
+
+            return r.json()

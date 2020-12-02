@@ -1,12 +1,9 @@
 from testcase import cms, sle, time, log, Base, pytest, allure
-from testcase.bet_base import bet, wait_and_lottery_draw, for_loop_bet_and_verify
-
-
-now_month = time.strftime('%m')
-now_day = time.strftime('%d')
+from testcase.bet_base import bet, wait_and_lottery_draw, for_loop_bet_and_verify, now_month, now_day
 
 
 @allure.feature('Scenario for bet and single profitloss report')
+@allure.step('')
 def test_bet_search_and_verify_report(username='spreport01',
                                       result='000123,111,111,222,222,45',
                                       gameId='NYTHAIFFC',
@@ -39,12 +36,13 @@ def test_bet_search_and_verify_report(username='spreport01',
                                      tm_start=todays_start,
                                      drawIdString=drawId_at_this_time['current']['drawIdString'])
 
+    # 查詢注單明細當期注單, 有的話就等到下一期
     while len(txn_reports['data']) != 0:
         log(f'Current draw id is already exist, count down second: '
             f'{drawId_at_this_time["current"]["countdown"]/1000 + 3}')
         time.sleep(drawId_at_this_time['current']['countdown']/1000 + 3)
 
-    # 流到剩下17秒後, 先開獎
+    # 流到剩下20秒後, 先開獎
     wait_and_lottery_draw(result=result, gameId=gameId, count_down_second=20)
 
     _, get_token = sle.get_token(username=username)

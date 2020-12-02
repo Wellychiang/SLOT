@@ -5,6 +5,7 @@ class Sle(Base):
 
     sle = UrlSle()
 
+    # Launch game
     def get_token(self, username='welly1'):
 
         url = self.sle.url_get_bet_token()
@@ -99,7 +100,7 @@ class Sle(Base):
 
         return r.status_code, r.json()
 
-    # display the active and previous game info
+    # Display the active and previous game info
     def active_and_previous(self, gameId):
 
         url = self.sle.url_active_and_previous(gameId)
@@ -107,4 +108,79 @@ class Sle(Base):
         r = self.s.get(url)
 
         log(r.json())
+        return r.json()
+
+    # Create a game room   id=1271981426123892
+    def little_game_create(self,
+                           token=None,
+                           amount="10",
+                           choice="HEAD",
+                           gameId="SC",
+                           platform="Desktop"):
+
+        url = self.sle.url_little_game_create()
+
+        headers = {
+            'accept': 'application/json, text/plain, */*',
+            'accept-language': 'zh-TW,zh;q=0.9,en-US;q=0.8,en;q=0.7',
+            'authorization': token,
+            'content-length': '66',
+            'content-type': 'application/json',
+            'origin': 'https://mx2.stgdevops.site',
+            'referer': 'https://mx2.stgdevops.site/',
+            'sec-fetch-dest': 'empty',
+            'sec-fetch-mode': 'cors',
+            'sec-fetch-site': 'same-site',
+            'user-agent': 'Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, like Gecko)'
+                          ' Chrome/86.0.4240.198 Mobile Safari/537.36',
+            'x-vendor-id': 'MX2',
+        }
+
+        data = {
+            'amount': amount,
+            'choice': choice,
+            'gameId': gameId,
+            'platform': platform,
+        }
+
+        r = self.s.post(url, headers=headers, json=data)
+        log(f'\nResponse: {r.json()}')
+
+        return r.json()
+
+    def little_game_play(self,
+                         token=None,
+                         choice="TAIL" or 'dd',
+                         gameId="SC",
+                         platform="Desktop",
+                         roomId=1271981426123892,):
+
+        url = self.sle.url_little_game_play()
+
+        headers = {
+            'accept': 'application/json, text/plain, */*',
+            'accept-language': 'zh-TW,zh;q=0.9,en-US;q=0.8,en;q=0.7',
+            'authorization': token,
+            'content-length': '78',
+            'content-type': 'application/json',
+            'origin': 'https://mx2.stgdevops.site',
+            'referer': 'https://mx2.stgdevops.site/',
+            'sec-fetch-dest': 'empty',
+            'sec-fetch-mode': 'cors',
+            'sec-fetch-site': 'same-site',
+            'user-agent': 'Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, like Gecko)'
+                          ' Chrome/86.0.4240.198 Mobile Safari/537.36',
+            'x-vendor-id': 'MX2',
+        }
+
+        data = {
+            'choice': choice,
+            'gameId': gameId,
+            'platform': platform,
+            'roomId': roomId,
+        }
+
+        r = self.s.post(url, headers=headers, json=data)
+        log(f'\nResponse: {r.json()}')
+
         return r.json()

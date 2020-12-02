@@ -1,5 +1,8 @@
 from testcase import cms, sle, time, log, Base, pytest, allure
 
+now_month = time.strftime('%m')
+now_day = time.strftime('%d')
+
 
 def bet(gameId='NYSSC3F',  # NYSSC3F, NYSSC15F
         platform='Desktop',
