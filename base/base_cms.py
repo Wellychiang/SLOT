@@ -340,3 +340,43 @@ class Cms(Base):
         log(f"\nLittle game's time record:\n {r.json()}")
 
         return r.json()
+
+    def little_game_members_report(self,
+                                   username='wellyadmin',
+                                   end=1607011199999,
+                                   limit=25,
+                                   offset=0,
+                                   start=1606924800000,
+                                   userId='SL3timesrecord',
+                                   vendorId='MX2',):
+
+        url = self.cms.url_little_game_members_report()
+
+        _, get_token = self.cms_login(username)
+
+        headers = {
+            'accept': '*/*',
+            'accept-language': 'zh-TW,zh;q=0.9,en-US;q=0.8,en;q=0.7',
+            'authorization': get_token['token'],
+            'origin': 'https://sle-bo.stgdevops.site',
+            'referer': 'https://sle-bo.stgdevops.site/',
+            'sec-fetch-dest': 'empty',
+            'sec-fetch-mode': 'cors',
+            'sec-fetch-site': 'same-site',
+            'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko)'
+                          ' Chrome/86.0.4240.198 Safari/537.36',
+        }
+
+        params = {
+            'end': end,
+            'limit': limit,
+            'offset': offset,
+            'start': start,
+            'userId': userId,
+            'vendorId': vendorId,
+        }
+
+        r = self.s.get(url, headers=headers, params=params)
+        log(f"\nLittle game member's report:\n{r.json()}")
+
+        return r.json()

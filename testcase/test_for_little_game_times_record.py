@@ -2,9 +2,8 @@ from testcase import cms, sle, time, log, Base, pytest, allure
 from testcase.bet_base import bet, wait_and_lottery_draw, for_loop_bet_and_verify, now_month, now_day
 
 
-@allure.feature('Scenario for ')
+@allure.feature("Scenario for times record's three options")
 @allure.step('')
-@pytest.mark.d
 def test_three_options_to_search(amount=10,
                                  commission=5,
                                  commissionAmount=0.5,

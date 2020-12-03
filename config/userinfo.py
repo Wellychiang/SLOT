@@ -1,14 +1,23 @@
+import os
+
+
 class UserInfo:
 
     def __init__(self, user):
         self.user = user
+
+    root_account = os.getenv('ROOT_ACCOUNT')
+    root_pwd = os.getenv('ROOT_PASSWORD')
 
     cms_user_info = {'imwelly':     {'username': 'imwelly',
                                      'pwd': '6e97679a803cee7c930f1bc8d5fa42a5098f901d'},
                      'wellyadmin':  {'username': 'wellyadmin',
                                      'pwd': '64e89cab6f9b5560931d87399d916faf08e95c49'},
                      'welly2':      {'username': 'welly2',
-                                     'pwd': '3578165f887bbdf37a15e1e62c919e7471c73d1b'}}
+                                     'pwd': '3578165f887bbdf37a15e1e62c919e7471c73d1b'},
+                     root_account: {'username': root_account,
+                                    'pwd': root_pwd}
+                     }
 
     def cms_username(self):
         return self.cms_user_info[self.user]['username']
@@ -36,6 +45,10 @@ class UserInfo:
     spreport03 = 'spreport03'
     timesrecord = 'timesrecord'
     timesrecord01 = 'timesrecord01'
+    memberreport = 'memberreport'
+    memberreport1 = 'memberreport1'
+    memberreport2 = 'memberreport2'
+    memberreport3 = 'memberreport3'
 
 
     sle_user_info = {welly1:        {'username': welly1,
@@ -73,7 +86,15 @@ class UserInfo:
                      timesrecord: {'username': timesrecord,
                                   'pwd': '918a7d1c433f5edd63459a7a80c67f323ad96a21'},
                      timesrecord01: {'username': timesrecord01,
-                                     'pwd': 'a26927feea6835faaffa18d475ae99a72f71ff65'}
+                                     'pwd': 'a26927feea6835faaffa18d475ae99a72f71ff65'},
+                     memberreport: {'username': memberreport,
+                                     'pwd': '2bb150507f9bdfe60c4f5956cb4acfc8eea5e64d'},
+                     memberreport1: {'username': memberreport1,
+                                    'pwd': 'd97310874a63ee17ba90925a92d97b74da8e0c75'},
+                     memberreport2: {'username': memberreport2,
+                                    'pwd': '39a4a3a2765cc045c817cb2a46107d2807976f85'},
+                     memberreport3: {'username': memberreport3,
+                                     'pwd': 'e36426949e281f9b2327a884913dd5d4104bc0cd'}
                      }
 
     def sle_username(self):
