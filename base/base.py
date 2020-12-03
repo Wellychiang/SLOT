@@ -99,10 +99,10 @@ class Base:
         return r.status_code, r.json()
 
     # 轉換成可用的timestamp
-    def start_time_and_end_time(self, start_m,
-                                start_d,
-                                end_m,
-                                end_d):
+    def start_and_end_time(self, start_m,
+                                 start_d,
+                                 end_m,
+                                 end_d):
         strftimes = (time.strftime('%Y') + f'-{start_m}-{start_d} 00:00:00',
                      time.strftime('%Y') + f'-{end_m}-{end_d} 23:59:59')
 

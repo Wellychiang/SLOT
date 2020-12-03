@@ -1,8 +1,3 @@
-# from testcase.test_try import bet, bet_feature, cms, sle, time
-# from base import log, Base
-# import pytest
-# import allure
-
 from testcase import cms, sle, time, log, Base, pytest, allure
 from testcase.bet_base import bet, wait_and_lottery_draw, for_loop_bet_and_verify, now_month, now_day
 
@@ -177,7 +172,7 @@ def bet_search_and_verify_report(username: list = ('autowelly004', 'clsreport01'
     # 流到剩下八秒後, 先開獎
     wait_and_lottery_draw(result=result, gameId=gameId, count_down_second=8)
 
-    _, get_token = sle.get_token(username=username[change_button])
+    _, get_token = sle.get_launch_token(username=username[change_button])
 
     # launch, 投注 及他們自己之間都需要間隔1秒或以上, 不然會觸發duplicate
     time.sleep(1.5)
@@ -237,13 +232,13 @@ def search_classification_report(gameId='NYTHAIFFC',
                                  report_start_day=27,
                                  report_end_month=11,
                                  report_end_day=27, ):
-    todays_start, todays_end = Base().start_time_and_end_time(report_start_month,
-                                                              report_start_day,
-                                                              report_end_month,
-                                                              report_end_day)
-    response = cms.pnl_grp(end=todays_end,
-                           start=todays_start,
-                           userId=userId)
+    todays_start, todays_end = Base().start_and_end_time(report_start_month,
+                                                         report_start_day,
+                                                         report_end_month,
+                                                         report_end_day)
+    response = cms.cls_report(end=todays_end,
+                              start=todays_start,
+                              userId=userId)
 
     index = []
     for records_list in response['groupRecords']:

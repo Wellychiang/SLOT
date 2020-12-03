@@ -7,6 +7,6 @@ sle = Sle()
 
 @pytest.fixture()
 def token():
-    _, get_token = sle.get_token(username='welly1')
+    _, get_token = sle.get_launch_token(username='welly1')
 
     return get_token['token']

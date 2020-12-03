@@ -6,9 +6,9 @@ class Sle(Base):
     sle = UrlSle()
 
     # Launch game
-    def get_token(self, username='welly1'):
+    def get_launch_token(self, username='welly1'):
 
-        url = self.sle.url_get_bet_token()
+        url = self.sle.url_get_launch_token()
 
         _, get_token = self.sle_login(username)
 
@@ -35,7 +35,7 @@ class Sle(Base):
         }
 
         r = self.s.put(url, headers=headers, json=data)
-        log(r.json())
+        log(f"\nGet game's launch token:\n{r.json()}")
 
         return r.status_code, r.json()
 
@@ -96,18 +96,18 @@ class Sle(Base):
             data['txns'].append(more_data)
 
         r = self.s.post(url, headers=headers, json=data, verify=False)
-        log(f'\nResponse: {r.json()}')
+        log(f'\nBet:\n{r.json()}')
 
         return r.status_code, r.json()
 
     # Display the active and previous game info
-    def active_and_previous(self, gameId):
+    def active_and_previous_period(self, gameId):
 
-        url = self.sle.url_active_and_previous(gameId)
+        url = self.sle.url_active_and_previous_period(gameId)
 
         r = self.s.get(url)
 
-        log(r.json())
+        log(f"\nActive and previous period:\n{r.json()}")
         return r.json()
 
     # Create a game room   id=1271981426123892
@@ -144,13 +144,13 @@ class Sle(Base):
         }
 
         r = self.s.post(url, headers=headers, json=data)
-        log(f'\nResponse: {r.json()}')
+        log(f"\nLittle game's create:\n{r.json()}")
 
         return r.json()
 
     def little_game_play(self,
                          token=None,
-                         choice="TAIL" or 'dd',
+                         choice="TAIL" or 'HEAD',
                          gameId="SC",
                          platform="Desktop",
                          roomId=1271981426123892,):
@@ -181,6 +181,6 @@ class Sle(Base):
         }
 
         r = self.s.post(url, headers=headers, json=data)
-        log(f'\nResponse: {r.json()}')
+        log(f"\nLittle game's play:\n{r.json()}")
 
         return r.json()

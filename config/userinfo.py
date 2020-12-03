@@ -34,6 +34,8 @@ class UserInfo:
     spreport01 = 'spreport01'
     spreport02 = 'spreport02'
     spreport03 = 'spreport03'
+    timesrecord = 'timesrecord'
+    timesrecord01 = 'timesrecord01'
 
 
     sle_user_info = {welly1:        {'username': welly1,
@@ -67,7 +69,11 @@ class UserInfo:
                      spreport02: {'username': spreport02,
                                   'pwd': 'f9bc7df343501139d9b383d786498763e9c7b23d'},
                      spreport03: {'username': spreport03,
-                                  'pwd': 'aee05fb17e1377e6b05ff24ca2bd636a6b736907'}
+                                  'pwd': 'aee05fb17e1377e6b05ff24ca2bd636a6b736907'},
+                     timesrecord: {'username': timesrecord,
+                                  'pwd': '918a7d1c433f5edd63459a7a80c67f323ad96a21'},
+                     timesrecord01: {'username': timesrecord01,
+                                     'pwd': 'a26927feea6835faaffa18d475ae99a72f71ff65'}
                      }
 
     def sle_username(self):

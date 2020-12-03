@@ -28,7 +28,7 @@ def test_cms():
             todays_end = time.mktime(strptime)
 
     # print(int(todays_start*1000), int((todays_end+0.999)*1000))
-    status_code, response = cms.txn_reports(tm_start=int(todays_start*1000), tm_end=int((todays_end+0.999)*1000))
+    status_code, response = cms.bet_details(tm_start=int(todays_start*1000), tm_end=int((todays_end+0.999)*1000))
 
     """Not done"""
     print(f'response: {len(response["data"])}')
@@ -201,7 +201,7 @@ def test_bet_for_game_playId(token,
                              playIdd=range(1, 50),
                              playIds=(17, '', '1'*20, '####', '我是中文', ' ', 'english')):
 
-    response = sle.active_and_previous('NYSSC3F')
+    response = sle.active_and_previous_period('NYSSC3F')
     if response['current']['countdown'] <= 16000:
         wait_time = ((response['current']['countdown']/1000) + 5)
 

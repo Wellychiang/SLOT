@@ -25,27 +25,27 @@ def test_bet_search_and_verify_report(username='spreport01',
                                       assert_bet_user_count=1,
                                       assert_prizeWon=9.6):
     # 轉成timestamp
-    todays_start, todays_end = Base().start_time_and_end_time(report_start_month,
-                                                              report_start_day,
-                                                              report_end_month,
-                                                              report_end_day)
-    drawId_at_this_time = sle.active_and_previous(gameId)
+    todays_start, todays_end = Base().start_and_end_time(report_start_month,
+                                                         report_start_day,
+                                                         report_end_month,
+                                                         report_end_day)
+    active_and_previous_period = sle.active_and_previous_period(gameId)
 
-    _, txn_reports = cms.txn_reports(username='wellyadmin',
+    _, bet_details = cms.bet_details(username='wellyadmin',
                                      tm_end=todays_end,
                                      tm_start=todays_start,
-                                     drawIdString=drawId_at_this_time['current']['drawIdString'])
+                                     drawIdString=active_and_previous_period['current']['drawIdString'])
 
     # 查詢注單明細當期注單, 有的話就等到下一期
-    while len(txn_reports['data']) != 0:
+    while len(bet_details['data']) != 0:
         log(f'Current draw id is already exist, count down second: '
-            f'{drawId_at_this_time["current"]["countdown"]/1000 + 3}')
-        time.sleep(drawId_at_this_time['current']['countdown']/1000 + 3)
+            f'{active_and_previous_period["current"]["countdown"]/1000 + 3}')
+        time.sleep(active_and_previous_period['current']['countdown']/1000 + 3)
 
     # 流到剩下20秒後, 先開獎
     wait_and_lottery_draw(result=result, gameId=gameId, count_down_second=20)
 
-    _, get_token = sle.get_token(username=username)
+    _, get_token = sle.get_launch_token(username=username)
 
     # launch, 投注 及他們自己之間都需要間隔1秒或以上, 不然會觸發duplicate
     time.sleep(1.5)
@@ -94,14 +94,14 @@ def search_single_profitloss_report(gameId='NYTHAIFFC|STANDALONE',
                                     report_end_month=now_month,
                                     report_end_day=now_day, ):
 
-    todays_start, todays_end = Base().start_time_and_end_time(report_start_month,
+    todays_start, todays_end = Base().start_and_end_time(report_start_month,
                                                               report_start_day,
                                                               report_end_month,
                                                               report_end_day)
-    infos = cms.pnl_draw(end=todays_end,
-                         start=todays_start,
-                         drawIdString=drawIdString,
-                         gameId=gameId)
+    infos = cms.single_profit_report(end=todays_end,
+                                     start=todays_start,
+                                     drawIdString=drawIdString,
+                                     gameId=gameId)
 
     index = []
 
