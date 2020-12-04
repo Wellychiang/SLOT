@@ -15,7 +15,7 @@ def tes_aa(username=('memberreport', 'memberreport1', 'memberreport2'),
     if len(members_report['records']) != 0:
 
         _, get_token = sle.get_launch_token(username[0])
-        sle.little_game_create(token=,
+        sle.little_game_create(token='123',
                                amount=amount,
                                choice=choice,
                                gameId=gameId,)
