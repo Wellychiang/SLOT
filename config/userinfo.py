@@ -49,6 +49,12 @@ class UserInfo:
     memberreport1 = 'memberreport1'
     memberreport2 = 'memberreport2'
     memberreport3 = 'memberreport3'
+    gamerecord01 = 'gamerecord01'
+    gamerecord02 = 'gamerecord02'
+    gamerecord03 = 'gamerecord03'
+    gamerecord04 = 'gamerecord04'
+    lgmaintain01 = 'lgmaintain01'
+    lgmaintain02 = 'lgmaintain02'
 
 
     sle_user_info = {welly1:        {'username': welly1,
@@ -84,17 +90,30 @@ class UserInfo:
                      spreport03: {'username': spreport03,
                                   'pwd': 'aee05fb17e1377e6b05ff24ca2bd636a6b736907'},
                      timesrecord: {'username': timesrecord,
-                                  'pwd': '918a7d1c433f5edd63459a7a80c67f323ad96a21'},
+                                   'pwd': '918a7d1c433f5edd63459a7a80c67f323ad96a21'},
                      timesrecord01: {'username': timesrecord01,
                                      'pwd': 'a26927feea6835faaffa18d475ae99a72f71ff65'},
                      memberreport: {'username': memberreport,
                                      'pwd': '2bb150507f9bdfe60c4f5956cb4acfc8eea5e64d'},
                      memberreport1: {'username': memberreport1,
-                                    'pwd': 'd97310874a63ee17ba90925a92d97b74da8e0c75'},
+                                     'pwd': 'd97310874a63ee17ba90925a92d97b74da8e0c75'},
                      memberreport2: {'username': memberreport2,
-                                    'pwd': '39a4a3a2765cc045c817cb2a46107d2807976f85'},
+                                     'pwd': '39a4a3a2765cc045c817cb2a46107d2807976f85'},
                      memberreport3: {'username': memberreport3,
-                                     'pwd': 'e36426949e281f9b2327a884913dd5d4104bc0cd'}
+                                     'pwd': 'e36426949e281f9b2327a884913dd5d4104bc0cd'},
+                     gamerecord01: {'username': gamerecord01,
+                                    'pwd': 'cff99a89c093683e02164410e2be85f7620eabb7'},
+                     gamerecord02: {'username': gamerecord02,
+                                    'pwd': 'de3e5d00d4dc290d90dd3f811154399831f84e83'},
+                     gamerecord03: {'username': gamerecord03,
+                                    'pwd': '489eea0c4e9c243ce56f3cad13827860ed53fbd4'},
+                     gamerecord04: {'username': gamerecord04,
+                                    'pwd': '0bc51b91d1931159b527aab5c4fc0979d3b2ffbb'},
+                     lgmaintain01: {'username': lgmaintain01,
+                                    'pwd': 'f5aec717529587e169e44287f45aed49851fbe09'},
+                     lgmaintain02: {'username': lgmaintain02,
+                                    'pwd': '6216008676e6f77e54c093593d7a150f72ebcb98'},
+
                      }
 
     def sle_username(self):

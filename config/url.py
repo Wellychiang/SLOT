@@ -81,13 +81,16 @@ class UrlSle:
         draw =                              'draw/'
         active_and_previous =               f'{draw}activeandprevious/'
         little_game =                       'littleGame/'
+        transaction_record =                'transactionrecord'
         create =                            little_game + 'create'
         play =                              little_game + 'play'
+
 
         self.txns =                         sle_portal + txns
         self.active_and_previous_period =   sle_portal + active_and_previous
         self.little_game_create =           sle_portal + create
         self.little_game_play =             sle_portal + play
+        self.transaction_record =           sle_portal + transaction_record
 
     def url_login(self):
         return self.login
@@ -106,3 +109,6 @@ class UrlSle:
 
     def url_little_game_play(self):
         return self.little_game_play
+
+    def url_transaction_record(self):
+        return self.transaction_record

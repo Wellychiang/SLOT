@@ -2,7 +2,7 @@ from testcase import cms, sle, time, log, Base, pytest, allure
 from testcase.bet_base import bet, wait_and_lottery_draw, for_loop_bet_and_verify, now_month, now_day
 
 
-@allure.feature('Scenario for bet and classification report')
+@allure.feature('Scenario for bet happythai and classification report')
 @allure.step('')
 def test_winning_both(username=('autowelly001', 'clsreport01', 'clsreport04', 'yahoo'),
                       result='410112,317,058,233,205,05',
@@ -196,7 +196,6 @@ def bet_search_and_verify_report(username: list = ('autowelly004', 'clsreport01'
                                               report_start_day=report_start_day,
                                               report_end_month=report_end_month,
                                               report_end_day=report_end_day, )
-
     for info in list_infos:
         log('Success iterable')
         if len(info) != 0:

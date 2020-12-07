@@ -245,8 +245,12 @@ class Cms(Base):
     # Patch != True, get report
     def little_game_get_or_patch(self,
                                  username='wellyadmin',
-                                 commission=5,
-                                 patch=True,):
+                                 SC_commission=None,
+                                 RPS_commission=None,
+                                 HL_commission=None,
+                                 method='get',
+                                 SC_status='NORMAL',
+                                 status='NORMAL' or 'MAINTAIN' or 'CLOSED'):
         url = self.cms.url_little_game_get_or_patch()
 
         _, get_token = self.cms_login(username)
@@ -264,17 +268,17 @@ class Cms(Base):
                           'Chrome/86.0.4240.198 Safari/537.36',
         }
 
-        if patch:
+        if method == 'patch':
             data = {
                 "vendorId": "MX2",
                 "data":
-                    [{"commission": commission, "betAmountItems":
+                    [{"commission": SC_commission, "betAmountItems":
                         ["10", "40", "100", "150", "300", "500", "800", "9990", "1234560"],
-                      "status": "NORMAL", "gameId": "SC"},
-                     {"commission": "31.7", "betAmountItems":
+                      "status": SC_status, "gameId": "SC"},
+                     {"commission": RPS_commission, "betAmountItems":
                          ["10", "20", "40", "90", "150", "500", "800", "1600", "3200"],
                       "status": "NORMAL", "gameId": "RPS"},
-                     {"commission": "11.7", "betAmountItems":
+                     {"commission": HL_commission, "betAmountItems":
                          ["20", "50", "110", "150", "300", "490", "800", "1600", "9999990"],
                       "status": "NORMAL", "gameId": "HL"}]
         }
@@ -282,7 +286,7 @@ class Cms(Base):
             log(f"\nLittle game's setting patch:\n{r.status_code}")
 
             return r.status_code
-        else:
+        elif method == 'get':
             data = {
                 'vendorId': 'MX2'
             }

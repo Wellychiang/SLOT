@@ -184,3 +184,40 @@ class Sle(Base):
         log(f"\nLittle game's play:\n{r.json()}")
 
         return r.json()
+
+    def transaction_record(self,
+                           token=None,
+                           start='1607270400000',
+                           end='1607356799999',
+                           types='LITTLE_GAME_DRAW_RETURN_BET,'
+                                 'LITTLE_GAME_TIMEOUT_RETURN_BET,'
+                                 'LITTLE_GAME_CLOSE_RETURN_BET',
+                           offset='0',):
+
+        url = self.sle.url_transaction_record()
+
+        headers = {
+            'accept': 'application/json, text/plain, */*',
+            'accept-language': 'zh-TW,zh;q=0.9,en-US;q=0.8,en;q=0.7',
+            'authorization': token,
+            'origin': 'https://mx2.stgdevops.site',
+            'referer': 'https://mx2.stgdevops.site/',
+            'sec-fetch-dest': 'empty',
+            'sec-fetch-mode': 'cors',
+            'sec-fetch-site': 'same-site',
+            'user-agent': 'Mozilla/5.0 (Linux; Android 6.0; Nexus 5 ABuild/MRA58N) AppleWebKit/537.36 '
+                          '(KHTML, like Gecko) Chrome/86.0.4240.198 Mobile Safari/537.36',
+            'x-vendor-id': 'MX2',
+        }
+
+        params = {
+            'start': start,
+            'end': end,
+            'types': types,
+            'offset': offset,
+        }
+
+        r = self.s.get(url, headers=headers, params=params)
+        log(f"\rTransaction record: {r.json()}")
+
+        return r.json()

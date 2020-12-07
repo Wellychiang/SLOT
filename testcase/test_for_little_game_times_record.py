@@ -24,10 +24,10 @@ def test_three_options_to_search(amount=10,
                                                          report_end_day)
 
     log('\nVerify commission to equal 5%, if not , update to 5%')
-    little_games = cms.little_game_get_or_patch(patch=False)
+    little_games = cms.little_game_get_or_patch(method='get')
 
-    if 5 not in [little_game['commission'] for little_game in little_games]:
-        status_code = cms.little_game_get_or_patch(patch=True, commission=5)
+    if 5 != little_games[0]['commission']:
+        status_code = cms.little_game_get_or_patch(method='patch', SC_commission=5)
         if status_code != 204:
             raise ValueError('Commission is not 5 and patch failed')
     else:
@@ -39,15 +39,13 @@ def test_three_options_to_search(amount=10,
                                          amount=amount,
                                          choice=creator_choice,
                                          gameId=gameId)
+    time.sleep(1)
 
     _, get_token = sle.get_launch_token(player)
     game_play_result = sle.little_game_play(token=get_token['token'],
                                             choice=player_choice,
                                             gameId=gameId,
                                             roomId=game_create['roomId'])
-
-    log(f"\nCreate room's id: {game_create['roomId']}")
-    log(f"Play room's id: {game_play_result['roomId']}\n")
 
     pytest.assume(game_play_result['roomId'] == game_create['roomId'])
     pytest.assume(game_play_result['status'] == 'LOSE')
