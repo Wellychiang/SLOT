@@ -4,7 +4,7 @@ from testcase.bet_base import bet, wait_and_lottery_draw, for_loop_bet_and_verif
 
 @allure.feature('Scenario for bet little game and game report')
 @allure.step('')
-def test_search_for_creator_and_player(creator=('gamerecord01', 'gamerecord02', 'gamerecord03'),
+def test_search_for_creator_and_player(creator='gamerecord01' or 'gamerecord02' or 'gamerecord03',
                                         player='gamerecord04',
                                         amount=20,
                                         bet_count=1,
@@ -32,12 +32,14 @@ def test_search_for_creator_and_player(creator=('gamerecord01', 'gamerecord02', 
                                                          report_end_month,
                                                          report_end_day)
 
-    _, get_token = sle.get_launch_token(creator[0])
+    _, get_token = sle.get_launch_token(creator)
     game_create = sle.little_game_create(token=get_token['token'],
                                          amount=amount,
                                          choice=creator_choice,
                                          gameId=gameId,)
-    time.sleep(1)
+
+    if game_create.get('status') != None:
+        raise ValueError(f'Creator: {creator}')
 
     _, get_token = sle.get_launch_token(player)
     game_play_result = sle.little_game_play(token=get_token['token'],
@@ -46,8 +48,8 @@ def test_search_for_creator_and_player(creator=('gamerecord01', 'gamerecord02', 
                                             roomId=game_create['roomId'])
 
     log('Search with creator')
-    assert_game_report(user_search=f'SL3{creator[0]}',
-                       creator=f'SL3{creator[0]}',
+    assert_game_report(user_search=f'SL3{creator}',
+                       creator=f'SL3{creator}',
                        player=f'SL3{player}',
                        recordType='CREATOR',
                        amount=amount,
@@ -61,7 +63,7 @@ def test_search_for_creator_and_player(creator=('gamerecord01', 'gamerecord02', 
 
     log('Search with player')
     assert_game_report(user_search=f'SL3{player}',
-                       creator=f'SL3{creator[0]}',
+                       creator=f'SL3{creator}',
                        player=f'SL3{player}',
                        recordType='PLAYER',
                        amount=amount,
