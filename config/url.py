@@ -10,6 +10,7 @@ class UrlCms:
         draws =                         'draws/'
         preset =                        'preset'
         little_game =                   'littleGame/'
+        transaction_record =            'transactionrecord'
         report =                        little_game + 'report/'
         records =                       report + 'records'
         room_record =                   report + 'roomRecord'
@@ -29,6 +30,7 @@ class UrlCms:
         self.little_game_get_or_patch = cms + little_game.strip('/')
         self.little_game_times_record = cms + room_record
         self.little_game_members_rp =   cms + account_record
+        self.transaction_record =       cms + transaction_record
 
     def url_login(self):
         return self.newtokens
@@ -59,6 +61,9 @@ class UrlCms:
 
     def url_little_game_members_report(self):
         return self.little_game_members_rp
+
+    def url_transaction_record(self):
+        return self.transaction_record
 
 
 class UrlSle:

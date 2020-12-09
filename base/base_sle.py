@@ -188,7 +188,7 @@ class Sle(Base):
     def transaction_record(self,
                            token=None,
                            start='1607270400000',
-                           end='1607356799999',
+                           end='1607443199999',
                            types='LITTLE_GAME_DRAW_RETURN_BET,'
                                  'LITTLE_GAME_TIMEOUT_RETURN_BET,'
                                  'LITTLE_GAME_CLOSE_RETURN_BET',
