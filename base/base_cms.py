@@ -294,9 +294,9 @@ class Cms(Base):
 
     def little_game_get_or_patch(self,
                                  username='wellyadmin',
-                                 SC_commission=None,
-                                 RPS_commission=None,
-                                 HL_commission=None,
+                                 SC_commission=5,
+                                 RPS_commission=5,
+                                 HL_commission=5,
                                  method='get',
                                  SC_status='NORMAL' or 'MAINTAIN' or None,
                                  RPS_status='NORMAL' or 'MAINTAIN' or None,

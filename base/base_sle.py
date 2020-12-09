@@ -100,7 +100,6 @@ class Sle(Base):
 
         return r.status_code, r.json()
 
-    # Display the active and previous game info
     def active_and_previous_period(self, gameId):
 
         url = self.sle.url_active_and_previous_period(gameId)
@@ -110,7 +109,6 @@ class Sle(Base):
         log(f"\nActive and previous period:\n{r.json()}")
         return r.json()
 
-    # Create a game room   id=1271981426123892
     def little_game_create(self,
                            token=None,
                            amount="10",
