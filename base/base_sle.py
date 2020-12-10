@@ -1,4 +1,5 @@
 from base import Base, log, UrlSle
+import time
 
 
 class Sle(Base):
@@ -36,6 +37,7 @@ class Sle(Base):
 
         r = self.s.put(url, headers=headers, json=data)
         log(f"\nGet game's launch token:\n{r.json()}")
+        time.sleep(1)
 
         return r.status_code, r.json()
 
@@ -149,7 +151,7 @@ class Sle(Base):
     def little_game_play(self,
                          token=None,
                          choice="TAIL" or 'HEAD',
-                         gameId="SC",
+                         gameId="SC" or "RPS" or "HL",
                          platform="Desktop",
                          roomId=1271981426123892,):
 

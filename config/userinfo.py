@@ -55,6 +55,8 @@ class UserInfo:
     gamerecord04 = 'gamerecord04'
     lgmaintain01 = 'lgmaintain01'
     lgmaintain02 = 'lgmaintain02'
+    relativeinfo = 'relativeinfo'
+    relativeinfo1 = 'relativeinfo1'
 
 
     sle_user_info = {welly1:        {'username': welly1,
@@ -113,6 +115,10 @@ class UserInfo:
                                     'pwd': 'f5aec717529587e169e44287f45aed49851fbe09'},
                      lgmaintain02: {'username': lgmaintain02,
                                     'pwd': '6216008676e6f77e54c093593d7a150f72ebcb98'},
+                     relativeinfo: {'username': relativeinfo,
+                                    'pwd': 'de7c70da9f47e31624ee5d973163d19775c7e1d8'},
+                     relativeinfo1: {'username': relativeinfo1,
+                                     'pwd': '586e51160662827c7ec31a42cc13344c25a8e607'}
 
                      }
 

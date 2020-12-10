@@ -48,7 +48,7 @@ def test_bet_search_and_verify_report(username='spreport01',
     _, get_token = sle.get_launch_token(username=username)
 
     # launch, 投注 及他們自己之間都需要間隔1秒或以上, 不然會觸發duplicate
-    time.sleep(1.5)
+    # time.sleep(1.5) 目前在launch裡面直接睡看看
 
     # 一個帳號投10筆
     for_loop_bet_and_verify(gameId=gameId,

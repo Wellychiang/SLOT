@@ -175,7 +175,7 @@ def bet_search_and_verify_report(username: list = ('autowelly004', 'clsreport01'
     _, get_token = sle.get_launch_token(username=username[change_button])
 
     # launch, 投注 及他們自己之間都需要間隔1秒或以上, 不然會觸發duplicate
-    time.sleep(1.5)
+    # time.sleep(1.5) 目前在launch裡面直接睡看看
 
     # 一個帳號投兩筆
     for_loop_bet_and_verify(gameId=gameId,

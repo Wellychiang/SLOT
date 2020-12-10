@@ -39,7 +39,6 @@ def test_three_options_to_search(amount=10,
                                          amount=amount,
                                          choice=creator_choice,
                                          gameId=gameId)
-    time.sleep(1)
 
     _, get_token = sle.get_launch_token(player)
     game_play_result = sle.little_game_play(token=get_token['token'],
