@@ -2,23 +2,22 @@ from testcase import cms, sle, time, log, Base, pytest, allure
 from testcase.bet_base import bet, wait_and_lottery_draw, for_loop_bet_and_verify, now_month, now_day
 
 
-@allure.feature()
-@pytest.mark.d
-def test_d(creator='relativeinfo',
-           player='relativeinfo1',
-           amount=150,
-           pull_water=0.09,
-           two_creators_choice='ROCK',
-           player_choice1='PAPER',
-           player_choice2='ROCK',
-           gameId='RPS',
-           pie_chiang_types='LITTLE_GAME_PRIZE',
-           draw_return_bet='LITTLE_GAME_DRAW_RETURN_BET',
-           bet='LITTLE_GAME_BET',
-           start_month=now_month,
-           end_month=now_month,
-           start_day=now_day,
-           end_day=now_day,):
+@allure.feature("Scenario with bet's relative info")
+def test_EC_CMS_transaction_record(creator='relativeinfo',
+                                   player='relativeinfo1',
+                                   amount=150,
+                                   pull_water=0.09,
+                                   two_creators_choice='ROCK',
+                                   player_choice1='PAPER',
+                                   player_choice2='ROCK',
+                                   gameId='RPS',
+                                   pie_chiang_types='LITTLE_GAME_PRIZE',
+                                   draw_return_bet='LITTLE_GAME_DRAW_RETURN_BET',
+                                   bet='LITTLE_GAME_BET',
+                                   start_month=now_month,
+                                   end_month=now_month,
+                                   start_day=now_day,
+                                   end_day=now_day,):
 
     start, end = Base().start_and_end_time(start_month, start_day, end_month, end_day)
     cms.little_game_get_or_patch(method='patch',
