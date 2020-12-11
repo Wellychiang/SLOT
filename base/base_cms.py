@@ -3,7 +3,6 @@ import time
 
 
 class Cms(Base):
-
     cms = UrlCms()
 
     # 注單明細查詢
@@ -109,9 +108,9 @@ class Cms(Base):
         result = result.split(',')
 
         data = {
-            'drawId':  drawId,
-            'gameId':  gameId,
-            'result':  '|'.join(result)
+            'drawId': drawId,
+            'gameId': gameId,
+            'result': '|'.join(result)
         }
 
         r = self.s.post(url, headers=headers, json=data)
@@ -254,7 +253,7 @@ class Cms(Base):
                                  start='1606838400000',
                                  status='CREATED,CREATOR_WIN,PLAYER_WIN,DRAW,CLOSED',
                                  tmMode='roomCreateDate',
-                                 vendorId='MX2',):
+                                 vendorId='MX2', ):
 
         url = self.cms.url_little_game_times_record()
 
@@ -272,7 +271,6 @@ class Cms(Base):
             'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) '
                           'Chrome/86.0.4240.198 Safari/537.36',
         }
-
         params = {
             'end': end,
             'limit': limit,
@@ -291,7 +289,6 @@ class Cms(Base):
 
         return r.json()
 
-
     def little_game_get_or_patch(self,
                                  username='wellyadmin',
                                  SC_commission=5,
@@ -300,7 +297,7 @@ class Cms(Base):
                                  method='get',
                                  SC_status='NORMAL' or 'MAINTAIN' or None,
                                  RPS_status='NORMAL' or 'MAINTAIN' or None,
-                                 HL_status='NORMAL' or 'MAINTAIN' or None,):
+                                 HL_status='NORMAL' or 'MAINTAIN' or None, ):
         url = self.cms.url_little_game_get_or_patch()
 
         _, get_token = self.cms_login(username)
@@ -317,7 +314,6 @@ class Cms(Base):
             'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) '
                           'Chrome/86.0.4240.198 Safari/537.36',
         }
-
         if method == 'patch':
             data = {
                 "vendorId": "MX2",
@@ -331,7 +327,7 @@ class Cms(Base):
                      {"commission": HL_commission, "betAmountItems":
                          ["20", "50", "110", "150", "300", "490", "800", "1600", "9999990"],
                       "status": HL_status, "gameId": "HL"}]
-        }
+            }
             r = self.s.patch(url, headers=headers, json=data)
             log(f"\nLittle game's setting patch:\n{r.status_code}")
 
@@ -353,7 +349,7 @@ class Cms(Base):
                                    offset=0,
                                    start=1606924800000,
                                    userId='SL3timesrecord',
-                                   vendorId='MX2',):
+                                   vendorId='MX2', ):
 
         url = self.cms.url_little_game_members_report()
 
@@ -371,7 +367,6 @@ class Cms(Base):
             'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko)'
                           ' Chrome/86.0.4240.198 Safari/537.36',
         }
-
         params = {
             'end': end,
             'limit': limit,
@@ -394,7 +389,7 @@ class Cms(Base):
                            offset='0',
                            start='1607356800000',
                            types='LITTLE_GAME_CLOSE_RETURN_BET',
-                           vendorId='MX2',):
+                           vendorId='MX2', ):
 
         url = self.cms.url_transaction_record()
 
@@ -412,7 +407,6 @@ class Cms(Base):
             'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko)'
                           ' Chrome/86.0.4240.198 Safari/537.36',
         }
-
         params = {
             'end': end,
             'limit': limit,
@@ -427,3 +421,85 @@ class Cms(Base):
         log(f"\nTransaction record: {r.json()}")
 
         return r.json()
+
+    def singled_out_setting(self,
+                            username='wellyadmin',
+                            singleBetLimitPercentage=1,
+                            singleBetPrizeMaximum='999'):
+
+        url = self.cms.url_singled_out_setting()
+
+        _, get_token = self.cms_login(username)
+
+        headers = {
+            'accept': '*/*',
+            'accept-language': 'zh-TW,zh;q=0.9,en-US;q=0.8,en;q=0.7',
+            'authorization': get_token['token'],
+            'content-length': '386',
+            'content-type': 'application/json;charset=UTF-8',
+            'origin': 'https://sle-bo.stgdevops.site',
+            'referer': 'https://sle-bo.stgdevops.site/',
+            'sec-fetch-dest': 'empty',
+            'sec-fetch-mode': 'cors',
+            'sec-fetch-site': 'same-site',
+            'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) '
+                          'Chrome/87.0.4280.88 Safari/537.36',
+        }
+        data = [
+            {"vendorId": "MX2",
+             "category": "SSC",
+             "singleBetLimitPercentage": singleBetLimitPercentage,
+             "singleBetPrizeMaximum": singleBetPrizeMaximum},
+            {"vendorId": "MX2",
+             "category": "PK10",
+             "singleBetLimitPercentage": 1,
+             "singleBetPrizeMaximum": "1000"},
+            {"vendorId": "MX2",
+             "category": "SYXW",
+             "singleBetLimitPercentage": 1,
+             "singleBetPrizeMaximum": "1000"},
+            {"vendorId": "MX2",
+             "category": "K3",
+             "singleBetLimitPercentage": 1,
+             "singleBetPrizeMaximum": "1000"}
+        ]
+
+        r = self.s.patch(url, headers=headers, json=data)
+        log(f'\n Status code: {r.status_code}')
+
+    def win_prize_limit(self,
+                         username='wellyadmin',
+                         gameId='"TXFFC"',
+                         playType='"SIMPLE"',
+                         prizeLimit='"500"',
+                         vendorId='"MX2"',
+                         ):
+        url = self.cms.url_win_prize_limit()
+
+        _, get_token = self.cms_login(username)
+
+        headers = {
+            'accept': '*/*',
+            'accept-language': 'zh-TW,zh;q=0.9,en-US;q=0.8,en;q=0.7',
+            'authorization': get_token['token'],
+            'content-length': '3574',
+            'content-type': 'application/json;charset=UTF-8',
+            'origin': 'https://sle-bo.stgdevops.site',
+            'referer': 'https://sle-bo.stgdevops.site/',
+            'sec-fetch-dest': 'empty',
+            'sec-fetch-mode': 'cors',
+            'sec-fetch-site': 'same-site',
+            'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko)'
+                          ' Chrome/87.0.4280.88 Safari/537.36',
+        }
+        data = [{
+            "vendorId": vendorId,
+            "gameId": gameId,
+            "prizeLimit": prizeLimit,
+            "playType": playType
+        }]
+
+        r = self.s.patch(url, headers=headers, json=data)
+        log(f"Status code: {r.status_code}")
+
+        return r.status_code

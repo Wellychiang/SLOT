@@ -57,6 +57,7 @@ class UserInfo:
     lgmaintain02 = 'lgmaintain02'
     relativeinfo = 'relativeinfo'
     relativeinfo1 = 'relativeinfo1'
+    singledout01 = 'singledout01'
 
 
     sle_user_info = {welly1:        {'username': welly1,
@@ -118,8 +119,9 @@ class UserInfo:
                      relativeinfo: {'username': relativeinfo,
                                     'pwd': 'de7c70da9f47e31624ee5d973163d19775c7e1d8'},
                      relativeinfo1: {'username': relativeinfo1,
-                                     'pwd': '586e51160662827c7ec31a42cc13344c25a8e607'}
-
+                                     'pwd': '586e51160662827c7ec31a42cc13344c25a8e607'},
+                     singledout01: {'username': singledout01,
+                                    'pwd': '123'}
                      }
 
     def sle_username(self):

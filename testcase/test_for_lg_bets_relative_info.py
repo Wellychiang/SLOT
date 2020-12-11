@@ -25,12 +25,12 @@ def test_EC_CMS_transaction_record(creator='relativeinfo',
     _, token = sle.get_launch_token(player)
 
     # Take EC, CMS's init report
-    pie_chiang_init_record = sle.transaction_record(token['token'], start, end, pie_chiang_types)
+    pie_chiang_init_record =      sle.transaction_record(token['token'], start, end, pie_chiang_types)
     draw_return_bet_init_record = sle.transaction_record(token['token'], start, end, draw_return_bet)
-    bet_init = sle.transaction_record(token['token'], start, end, bet)
-    cms_pie_chiang_init = cms.transaction_record(start=start, end=end, types=pie_chiang_types, userId=f'SL3{player}')
-    cms_return_bet_init = cms.transaction_record(start=start, end=end, types=draw_return_bet, userId=f'SL3{player}')
-    cms_bet_init = cms.transaction_record(start=start, end=end, types=bet, userId=f'SL3{player}')
+    bet_init =                    sle.transaction_record(token['token'], start, end, bet)
+    cms_pie_chiang_init =         cms.transaction_record(start=start, end=end, types=pie_chiang_types, userId=f'SL3{player}')
+    cms_return_bet_init =         cms.transaction_record(start=start, end=end, types=draw_return_bet, userId=f'SL3{player}')
+    cms_bet_init =                cms.transaction_record(start=start, end=end, types=bet, userId=f'SL3{player}')
 
     # Create two rooms and play
     creator_room1, creator_room2 = create_two_room_with_rock(creator, amount, two_creators_choice, gameId)
@@ -42,24 +42,24 @@ def test_EC_CMS_transaction_record(creator='relativeinfo',
                                                                 creator_room1,
                                                                 creator_room2)
 
-    # Assert response
+    # Assert creator and players response
     assert_two_rooms_response(gameplay1, gameplay2, creator_room1, creator_room2, amount, pull_water)
 
-    # Assert report
-    total_pie_chiang = assert_lg_pie_chiang_in_wallet(token, start, end, pie_chiang_types, amount, pull_water)
-    total_return_bet = assert_lg_draw_return_bet_in_wallet(token, start, end, draw_return_bet, amount)
-    total_bet = assert_lg_bet(token, start, end, bet, amount)
-    cms_total_pie_chiang = assert_cms_lg_pie_chiang(start, end, pie_chiang_types, f'SL3{player}', amount, pull_water)
-    cms_total_return_bet = assert_cms_lg_draw_return_bet_in_wallet(start, end, draw_return_bet, f'SL3{player}', amount)
-    cms_total_bet = assert_cms_lg_bet(start, end, bet, f'SL3{player}', amount)
+    # Take EC, CMS's report
+    total_pie_chiang =      assert_lg_pie_chiang_in_wallet(token, start, end, pie_chiang_types, amount, pull_water)
+    total_return_bet =      assert_lg_draw_return_bet_in_wallet(token, start, end, draw_return_bet, amount)
+    total_bet =             assert_lg_bet(token, start, end, bet, amount)
+    cms_total_pie_chiang =  assert_cms_lg_pie_chiang(start, end, pie_chiang_types, f'SL3{player}', amount, pull_water)
+    cms_total_return_bet =  assert_cms_lg_draw_return_bet_in_wallet(start, end, draw_return_bet, f'SL3{player}', amount)
+    cms_total_bet =         assert_cms_lg_bet(start, end, bet, f'SL3{player}', amount)
 
-    # Assert about init and right now's total
-    pytest.assume(total_pie_chiang == pie_chiang_init_record['total'] + 1)
-    pytest.assume(total_return_bet == draw_return_bet_init_record['total'] + 1)
-    pytest.assume(total_bet == bet_init['total'] + 2)
-    pytest.assume(cms_total_pie_chiang == cms_pie_chiang_init['total'] + 1)
-    pytest.assume(cms_total_return_bet == cms_return_bet_init['total'] + 1)
-    assert cms_total_bet == cms_bet_init['total'] + 2
+    # Assert about init and right now's report's total
+    pytest.assume(total_pie_chiang ==       pie_chiang_init_record['total'] + 1)
+    pytest.assume(total_return_bet ==       draw_return_bet_init_record['total'] + 1)
+    pytest.assume(total_bet ==              bet_init['total'] + 2)
+    pytest.assume(cms_total_pie_chiang ==   cms_pie_chiang_init['total'] + 1)
+    pytest.assume(cms_total_return_bet ==   cms_return_bet_init['total'] + 1)
+    assert cms_total_bet ==                 cms_bet_init['total'] + 2
 
 
 def create_two_room_with_rock(creator='relativeinfo',
