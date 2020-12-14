@@ -4,7 +4,7 @@ now_month = time.strftime('%m')
 now_day = time.strftime('%d')
 
 
-def bet(gameId='NYSSC3F',  # NYSSC3F, NYSSC15F
+def bet(gameId='NYSSC3F',
         platform='Desktop',
         playType='SIMPLE',
         betString='sum,small',
@@ -98,15 +98,15 @@ def wait_and_lottery_draw(result='410112,317,058,233,205,05',  # 自行開獎結
         raise ValueError(f'Failed with lottery draw , put status code: {status_code}')
 
 
-# 等到開獎倒數幾秒, 就返回drawid等等, 小於13秒就等到下個round (十秒為預留給開獎的時間)
+# 等到開獎倒數幾秒, 就返回drawid等等, 小於13秒就等到下個round (幾秒(10)為預留給開獎的時間)
 def wait_for_bet_and_return_previous_or_current(gameId, sleep_time):
     while True:
         response = sle.active_and_previous_period(gameId)
         count_down = response['current']['countdown']
 
         if count_down < 20000:
-            time.sleep(13)
             log(f'Start to wait a new round')
+            time.sleep(13)
 
         elif count_down >= 20000:
             start = time.time()

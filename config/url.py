@@ -18,6 +18,7 @@ class UrlCms:
         room_record =                   report + 'roomRecord'
         account_record =                report + 'accountRecord'
         MX2 =                           draws + 'MX2/'
+        clear =                         draws + 'clear/'
 
         pnl_grp =                       txn_reports + 'pnl/grp'
         pnl_draw =                      txn_reports + 'pnl/draw'
@@ -34,7 +35,8 @@ class UrlCms:
         self.little_game_members_rp =   cms + account_record
         self.transaction_record =       cms + transaction_record
         self.singled_out_setting =      cms + vendor_game
-        self.win_prize_limit =             cms + games
+        self.win_prize_limit =          cms + games
+        self.draw_null =                cms + clear
 
     def url_login(self):
         return self.newtokens
@@ -74,6 +76,9 @@ class UrlCms:
 
     def url_win_prize_limit(self):
         return self.win_prize_limit
+
+    def url_draw_null(self, period):
+        return self.draw_null + period
 
 
 class UrlSle:

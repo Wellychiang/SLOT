@@ -80,6 +80,46 @@ class Cms(Base):
 
         return r.json()
 
+    def draw_null(self,
+                  username='wellyadmin',
+                  period=123,
+                  action='OPEN_NULL' or 'MANUAL_GIVING_RESULTS',
+                  result='1,2,3,4,5',
+                  method='null'):
+
+        url = self.cms.url_draw_null(str(period))
+        _, get_token = self.cms_login(username)
+
+        headers = {
+            'accept': '*/*',
+            'accept-language': 'zh-TW,zh;q=0.9,en-US;q=0.8,en;q=0.7',
+            'authorization': get_token['token'],
+            'content-length': '22',
+            'content-type': 'application/json;charset=UTF-8',
+            'origin': 'https://sle-bo.stgdevops.site',
+            'referer': 'https://sle-bo.stgdevops.site/',
+            'sec-fetch-dest': 'empty',
+            'sec-fetch-mode': 'cors',
+            'sec-fetch-site': 'same-site',
+            'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko)'
+                          ' Chrome/87.0.4280.88 Safari/537.36',
+        }
+
+        result = result.split(',')
+
+        data = {
+            'action': action,
+        }
+
+        if method != 'null':
+            data['result'] = '|'.join(result)
+            data['vendorIds'] = ["MX2"]
+
+        r = self.s.patch(url, headers=headers, json=data)
+        log(f"Status code: {r.status_code}")
+
+        return r.status_code
+
     # 自行開獎, 只能用imwelly帳號 (輸入獎號帳號)
     def lottery_draw(self,
                      drawId=2020111900340,
@@ -472,8 +512,7 @@ class Cms(Base):
                          gameId='"TXFFC"',
                          playType='"SIMPLE"',
                          prizeLimit='"500"',
-                         vendorId='"MX2"',
-                         ):
+                         vendorId='"MX2"',):
         url = self.cms.url_win_prize_limit()
 
         _, get_token = self.cms_login(username)
@@ -503,3 +542,5 @@ class Cms(Base):
         log(f"Status code: {r.status_code}")
 
         return r.status_code
+
+
