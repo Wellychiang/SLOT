@@ -102,7 +102,7 @@ def test_bet_search_and_verify_report(username='spreport01',
             raise ValueError('Nothing in the single profitloss report')
 
 
-def search_single_profitloss_report(gameId='NYTHAIFFC|STANDALONE',
+def search_single_profitloss_report(gameId=None,
                                     drawIdString='',
                                     report_start_month=now_month,
                                     report_start_day=now_day,
@@ -121,7 +121,7 @@ def search_single_profitloss_report(gameId='NYTHAIFFC|STANDALONE',
     index = []
 
     for info_list in infos['records']:
-        if info_list['gameId'] == gameId[:9]:
+        if info_list['gameId'] == 'NYTHAIFFC':
             log(f"Game id:              {info_list['gameId']}")
             log(f"Game name:            {info_list['gameName']}")
             log(f"Bet user count:       {info_list['betUserCount']}")
