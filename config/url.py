@@ -12,7 +12,7 @@ class UrlCms:
         little_game =                   'littleGame/'
         transaction_record =            'transactionrecord'
         vendor_game =                   'vendorGame'
-        games =                         'games'
+        games =                         'games/'
         plays =                         'plays/'
         report =                        little_game + 'report/'
         records =                       report + 'records'
@@ -20,7 +20,7 @@ class UrlCms:
         account_record =                report + 'accountRecord'
         MX2 =                           draws + 'MX2/'
         clear =                         draws + 'clear/'
-        batch =                         plays + 'batch'
+        status =                        games + 'status/'
 
         pnl_grp =                       txn_reports + 'pnl/grp'
         pnl_draw =                      txn_reports + 'pnl/draw'
@@ -37,9 +37,9 @@ class UrlCms:
         self.little_game_members_rp =   cms + account_record
         self.transaction_record =       cms + transaction_record
         self.singled_out_setting =      cms + vendor_game
-        self.win_prize_limit =          cms + games
+        self.win_prize_limit =          cms + games.strip('/')
         self.draw_null =                cms + clear
-        self.games_close_or_open =      cms + batch
+        self.games_close_or_open =      cms + status
 
     def url_login(self):
         return self.newtokens
@@ -83,8 +83,9 @@ class UrlCms:
     def url_draw_null(self, period):
         return self.draw_null + period
 
-    def url_games_close_or_open(self):
-        return self.games_close_or_open
+    def url_games_close_or_open(self, gameId):
+        return self.games_close_or_open + gameId
+
 
 
 class UrlSle:

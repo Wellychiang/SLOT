@@ -51,8 +51,14 @@ def test_bet_search_and_verify_report(username='spreport01',
             f'{active_and_previous_period["current"]["countdown"]/1000 + 3}')
         time.sleep(active_and_previous_period['current']['countdown']/1000 + 3)
 
+        active_and_previous_period = sle.active_and_previous_period(gameId)
+        _, bet_details = cms.bet_details(username='wellyadmin',
+                                         tm_end=todays_end,
+                                         tm_start=todays_start,
+                                         drawIdString=active_and_previous_period['current']['drawIdString'])
+
     # 流到剩下20秒後, 先開獎
-    wait_and_lottery_draw(result=result, gameId=gameId, count_down_second=20)
+    wait_and_lottery_draw(result=result, gameId=gameId, count_down_second=22)
 
     _, get_token = sle.get_launch_token(username=username)
 
@@ -72,7 +78,7 @@ def test_bet_search_and_verify_report(username='spreport01',
     # 目前15秒差不多可以更新到報表
     time.sleep(15)
 
-    list_infos = search_single_profitloss_report(drawIdString='202012011082',
+    list_infos = search_single_profitloss_report(drawIdString=active_and_previous_period['current']['drawIdString'],
                                                   report_start_month=report_start_month,
                                                   report_start_day=report_start_day,
                                                   report_end_month=report_end_month,
