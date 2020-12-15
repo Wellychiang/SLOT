@@ -1,5 +1,14 @@
-from testcase import cms, sle, time, log, Base, pytest, allure
-from testcase.bet_base import bet, wait_and_lottery_draw, for_loop_bet_and_verify, now_month, now_day
+from testcase import allure
+from testcase import Base
+from testcase import cms
+from testcase import log
+from testcase import pytest
+from testcase import sle
+from testcase import time
+from testcase.bet_base import for_loop_bet_and_verify
+from testcase.bet_base import now_month
+from testcase.bet_base import now_day
+from testcase.bet_base import wait_and_lottery_draw
 
 
 @allure.feature('Scenario for bet happythai and classification report')
@@ -129,7 +138,7 @@ def test_lose_both_draw(username=('autowelly003', 'clsreport03', 'clsreport06'),
                                  how_many_wins=how_many_wins)
 
 
-def bet_search_and_verify_report(username: list = ('autowelly004', 'clsreport01', 'clsreport02', 'clsreport03'),
+def bet_search_and_verify_report(username: tuple = ('autowelly004', 'clsreport01', 'clsreport02', 'clsreport03'),
                                   result='410112,317,058,233,205,05',
                                   gameId='NYTHAIFFC',
                                   playType='STANDALONE',

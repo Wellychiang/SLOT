@@ -1,15 +1,9 @@
-# from base.base import log, Base
-# from base.base_cms import Cms
-# from base.base_sle import Sle
-# import pytest
-# import allure
-# import time
-# import re
-# from pprint import pprint
-#
-# cms = Cms()
-# sle = Sle()
-from testcase import Base, log, cms, sle, pytest, allure, time, re, pprint
+from testcase import allure
+from testcase import cms
+from testcase import log
+from testcase import pytest
+from testcase import sle
+from testcase import time
 from testcase.bet_base import bet
 
 bet_feature = 'Bet'
@@ -38,9 +32,9 @@ def test_cms():
 @allure.step('')
 @pytest.mark.Bet
 def test_bet_for_rebate_packages(token, rebatePackages=(1980,
-                                                        1800,
+                                                        1979,
                                                         1981,
-                                                        1799,
+                                                        1769,
                                                         '1'*20,
                                                         '####',
                                                         '我是中文',
@@ -50,7 +44,7 @@ def test_bet_for_rebate_packages(token, rebatePackages=(1980,
 
     for rebatePackage in rebatePackages:
 
-        if rebatePackage in rebatePackages[2:4]:
+        if rebatePackage in rebatePackages[1:4]:
             status_code, response = bet(rebatePackage=rebatePackage, token=token)
 
             pytest.assume(response['status'] == 400)
@@ -78,7 +72,6 @@ def test_bet_for_rebate_packages(token, rebatePackages=(1980,
 @allure.step('')
 @pytest.mark.Bet
 def test_bet_for_game_id(token, gameIds=('NYSSC3F', 'nyssc3f', '####', '', '1'*20, '我是中文', ' ', 'english')):
-    # bet(gameId='english', token=token)
     for gameId in gameIds:
         if gameId not in gameIds[:4]:
             status_code, response = bet(gameId=gameId, token=token)

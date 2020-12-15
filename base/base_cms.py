@@ -543,4 +543,43 @@ class Cms(Base):
 
         return r.status_code
 
+    def games_close_or_open(self,
+                            username='wellyadmin',
+                            gameId='TXFFC',
+                            status='ACTIVE'):
+        url = self.cms.url_games_close_or_open()
 
+        _, get_token = self.cms_login(username)
+
+        headers = {
+            'accept': '*/*',
+            'accept-language': 'zh-TW,zh;q=0.9,en-US;q=0.8,en;q=0.7',
+            'authorization': get_token['token'],
+            'content-length': '647',
+            'content-type': 'application/json;charset=UTF-8',
+            'origin': 'https://sle-bo.stgdevops.site',
+            'referer': 'https://sle-bo.stgdevops.site/',
+            'sec-fetch-dest': 'empty',
+            'sec-fetch-mode': 'cors',
+            'sec-fetch-site': 'same-site',
+            'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko)'
+                          ' Chrome/87.0.4280.88 Safari/537.36',
+        }
+
+        with open(f'{gameId}.txt', 'r') as f:
+            playIds = f.read()
+
+        playIds = playIds.split(',\n')
+        print(playIds)
+        data = {
+                "vendorId": "MX2",
+                "gameId": gameId,
+                "status": status,
+                "openUnit": "1111",
+                "playType": "STANDALONE",
+                "playIds": playIds
+            }
+
+        r = self.s.patch(url, headers=headers, json=data)
+        log(f'\nStatus code: {r.status_code}')
+        return r.status_code

@@ -1,5 +1,11 @@
-from testcase import cms, sle, time, log, Base, pytest, allure
-from testcase.bet_base import bet, wait_and_lottery_draw, for_loop_bet_and_verify, now_month, now_day
+from testcase import allure
+from testcase import Base
+from testcase import cms
+from testcase import log
+from testcase import pytest
+from testcase import sle
+from testcase.bet_base import now_month
+from testcase.bet_base import now_day
 
 
 @allure.feature('Scenario for bet little game and game report')

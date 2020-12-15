@@ -1,5 +1,13 @@
-from testcase import cms, sle, time, log, Base, pytest, allure
-from testcase.bet_base import bet, wait_and_lottery_draw, for_loop_bet_and_verify, now_month, now_day
+from testcase import allure
+from testcase import Base
+from testcase import cms
+from testcase import log
+from testcase import pytest
+from testcase import sle
+from testcase import time
+from testcase.bet_base import bet
+from testcase.bet_base import now_month
+from testcase.bet_base import now_day
 from testcase.bet_base import wait_for_bet_and_return_previous_or_current
 
 
