@@ -2,9 +2,7 @@ from testcase import cms
 from testcase import sle
 from testcase import time
 from testcase import log
-from testcase import Base
-from testcase import pytest
-from testcase import allure
+
 
 now_month = time.strftime('%m')
 now_day = time.strftime('%d')

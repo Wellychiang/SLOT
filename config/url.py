@@ -104,20 +104,21 @@ class UrlSle:
 
         sle_portal = f'https://sle-api.{env}devops.site/sle-portal/v2/'
 
-        txns =                              'txns'
+        txns =                              'txns/'
         draw =                              'draw/'
         active_and_previous =               f'{draw}activeandprevious/'
         little_game =                       'littleGame/'
         transaction_record =                'transactionrecord'
         create =                            little_game + 'create'
         play =                              little_game + 'play'
+        cancel =                            txns + 'cancel'
 
-
-        self.txns =                         sle_portal + txns
+        self.txns =                         sle_portal + txns.strip('/')
         self.active_and_previous_period =   sle_portal + active_and_previous
         self.little_game_create =           sle_portal + create
         self.little_game_play =             sle_portal + play
         self.transaction_record =           sle_portal + transaction_record
+        self.cancel_bet =                   sle_portal + cancel
 
     def url_login(self):
         return self.login
@@ -139,3 +140,6 @@ class UrlSle:
 
     def url_transaction_record(self):
         return self.transaction_record
+
+    def url_cancel_bet(self):
+        return self.cancel_bet

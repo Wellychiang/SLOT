@@ -221,3 +221,40 @@ class Sle(Base):
         log(f"\rTransaction record: {r.json()}")
 
         return r.json()
+
+    def cancel_bet(self,
+                   token=None,
+                   drawIdString='202012160932',
+                   drawid='2020121600932',
+                   gameid='NYSSC1F',
+                   txnid='1282027396351040',
+                   ):
+        url = self.sle.url_cancel_bet()
+
+        headers = {
+            'accept': 'application/json, text/plain, */*',
+            'accept-language': 'zh-TW,zh;q=0.9,en-US;q=0.8,en;q=0.7',
+            'authorization': token,
+            'content-length': '100',
+            'content-type': 'application/json',
+            'origin': 'https://mx2.stgdevops.site',
+            'referer': 'https://mx2.stgdevops.site/',
+            'sec-fetch-dest': 'empty',
+            'sec-fetch-mode': 'cors',
+            'sec-fetch-site': 'same-site',
+            'user-agent': 'Mozilla/5.0 (iPhone; CPU iPhone OS 13_2_3 like Mac OS X) AppleWebKit/605.1.15 '
+                          '(KHTML, like Gecko) Version/13.0.3 Mobile/15E148 Safari/604.1',
+            'x-vendor-id': 'MX2',
+        }
+
+        data = [{
+            'drawIdString': drawIdString,
+            'drawid': drawid,
+            'gameid': gameid,
+            'txnid': txnid,
+        }]
+
+        r = self.s.put(url, headers=headers, json=data)
+        log(f"Response:{r.json()}\nStatus code: {r.status_code}")
+
+        return r.status_code, r.json()
