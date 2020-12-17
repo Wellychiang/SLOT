@@ -14,7 +14,7 @@ ROOT_ACCOUNT = os.getenv('ROOT_ACCOUNT')
 
 
 @allure.feature('Scenario for system revoke bet when game closed')
-def test_system_step_backs_info(games_close_or_open_init,
+def test_system_revoke_bet_info(games_close_or_open_init,
                                 gameId='TXFFC',
                                 cms_username=ROOT_ACCOUNT,
                                 sle_username='welly1',
@@ -39,6 +39,35 @@ def test_system_step_backs_info(games_close_or_open_init,
                                              start=start,
                                              end=end,
                                              types=types)
+    game_bet_and_close(gameId=gameId,
+                       playType=playType,
+                       betString=betString,
+                       playId=playId,
+                       playRateId=playRateId,
+                       stake=stake,
+                       times=times,
+                       token=get_token['token'],
+                       username=cms_username,
+                       gameStatus=gameStatus)
+
+    cms_search_for_revoke_bet_and_equal_5(userId=f"SL3{sle_username}",
+                                          start=start,
+                                          end=end,
+                                          types=types,
+                                          cms_init_total_record=cms_init_record['total'],
+                                          stake=stake,
+                                          times=times)
+
+    ec_search_for_revoke_bet_and_equal_5(token=get_token['token'],
+                                         start=start,
+                                         end=end,
+                                         types=types,
+                                         sle_init_total_record=sle_init_record['total'],
+                                         stake=stake,
+                                         times=times)
+
+
+def game_bet_and_close(gameId, playType, betString, playId, playRateId, stake, times, token, username, gameStatus):
     bet(gameId=gameId,
         playType=playType,
         betString=betString,
@@ -46,51 +75,55 @@ def test_system_step_backs_info(games_close_or_open_init,
         playRateId=playRateId,
         stake=stake,
         times=times,
-        token=get_token['token'],)
+        token=token)
 
-    cms.games_close_or_open(username=cms_username,
+    cms.games_close_or_open(username=username,
                             gameId=gameId,
                             gameStatus=gameStatus,
                             playType=playType)
-
-    cms_record = cms.transaction_record(userId=f"SL3{sle_username}",
+    
+    
+def cms_search_for_revoke_bet_and_equal_5(userId, start, end, types, cms_init_total_record, stake, times, ):
+    record = cms.transaction_record(userId=userId,
                                         end=end,
                                         start=start,
                                         types=types,)
 
     timess = 0
     log(f"Wait for the record update, it will spend about 30 second")
-    while cms_record['total'] == cms_init_record['total']:
+    while record['total'] == cms_init_total_record:
         time.sleep(5)
         timess += 1
-        cms_record = cms.transaction_record(userId=f"SL3{sle_username}",
-                                            end=end,
-                                            start=start,
-                                            types=types,)
+        record = cms.transaction_record(userId=userId,
+                                        end=end,
+                                        start=start,
+                                        types=types,)
         if timess > 12:
             raise ValueError("It spend more then 1 minute, the original update time is about 30 second")
 
+    data = record['data'][0]
+    pytest.assume(data['txnAmt'] == stake * times)
+    pytest.assume(data['txnType'] == types)
+    pytest.assume(data['in'] == True)
+    pytest.assume(data['afterBalance'] == data['beforeBalance'] + (stake * times))
+    pytest.assume(data['userId'] == userId)
+    pytest.assume(data['detailType'] == 'LOTTERY')
 
-    sle_record = sle.transaction_record(token=get_token['token'],
-                                        start=start,
-                                        end=end,
-                                        types=types)
-    sle_data = sle_record['data'][0]
+    pytest.assume(cms_init_total_record == record['total'] - 1)
+
+
+def ec_search_for_revoke_bet_and_equal_5(token, start, end, types, sle_init_total_record, stake, times,):
+    record = sle.transaction_record(token=token,
+                                    start=start,
+                                    end=end,
+                                    types=types)
+    sle_data = record['data'][0]
     pytest.assume(sle_data['txnAmt'] == stake * times)
     pytest.assume(sle_data['txnType'] == types)
     pytest.assume(sle_data['in'] == True)
     pytest.assume(sle_data['afterBalance'] == sle_data['beforeBalance'] + (stake * times))
 
-    cms_data = cms_record['data'][0]
-    pytest.assume(cms_data['txnAmt'] == stake * times)
-    pytest.assume(cms_data['txnType'] == types)
-    pytest.assume(cms_data['in'] == True)
-    pytest.assume(cms_data['afterBalance'] == cms_data['beforeBalance'] + (stake * times))
-    pytest.assume(cms_data['userId'] == f"SL3{sle_username}")
-    pytest.assume(cms_data['detailType'] == 'LOTTERY')
-
-    pytest.assume(sle_init_record['total'] == sle_record['total'] - 1)
-    assert cms_init_record['total'] == cms_record['total'] - 1
+    pytest.assume(sle_init_total_record == record['total'] - 1)
 
 
 @pytest.fixture()
