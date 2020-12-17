@@ -97,10 +97,14 @@ class UrlSle:
 
         login =                             'login'
         get_bet_token =                     'games/NY/NY/NYSSC1F/launch'
+        withdrawl =                         'withdrawals/'
+        profile =                           'profile'
+        apply_info =                        withdrawl + 'applyinfo'
 
         self.login =                        sle + login
         self.get_launch_token =             sle + get_bet_token
-
+        self.transfer_out =                 sle + apply_info
+        self.profile =                      sle + profile
 
         sle_portal = f'https://sle-api.{env}devops.site/sle-portal/v2/'
 
@@ -143,3 +147,9 @@ class UrlSle:
 
     def url_cancel_bet(self):
         return self.cancel_bet
+
+    def url_transfer_out(self):
+        return self.transfer_out
+
+    def url_profile(self):
+        return self.profile

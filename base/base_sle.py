@@ -258,3 +258,49 @@ class Sle(Base):
         log(f"Response:{r.json()}\nStatus code: {r.status_code}")
 
         return r.status_code, r.json()
+
+    def transfer_out(self, username='welly1'):
+        url = self.sle.url_transfer_out()
+
+        _, get_token = self.sle_login(username)
+        headers = {
+            'accept': 'application/json, text/plain, */*',
+            'accept-language': 'zh-TW,zh;q=0.9,en-US;q=0.8,en;q=0.7',
+            'authorization': get_token['token'],
+            'origin': 'https://mx2.stgdevops.site',
+            'referer': 'https://mx2.stgdevops.site/',
+            'sec-fetch-dest': 'empty',
+            'sec-fetch-mode': 'cors',
+            'sec-fetch-site': 'same-site',
+            'user-agent': 'Mozilla/5.0 (iPhone; CPU iPhone OS 13_2_3 like Mac OS X) AppleWebKit/605.1.15 '
+                          '(KHTML, like Gecko) Version/13.0.3 Mobile/15E148 Safari/604.1',
+        }
+        params = {
+            'language': 2
+        }
+        r = self.s.get(url, headers=headers, params=params)
+        log(f"Status code: {r.status_code}")
+
+        return r.status_code
+
+    def profile(self, username='welly1'):
+        url = self.sle.url_profile()
+
+        _, get_token = self.sle_login(username)
+        headers = {
+            'accept': 'application/json, text/plain, */*',
+            'accept-language': 'zh-TW,zh;q=0.9,en-US;q=0.8,en;q=0.7',
+            'authorization': get_token['token'],
+            'origin': 'https://mx2.stgdevops.site',
+            'referer': 'https://mx2.stgdevops.site/',
+            'sec-fetch-dest': 'empty',
+            'sec-fetch-mode': 'cors',
+            'sec-fetch-site': 'same-site',
+            'user-agent': 'Mozilla/5.0 (iPhone; CPU iPhone OS 13_2_3 like Mac OS X) AppleWebKit/605.1.15 '
+                          '(KHTML, like Gecko) Version/13.0.3 Mobile/15E148 Safari/604.1',
+        }
+
+        r = self.s.get(url, headers=headers)
+        log(f"Status code: {r.status_code}\nResponse{r.json()}")
+
+        return r.status_code, r.json()
