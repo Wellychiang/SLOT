@@ -61,6 +61,7 @@ class UserInfo:
     overwin01 = 'overwin01'
     overwin04 = 'overwin04'
     overwin03 = 'overwin03'
+    betrelative = 'betrelative'
 
     sle_user_info = {welly1: {'username': welly1,
                               'pwd': '21e7692cef417d7be81d44054f9b3c1bb5dc7f30'},
@@ -130,6 +131,9 @@ class UserInfo:
                                  'pwd': '00b498c6078cd0ad6497aae97495745585912ee9'},
                      overwin03: {'username': overwin03,
                                  'pwd': 'd08abfa32d58e34063243165faab39bfe5b85555'},
+                     betrelative: {'username': betrelative,
+                                   'pwd': '9eb54dd6e74c0ecd36db48cbc71d02acf52dd73b'
+                     }
                      }
 
     def sle_username(self):

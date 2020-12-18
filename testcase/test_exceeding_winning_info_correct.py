@@ -25,15 +25,15 @@ def test_over_win_prize(username=('overwin01', 'overwin04', 'overwin03', 'yahoo'
                         draw_null_types='REVOKED_NULL_RESULT'):
     start, end = Base().start_and_end_time(now_month, now_day, now_month, now_day)
 
-    levelup_button = 0
-    record = cms.transaction_record(userId=f"SL3{username[levelup_button]}", start=start, end=end, types=None)
+    switch_button = 0
+    record = cms.transaction_record(userId=f"SL3{username[switch_button]}", start=start, end=end, types=None)
 
     while record['total'] != 0:
-        levelup_button += 1
-        record = cms.transaction_record(userId=f"SL3{username[levelup_button]}", start=start, end=end, types=None)
+        switch_button += 1
+        record = cms.transaction_record(userId=f"SL3{username[switch_button]}", start=start, end=end, types=None)
 
-    log(f"Use user: {username[levelup_button]}")
-    _, token = sle.get_launch_token(username[levelup_button])
+    log(f"Use user: {username[switch_button]}")
+    _, token = sle.get_launch_token(username[switch_button])
 
     cms.win_prize_limit(gameId=gameId,
                         playType=playType,
@@ -66,7 +66,7 @@ def test_over_win_prize(username=('overwin01', 'overwin04', 'overwin03', 'yahoo'
 
     # TODO: cms勾選超額中獎扣除並提交, 和勾選彩票派獎並提交
     cms_over_win_minus(start, end, userId=None, types=over_win_prize_type)
-    cms_win_prize_search_and_display_500(start, end, userId=f'SL3{username[levelup_button]}', types=win_prize_type,
+    cms_win_prize_search_and_display_500(start, end, userId=f'SL3{username[switch_button]}', types=win_prize_type,
                                          amount=prizeLimit)
 
     # TODO: cms 騰訊紛紛採 空開
@@ -79,15 +79,12 @@ def test_over_win_prize(username=('overwin01', 'overwin04', 'overwin03', 'yahoo'
     # TODO: cms 勾選中獎返還並提交 (暫無資料)
     cms_over_win_minus(start, end, userId=None, types=over_win_prize_type)
 
-    # TODO: cms 勾選撤銷派彩並提交(顯示500)
-    cms_cancel_win_prize_search_equal_500(start, end, userId=f'SL3{username[levelup_button]}',
+    cms_cancel_win_prize_search_equal_500(start, end, userId=f'SL3{username[switch_button]}',
                                           types=cancel_win_prize_types, amount=prizeLimit)
 
-    # TODO: cms 勾選空開撤單並提交(有兩筆, 顯示空開且500)
-    cms_draw_null_search_two_equal_500(start, end, userId=f'SL3{username[levelup_button]}', types=draw_null_types,
+    cms_draw_null_search_two_equal_500(start, end, userId=f'SL3{username[switch_button]}', types=draw_null_types,
                                        amount=prizeLimit)
 
-    # TODO: ec 遊戲大廳 > 錢包紀錄, 撤銷派彩 -500, 兩筆空開掣單500
     sle_cancel_win_prize_equal_500(token, start, end, types=cancel_win_prize_types, amount=prizeLimit)
     sle_draw_null_search_two_bet_equal_500(token, start, end, types=draw_null_types, amount=prizeLimit)
 
