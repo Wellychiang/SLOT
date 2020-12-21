@@ -12,7 +12,7 @@ from .bet_base import wait_for_bet_and_return_previous_or_current
 
 
 @allure.feature("Scenario for check overwin's info correct or not")
-@pytest.mark.dd
+@pytest.mark.d
 def test_over_win_prize(username=('overwin01', 'overwin04', 'overwin03', 'yahoo'),
                         gameId='TXFFC',
                         playType='SIMPLE',
