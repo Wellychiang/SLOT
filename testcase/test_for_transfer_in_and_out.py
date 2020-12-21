@@ -1,12 +1,10 @@
-from testcase import allure
-from testcase import Base
-from testcase import cms
-from testcase import pytest
-from testcase import sle
-from testcase import time
-from testcase.bet_base import bet
-from testcase.bet_base import now_month
-from testcase.bet_base import now_day
+from . import allure
+from . import Base
+from . import cms
+from . import pytest
+from . import sle
+from .bet_base import now_month
+from .bet_base import now_day
 
 
 @allure.feature('Scenario for transfer in and out check')

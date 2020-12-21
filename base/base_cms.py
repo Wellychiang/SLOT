@@ -1,6 +1,6 @@
-from base import Base
-from base import log
-from base import UrlCms
+from . import Base
+from . import log
+from . import UrlCms
 import time
 
 
@@ -76,7 +76,6 @@ class Cms(Base):
             'startBefore': startBefore,
             'drawIdString': drawIdString,
         }
-        log(url)
         r = self.s.get(url, headers=headers, params=params)
         log(f"\nDraw management: {str(r.json()).encode('utf8').decode('cp950', 'ignore')}\n")
 
@@ -579,3 +578,35 @@ class Cms(Base):
         log(f"Status code: {r.status_code}")
 
         return r.status_code
+
+    def change_bet_choose(self, username='wellyadmin'):
+
+        url = 'https://sle-boapi.stgdevops.site/sle-cms/txns/bets'
+        _, get_token = self.cms_login(username)
+
+        headers = {
+            'accept': '*/*',
+            'accept-language': 'zh-TW,zh;q=0.9,en-US;q=0.8,en;q=0.7',
+            'authorization': get_token['token'],
+            'content-length': '82',
+            'content-type': 'application/json;charset=UTF-8',
+            'origin': 'https://sle-bo.stgdevops.site',
+            'referer': 'https://sle-bo.stgdevops.site/',
+            'sec-fetch-dest': 'empty',
+            'sec-fetch-mode': 'cors',
+            'sec-fetch-site': 'same-site',
+            'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko)'
+                          ' Chrome/87.0.4280.88 Safari/537.36',
+        }
+        params = {
+            'end': 1608566399999,
+            'start': 1608521388505
+        }
+        data = {
+            'betString': "",
+            'playRateId': 14828,
+            'txnId': 1285446224913472,
+        }
+
+        r = self.s.patch(url, headers=headers, json=data, params=params)
+        log(r.status_code)

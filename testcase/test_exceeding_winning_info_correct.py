@@ -1,17 +1,18 @@
-from testcase import allure
-from testcase import Base
-from testcase import cms
-from testcase import log
-from testcase import pytest
-from testcase import sle
-from testcase import time
-from testcase.bet_base import bet
-from testcase.bet_base import now_month
-from testcase.bet_base import now_day
-from testcase.bet_base import wait_for_bet_and_return_previous_or_current
+from . import allure
+from . import Base
+from . import cms
+from . import log
+from . import pytest
+from . import sle
+from . import time
+from .bet_base import bet
+from .bet_base import now_month
+from .bet_base import now_day
+from .bet_base import wait_for_bet_and_return_previous_or_current
 
 
 @allure.feature("Scenario for check overwin's info correct or not")
+@pytest.mark.dd
 def test_over_win_prize(username=('overwin01', 'overwin04', 'overwin03', 'yahoo'),
                         gameId='TXFFC',
                         playType='SIMPLE',
@@ -25,22 +26,14 @@ def test_over_win_prize(username=('overwin01', 'overwin04', 'overwin03', 'yahoo'
                         draw_null_types='REVOKED_NULL_RESULT'):
     start, end = Base().start_and_end_time(now_month, now_day, now_month, now_day)
 
-    switch_button = 0
-    record = cms.transaction_record(userId=f"SL3{username[switch_button]}", start=start, end=end, types=None)
-
-    while record['total'] != 0:
-        switch_button += 1
-        record = cms.transaction_record(userId=f"SL3{username[switch_button]}", start=start, end=end, types=None)
-
-    log(f"Use user: {username[switch_button]}")
-    _, token = sle.get_launch_token(username[switch_button])
+    token, switch_button = continue_or_switch_user(username, start, end, types=None)
 
     cms.win_prize_limit(gameId=gameId,
                         playType=playType,
                         prizeLimit=prizeLimit, )
 
     # TODO: 下注藤信紛紛採 大, 小, 各500, 然後等到開獎
-    current_bet = wait_for_bet_and_return_previous_or_current('TXFFC', 6)
+    current_bet = wait_for_bet_and_return_previous_or_current(gameId, sleep_time=6)
     for i in range(2):
         bet(gameId='TXFFC',
             betString=betString,
@@ -48,17 +41,19 @@ def test_over_win_prize(username=('overwin01', 'overwin04', 'overwin03', 'yahoo'
             playRateId=playRateId,
             rebatePackage=1980,
             stake=500,
-            token=token['token'])
+            token=token)
         betString = betString2
         playRateId += 1
         time.sleep(1)
 
     time.sleep(30)  # 太接近預設的開獎會失敗, so 睡30秒
 
-    draw_record = cms.draw_management(gameId='TXFFC',
-                                      startBefore=start,
-                                      drawIdString=current_bet['current']['drawIdString'])
-    cms.draw_null(period=draw_record['data'][0]['id'], action='MANUAL_GIVING_RESULTS', method=1)
+    draw_lottery(gameId=gameId,
+                 start=start,
+                 drawIdString=current_bet['current']['drawIdString'],
+                 action='MANUAL_GIVING_RESULTS',
+                 result='1,2,3,4,5',
+                 method=1)
 
     # TODO: Search EC斷言撤銷派彩, 中獎(Done)
     sle_cancel_win_prize_equal_zero(token, start, end, types=cancel_win_prize_types)
@@ -66,31 +61,61 @@ def test_over_win_prize(username=('overwin01', 'overwin04', 'overwin03', 'yahoo'
 
     # TODO: cms勾選超額中獎扣除並提交, 和勾選彩票派獎並提交
     cms_over_win_minus(start, end, userId=None, types=over_win_prize_type)
-    cms_win_prize_search_and_display_500(start, end, userId=f'SL3{username[switch_button]}', types=win_prize_type,
+    cms_win_prize_search_and_display_500(start, end,
+                                         userId=f'SL3{username[switch_button]}',
+                                         types=win_prize_type,
                                          amount=prizeLimit)
 
-    # TODO: cms 騰訊紛紛採 空開
-    draw_record = cms.draw_management(gameId='TXFFC',
-                                      startBefore=start,
-                                      drawIdString=current_bet['current']['drawIdString'])
-    cms.draw_null(period=draw_record['data'][0]['id'])
+    draw_lottery(gameId=gameId,
+                 start=start,
+                 drawIdString=current_bet['current']['drawIdString'],
+                 action='OPEN_NULL',
+                 result='1,2,3,4,5',
+                 method='null')
 
     time.sleep(3)
-    # TODO: cms 勾選中獎返還並提交 (暫無資料)
+
     cms_over_win_minus(start, end, userId=None, types=over_win_prize_type)
 
-    cms_cancel_win_prize_search_equal_500(start, end, userId=f'SL3{username[switch_button]}',
-                                          types=cancel_win_prize_types, amount=prizeLimit)
+    cms_cancel_win_prize_search_equal_500(start,
+                                          end,
+                                          userId=f'SL3{username[switch_button]}',
+                                          types=cancel_win_prize_types,
+                                          amount=prizeLimit)
 
-    cms_draw_null_search_two_equal_500(start, end, userId=f'SL3{username[switch_button]}', types=draw_null_types,
+    cms_draw_null_search_two_equal_500(start,
+                                       end,
+                                       userId=f'SL3{username[switch_button]}',
+                                       types=draw_null_types,
                                        amount=prizeLimit)
 
     sle_cancel_win_prize_equal_500(token, start, end, types=cancel_win_prize_types, amount=prizeLimit)
     sle_draw_null_search_two_bet_equal_500(token, start, end, types=draw_null_types, amount=prizeLimit)
 
 
+def continue_or_switch_user(username, start, end, types):
+    switch_button = 0
+    record = cms.transaction_record(userId=f"SL3{username[switch_button]}", start=start, end=end, types=types)
+
+    while record['total'] != 0:
+        switch_button += 1
+        record = cms.transaction_record(userId=f"SL3{username[switch_button]}", start=start, end=end, types=types)
+
+    log(f"Use user: {username[switch_button]}")
+    _, token = sle.get_launch_token(username[switch_button])
+
+    return token['token'], switch_button
+
+
+def draw_lottery(gameId, start, drawIdString, action, result, method):
+    draw_record = cms.draw_management(gameId=gameId,
+                                      startBefore=start,
+                                      drawIdString=drawIdString)
+    cms.draw_null(period=draw_record['data'][0]['id'], action=action, result=result, method=method)
+
+
 def sle_cancel_win_prize_equal_zero(token, start, end, types):
-    cancel_win_prize_record = sle.transaction_record(token=token['token'],
+    cancel_win_prize_record = sle.transaction_record(token=token,
                                                      start=start,
                                                      end=end,
                                                      types=types)
@@ -98,7 +123,7 @@ def sle_cancel_win_prize_equal_zero(token, start, end, types):
 
 
 def sle_win_prize_search_and_display_500(token, start, end, types, amount):
-    win_prize_record = sle.transaction_record(token['token'], start, end, types)
+    win_prize_record = sle.transaction_record(token, start, end, types)
     data = win_prize_record['data'][0]
 
     pytest.assume(data['txnType'] == types)
@@ -164,7 +189,7 @@ def cms_draw_null_search_two_equal_500(start, end, userId, types, amount):
 
 
 def sle_cancel_win_prize_equal_500(token, start, end, types, amount):
-    record = sle.transaction_record(token=token['token'],
+    record = sle.transaction_record(token=token,
                                     start=start,
                                     end=end,
                                     types=types)
@@ -176,7 +201,7 @@ def sle_cancel_win_prize_equal_500(token, start, end, types, amount):
 
 
 def sle_draw_null_search_two_bet_equal_500(token, start, end, types, amount):
-    record = sle.transaction_record(token=token['token'],
+    record = sle.transaction_record(token=token,
                                     start=start,
                                     end=end,
                                     types=types)

@@ -1,7 +1,7 @@
-from testcase import allure
-from testcase import pytest
-from testcase import sle
-from testcase.bet_base import for_loop_bet_and_verify
+from . import allure
+from . import pytest
+from . import sle
+from .bet_base import for_loop_bet_and_verify
 
 
 @allure.feature()

@@ -1,13 +1,13 @@
-from testcase import allure
-from testcase import Base
-from testcase import cms
-from testcase import log
-from testcase import pytest
-from testcase import sle
-from testcase import time
-from testcase.bet_base import bet
-from testcase.bet_base import now_month
-from testcase.bet_base import now_day
+from . import allure
+from . import Base
+from . import cms
+from . import log
+from . import pytest
+from . import sle
+from . import time
+from .bet_base import bet
+from .bet_base import now_month
+from .bet_base import now_day
 import os
 
 ROOT_ACCOUNT = os.getenv('ROOT_ACCOUNT')

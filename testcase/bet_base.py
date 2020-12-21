@@ -1,7 +1,7 @@
-from testcase import cms
-from testcase import sle
-from testcase import time
-from testcase import log
+from . import cms
+from . import sle
+from . import time
+from . import log
 
 
 now_month = time.strftime('%m')
@@ -10,10 +10,10 @@ now_day = time.strftime('%d')
 
 def bet(gameId='NYSSC3F',
         platform='Desktop',
-        playType='SIMPLE',
+        playType='SIMPLE',  # SIMPLE 為信用玩法, STANDALONE 為官方玩法, 切換直接改成 playType 就可, 但有些彩種只有 STANDALONE(泰彩)
         betString='sum,small',
         comment='',
-        playId=17,
+        playId=17,  # 信用玩法依順序為17, 18, 19 .....(泰國彩也不適用)
         playRateId=16080,
         rebatePackage=1980,
         stake=10,

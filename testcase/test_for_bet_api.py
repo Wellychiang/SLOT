@@ -1,16 +1,16 @@
-from testcase import allure
-from testcase import cms
-from testcase import log
-from testcase import pytest
-from testcase import sle
-from testcase import time
-from testcase.bet_base import bet
+from . import allure
+from . import cms
+from . import log
+from . import pytest
+from . import sle
+from . import time
+from .bet_base import bet
 
 bet_feature = 'Bet'
 
 
 @allure.feature('Cms')
-@pytest.mark.skip
+@pytest.mark.skip()
 def test_cms():
     strftimes = (time.strftime('%Y-%m-%d') + ' 00:00:00', time.strftime('%Y-%m-%d') + ' 23:59:59')
 

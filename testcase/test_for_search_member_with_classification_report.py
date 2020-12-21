@@ -1,14 +1,14 @@
-from testcase import allure
-from testcase import Base
-from testcase import cms
-from testcase import log
-from testcase import pytest
-from testcase import sle
-from testcase import time
-from testcase.bet_base import for_loop_bet_and_verify
-from testcase.bet_base import now_month
-from testcase.bet_base import now_day
-from testcase.bet_base import wait_and_lottery_draw
+from . import allure
+from . import Base
+from . import cms
+from . import log
+from . import pytest
+from . import sle
+from . import time
+from .bet_base import for_loop_bet_and_verify
+from .bet_base import now_month
+from .bet_base import now_day
+from .bet_base import wait_and_lottery_draw
 
 
 @allure.feature('Scenario for bet happythai and classification report')
@@ -264,5 +264,5 @@ def search_classification_report(gameId='NYTHAIFFC',
             else:
                 raise ValueError('gameId is not correct')
 
-                index.append(record_list)
+            index.append(record_list)
     return index

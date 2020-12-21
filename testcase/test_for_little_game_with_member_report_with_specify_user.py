@@ -1,11 +1,11 @@
-from testcase import allure
-from testcase import Base
-from testcase import cms
-from testcase import log
-from testcase import pytest
-from testcase import sle
-from testcase.bet_base import now_month
-from testcase.bet_base import now_day
+from . import allure
+from . import Base
+from . import cms
+from . import log
+from . import pytest
+from . import sle
+from .bet_base import now_month
+from .bet_base import now_day
 
 
 @allure.feature("Scenario for little game HL bet and member report")
@@ -32,11 +32,32 @@ def test_member_search_success_normally(creator=('memberreport1', 'memberreport2
                                                          report_start_day,
                                                          report_end_month,
                                                          report_end_day)
+    update_commission_to_5dot9(HL_commission)
 
-    members_report = cms.little_game_members_report(userId=f'SL3{creator[0]}',
-                                                    start=todays_start,
-                                                    end=todays_end)
+    change_button = change_user_if_used(creator, todays_start, todays_end)
 
+    game_create, game_play_result = game_create_and_play(creator[change_button],
+                                                         player,
+                                                         amount,
+                                                         creator_choice,
+                                                         player_choice,
+                                                         gameId)
+
+    assert_create_and_play_result(game_create, game_play_result, amount)
+
+    assert_specify_member_info_in_little_game_report(f'SL3{creator[change_button]}',
+                                                     todays_start,
+                                                     todays_end,
+                                                     bet_count,
+                                                     lose,
+                                                     amount,
+                                                     validBet,
+                                                     prizeWon,
+                                                     gainLose,
+                                                     winRate)
+
+
+def update_commission_to_5dot9(HL_commission):
     little_games = cms.little_game_get_or_patch(method='get')
 
     log('\nVerify commission to equal 5.9%, if not, update to 5.9%')
@@ -49,15 +70,23 @@ def test_member_search_success_normally(creator=('memberreport1', 'memberreport2
         log('\nCommission success')
 
 
+def change_user_if_used(userId, start, end):
+    members_report = cms.little_game_members_report(userId=f'SL3{userId[0]}',
+                                                    start=start,
+                                                    end=end)
     change_button = 0
     while len(members_report['records']) != 0:
         change_button += 1
-        members_report = cms.little_game_members_report(userId=f'SL3{creator[change_button]}',
-                                                        start=todays_start,
-                                                        end=todays_end)
-    log(f'\nCreator: {creator[change_button]}')
+        members_report = cms.little_game_members_report(userId=f'SL3{userId[change_button]}',
+                                                        start=start,
+                                                        end=end)
+    log(f'\nCreator: {userId[change_button]}')
 
-    _, get_token = sle.get_launch_token(creator[change_button])
+    return change_button
+
+
+def game_create_and_play(creator, player, amount, creator_choice, player_choice, gameId):
+    _, get_token = sle.get_launch_token(creator)
     game_create = sle.little_game_create(token=get_token['token'],
                                          amount=amount,
                                          choice=creator_choice,
@@ -69,15 +98,28 @@ def test_member_search_success_normally(creator=('memberreport1', 'memberreport2
                                             gameId=gameId,
                                             roomId=game_create['roomId'])
 
+    return game_create, game_play_result
+
+
+def assert_create_and_play_result(game_create, game_play_result, amount):
     pytest.assume(game_play_result['creatorPick'] == game_create['creatorPick'])
     pytest.assume(game_play_result['roomId'] == game_create['roomId'])
     pytest.assume(game_play_result['status'] == 'LOSE')
     pytest.assume(game_play_result['amountResult'] == -amount)
 
-    members_report = cms.little_game_members_report(userId=f'SL3{creator[change_button]}',
-                                                    start=todays_start,
-                                                    end=todays_end)
 
+def assert_specify_member_info_in_little_game_report(userId,
+                                                     start,
+                                                     end,
+                                                     bet_count,
+                                                     lose,
+                                                     amount,
+                                                     validBet,
+                                                     prizeWon,
+                                                     gainLose,
+                                                     winRate):
+
+    members_report = cms.little_game_members_report(userId=userId, start=start, end=end)
     report = members_report['records'][0]
 
     pytest.assume(report['betCount'] == bet_count)
