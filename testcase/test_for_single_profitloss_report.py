@@ -38,32 +38,12 @@ def test_bet_search_and_verify_report(username='spreport01',
                                                          report_start_day,
                                                          report_end_month,
                                                          report_end_day)
-    active_and_previous_period = sle.active_and_previous_period(gameId)
 
-    _, bet_details = cms.bet_details(username='wellyadmin',
-                                     tm_end=todays_end,
-                                     tm_start=todays_start,
-                                     drawIdString=active_and_previous_period['current']['drawIdString'])
+    active_and_previous_period = wait_next_round_if_this_period_already_bet(gameId, start=todays_start, end=todays_end)
 
-    # 查詢注單明細當期注單, 有的話就等到下一期
-    while len(bet_details['data']) != 0:
-        log(f'Current draw id is already exist, count down second: '
-            f'{active_and_previous_period["current"]["countdown"]/1000 + 3}')
-        time.sleep(active_and_previous_period['current']['countdown']/1000 + 3)
-
-        active_and_previous_period = sle.active_and_previous_period(gameId)
-        _, bet_details = cms.bet_details(username='wellyadmin',
-                                         tm_end=todays_end,
-                                         tm_start=todays_start,
-                                         drawIdString=active_and_previous_period['current']['drawIdString'])
-
-    # 流到剩下20秒後, 先開獎
     wait_and_lottery_draw(result=result, gameId=gameId, count_down_second=22)
 
     _, get_token = sle.get_launch_token(username=username)
-
-    # launch, 投注 及他們自己之間都需要間隔1秒或以上, 不然會觸發duplicate
-    # time.sleep(1.5) 目前在launch裡面直接睡看看
 
     # 一個帳號投10筆
     for_loop_bet_and_verify(gameId=gameId,
@@ -100,6 +80,27 @@ def test_bet_search_and_verify_report(username='spreport01',
 
         else:
             raise ValueError('Nothing in the single profitloss report')
+
+
+def wait_next_round_if_this_period_already_bet(gameId, start, end):
+    active_and_previous_period = sle.active_and_previous_period(gameId)
+    _, bet_details = cms.bet_details(username='wellyadmin',
+                                     tm_end=end,
+                                     tm_start=start,
+                                     drawIdString=active_and_previous_period['current']['drawIdString'])
+
+    while len(bet_details['data']) != 0:
+        log(f'Current draw id is already exist, count down second: '
+            f'{active_and_previous_period["current"]["countdown"] / 1000 + 3}')
+        time.sleep(active_and_previous_period['current']['countdown'] / 1000 + 3)
+
+        active_and_previous_period = sle.active_and_previous_period(gameId)
+        _, bet_details = cms.bet_details(username='wellyadmin',
+                                         tm_end=end,
+                                         tm_start=start,
+                                         drawIdString=active_and_previous_period['current']['drawIdString'])
+
+    return active_and_previous_period
 
 
 def search_single_profitloss_report(gameId=None,

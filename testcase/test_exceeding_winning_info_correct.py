@@ -12,7 +12,6 @@ from .bet_base import wait_for_bet_and_return_previous_or_current
 
 
 @allure.feature("Scenario for check overwin's info correct or not")
-@pytest.mark.d
 def test_over_win_prize(username=('overwin01', 'overwin04', 'overwin03', 'yahoo'),
                         gameId='TXFFC',
                         playType='SIMPLE',
@@ -32,7 +31,6 @@ def test_over_win_prize(username=('overwin01', 'overwin04', 'overwin03', 'yahoo'
                         playType=playType,
                         prizeLimit=prizeLimit, )
 
-    # TODO: 下注藤信紛紛採 大, 小, 各500, 然後等到開獎
     current_bet = wait_for_bet_and_return_previous_or_current(gameId, sleep_time=6)
     for i in range(2):
         bet(gameId='TXFFC',
@@ -55,12 +53,10 @@ def test_over_win_prize(username=('overwin01', 'overwin04', 'overwin03', 'yahoo'
                  result='1,2,3,4,5',
                  method=1)
 
-    # TODO: Search EC斷言撤銷派彩, 中獎(Done)
     sle_cancel_win_prize_equal_zero(token, start, end, types=cancel_win_prize_types)
     sle_win_prize_search_and_display_500(token, start, end, types=win_prize_type, amount=prizeLimit)
 
-    # TODO: cms勾選超額中獎扣除並提交, 和勾選彩票派獎並提交
-    cms_over_win_minus(start, end, userId=None, types=over_win_prize_type)
+    cms_over_win_prize_minus(start, end, userId=None, types=over_win_prize_type)
     cms_win_prize_search_and_display_500(start, end,
                                          userId=f'SL3{username[switch_button]}',
                                          types=win_prize_type,
@@ -75,7 +71,7 @@ def test_over_win_prize(username=('overwin01', 'overwin04', 'overwin03', 'yahoo'
 
     time.sleep(3)
 
-    cms_over_win_minus(start, end, userId=None, types=over_win_prize_type)
+    cms_over_win_prize_minus(start, end, userId=None, types=over_win_prize_type)
 
     cms_cancel_win_prize_search_equal_500(start,
                                           end,
@@ -132,7 +128,7 @@ def sle_win_prize_search_and_display_500(token, start, end, types, amount):
     pytest.assume(data['afterBalance'] == data['beforeBalance'] + amount)
 
 
-def cms_over_win_minus(start, end, userId, types):
+def cms_over_win_prize_minus(start, end, userId, types):
     record = cms.transaction_record(userId=userId, start=start, end=end, types=types)
 
     pytest.assume(record['total'] == 0)

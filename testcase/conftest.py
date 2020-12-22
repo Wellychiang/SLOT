@@ -1,10 +1,10 @@
-from testcase import cms
-from testcase import sle
-from testcase import time
-from testcase import log
-from testcase import Base
-from testcase import pytest
-from testcase import allure
+from . import cms
+from . import sle
+from . import time
+from . import log
+from . import Base
+from . import pytest
+from . import allure
 
 
 @pytest.fixture()

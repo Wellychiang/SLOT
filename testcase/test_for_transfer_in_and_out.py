@@ -88,7 +88,7 @@ def ec_search_for_transfer_out_assert(token, start, end, types, balance):
 
     pytest.assume(data['txnType'] == types)
     pytest.assume(data['in'] == False)
-    pytest.assume(str(data['afterBalance']) == str(data['beforeBalance'] - float(balance))[:6])
+    pytest.assume(str(data['afterBalance']) == f"{data['beforeBalance'] - float(balance):.4f}")
 
     return record['total']
 
@@ -108,9 +108,10 @@ def ec_search_for_transfer_in_and_out_assert(token, start, end, types, balance):
     pytest.assume(data_in['afterBalance'] == float(balance))
 
     balance = str(balance)[:-2]
+
     pytest.assume(data_out['txnType'] == types[12:])
     pytest.assume(data_out['in'] == False)
-    assert (str(data_out['afterBalance']) == str(data_out['beforeBalance'] - float(balance))[:6])
+    pytest.assume(str(data_out['afterBalance']) == f"{data_out['beforeBalance'] - float(balance):.4f}")
 
     return record['total']
 
@@ -137,8 +138,8 @@ def cms_search_for_transfer_in_and_out_assert(userId, start, end, types, balance
 
         pytest.assume(data['txnType'] == types)
         pytest.assume(data['in'] == False)
-        pytest.assume(str(data['afterBalance']) == str(data['beforeBalance'] - float(balance))[:6])
-        pytest.assume(record['total'] == sle_total)
+        pytest.assume(str(data['afterBalance']) == f"{data['beforeBalance'] - float(balance):.4f}")
+        assert record['total'] == sle_total
 
     else:
         raise ValueError('Please input the right types')
