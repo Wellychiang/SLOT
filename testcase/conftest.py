@@ -1,10 +1,6 @@
 from . import cms
 from . import sle
-from . import time
-from . import log
-from . import Base
 from . import pytest
-from . import allure
 
 
 @pytest.fixture()
