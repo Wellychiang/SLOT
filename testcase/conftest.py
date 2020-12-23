@@ -1,6 +1,6 @@
-from testcase import cms
-from testcase import sle
-from testcase import pytest
+from . import cms
+from . import sle
+from . import pytest
 
 
 @pytest.fixture()
