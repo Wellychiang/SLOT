@@ -114,3 +114,11 @@ class Base:
                 todays_end = time.mktime(strptime)
 
         return str(int(todays_start))+'000', str(int(todays_end))+'999'
+
+
+    def return_now_start_time(self):
+        strftime = time.strftime('%Y-%m-%d %H:%M:%S')
+        strptime = time.strptime(strftime, '%Y-%m-%d %H:%M:%S')
+        now_start_time = time.mktime(strptime)
+
+        return str(int(now_start_time)) + '000'

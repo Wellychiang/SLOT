@@ -62,6 +62,10 @@ class UserInfo:
     overwin04 = 'overwin04'
     overwin03 = 'overwin03'
     betrelative = 'betrelative'
+    gamereport01 = 'gamereport01'
+    gamereport02 = 'gamereport02'
+    gamereport03 = 'gamereport03'
+    gamereport04 = 'gamereport04'
 
     sle_user_info = {welly1: {'username': welly1,
                               'pwd': '21e7692cef417d7be81d44054f9b3c1bb5dc7f30'},
@@ -132,8 +136,15 @@ class UserInfo:
                      overwin03: {'username': overwin03,
                                  'pwd': 'd08abfa32d58e34063243165faab39bfe5b85555'},
                      betrelative: {'username': betrelative,
-                                   'pwd': '9eb54dd6e74c0ecd36db48cbc71d02acf52dd73b'
-                     }
+                                   'pwd': '9eb54dd6e74c0ecd36db48cbc71d02acf52dd73b'},
+                     gamereport01: {'username': gamereport01,
+                                    'pwd': '403d1bfa836a3fdad1cd2bd9b7af0f55fc2bce63'},
+                     gamereport02: {'username': gamereport02,
+                                    'pwd': '0df65c1ddf6d5b14d7a865b0e71be9e9981cf912'},
+                     gamereport03: {'username': gamereport03,
+                                    'pwd': '0af041747ae429b73da2788064aee8e21711a38a'},
+                     gamereport04: {'username': gamereport04,
+                                    'pwd': '263717e8fa8ce863dec69a1e1d39c165209eeea9'},
                      }
 
     def sle_username(self):

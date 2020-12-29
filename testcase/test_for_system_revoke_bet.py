@@ -5,12 +5,13 @@ from . import log
 from . import pytest
 from . import sle
 from . import time
+from . import ROOT_ACCOUNT
 from .bet_base import bet
 from .bet_base import now_month
 from .bet_base import now_day
 import os
 
-ROOT_ACCOUNT = os.getenv('ROOT_ACCOUNT')
+
 
 
 @allure.feature('Scenario for system revoke bet when game closed')

@@ -68,7 +68,6 @@ def for_loop_bet_and_verify(token,
 
     log(f'Start bet')
     for betString in betStrings:
-
         _, response = bet(betString=betString,
                           gameId=gameId,
                           playType=playType,

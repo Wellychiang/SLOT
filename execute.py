@@ -7,5 +7,3 @@ if __name__ == '__main__':
     # pytest.main(['-vvs'])
 
     pytest.main(['-vvs', '--reruns', '1', '--reruns-delay', '2', '--alluredir', 'report'])
-
-

@@ -14,6 +14,7 @@ class UrlCms:
         vendor_game =                   'vendorGame'
         games =                         'games/'
         plays =                         'plays/'
+        pnl =                           'pnl/'
         report =                        little_game + 'report/'
         records =                       report + 'records'
         room_record =                   report + 'roomRecord'
@@ -22,15 +23,17 @@ class UrlCms:
         clear =                         draws + 'clear/'
         status =                        games + 'status/'
 
-        pnl_grp =                       txn_reports + 'pnl/grp'
-        pnl_draw =                      txn_reports + 'pnl/draw'
+        game =                          txn_reports + pnl + 'game'
+        grp =                           txn_reports + pnl + 'grp'
+        draw =                          txn_reports + pnl + 'draw'
+        user =                          txn_reports + pnl + 'user'
 
         self.newtokens =                cms + newtokens
         self.bet_details =              cms + txn_reports.strip('/')
         self.draw_management =          cms + MX2
         self.lottery_draw =             cms + preset
-        self.cls_report =               cms + pnl_grp
-        self.single_profit_report =     cms + pnl_draw
+        self.cls_report =               cms + grp
+        self.single_profit_report =     cms + draw
         self.little_game_record =       cms + records
         self.little_game_get_or_patch = cms + little_game.strip('/')
         self.little_game_times_record = cms + room_record
@@ -40,6 +43,8 @@ class UrlCms:
         self.win_prize_limit =          cms + games.strip('/')
         self.draw_null =                cms + clear
         self.games_close_or_open =      cms + status
+        self.game_report =              cms + user
+        self.game_profit_report =       cms + game
 
     def url_login(self):
         return self.newtokens
@@ -86,6 +91,11 @@ class UrlCms:
     def url_games_close_or_open(self, gameId):
         return self.games_close_or_open + gameId
 
+    def url_game_report(self):
+        return self.game_report
+
+    def url_game_profit_report(self):
+        return self.game_profit_report
 
 
 class UrlSle:
