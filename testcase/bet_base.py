@@ -20,7 +20,8 @@ def bet(gameId='NYSSC3F',
         times=1,
         unit='DOLLAR',
         token=None,
-        more_data=None):
+        more_data=None,
+        vendor='MX2'):
 
     response = sle.active_and_previous_period(gameId)
     if response['current']['countdown'] <= 1000:
@@ -43,7 +44,8 @@ def bet(gameId='NYSSC3F',
                                     times,
                                     unit,
                                     token,
-                                    more_data)
+                                    more_data,
+                                    vendor)
 
     return status_code, response
 

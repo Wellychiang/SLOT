@@ -1,5 +1,7 @@
 import requests
-from config.url import UrlCms, UrlSle
+from config.url import UrlCms
+from config.url import UrlSle
+from config.url import UrlAe
 from config.userinfo import UserInfo
 import logging
 import time
@@ -97,6 +99,43 @@ class Base:
         r = self.s.post(url, headers=headers, json=data, verify=False)
         log(f'Response: {r.json()}')
         return r.status_code, r.json()
+
+
+    def ae_login(self, username):
+
+        ae = UrlAe()
+        url = ae.url_login()
+
+        user = UserInfo(username)
+        username = user.ae_username()
+        pwd = user.ae_pwd()
+
+        headers = {
+            'accept': '*/*',
+            'accept-language': 'zh-TW,zh;q=0.9,en-US;q=0.8,en;q=0.7',
+            'content-length': '224',
+            'content-type': 'application/json;charset=UTF-8',
+            'origin': 'https://ae.stgdevops.site',
+            'referer': 'https://ae.stgdevops.site/',
+            'sec-fetch-dest': 'empty',
+            'sec-fetch-mode': 'cors',
+            'sec-fetch-site': 'same-site',
+            'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) '
+                          'Chrome/87.0.4280.88 Safari/537.36',
+        }
+        data = {
+            'captcha': "2222",
+            'captchauuid': "fc3df66d-f76c-4830-9c91-e195c8367a01",
+            'fingerprint': "7db7a3f6a869f9a34ae967dc176421df",
+            'loginname': username,
+            'loginpassword': pwd,
+            'portalid': "EC_DESKTOP",
+        }
+
+        r = self.s.post(url, headers=headers, json=data, verify=False)
+        log(f"Ae login: {r.json()}")
+        return r.status_code, r.json()
+
 
     # 轉換成可用的timestamp
     def start_and_end_time(self, start_m,

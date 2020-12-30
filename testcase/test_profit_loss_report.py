@@ -14,7 +14,6 @@ from .bet_base import wait_and_lottery_draw
 
 
 @allure.feature(f"Scenario for search game profit loss report after bet")
-@pytest.mark.skip()
 def test_game_profit_loss_report(username=('welly1',),
                                  result='000001|111|111|222|222|45',
                                  vendorId='MX2',
@@ -30,7 +29,6 @@ def test_game_profit_loss_report(username=('welly1',),
                                  playRateId=102328,
                                  rebatePackage=1980,
                                  stake=1, ):
-    # TODO: 跑一次看一下報表的數據用來當之後測試依據
     start, end = Base().start_and_end_time(now_month, now_day, now_month, now_day)
 
     origin_report = cms.game_profit_report(start=start, end=end, gameId=f'{gameId}|{playType}')

@@ -26,8 +26,7 @@ def test_search_user_game_report(username=('gamereport01', 'gamereport02', 'game
                                  playRateId=102328,
                                  rebatePackage=1980,
                                  stake=1,
-                                 odds=920,
-                                 ):
+                                 odds=920,):
     start, end = Base().start_and_end_time(now_month, now_day, now_month, now_day)
 
     cms.games_close_or_open(username=ROOT_ACCOUNT,
@@ -90,15 +89,15 @@ def wait_for_the_game_report(start, end, username, switch_button):
                                   userId=f'SL3{username[switch_button]}', )
 
     times = 0
-    while game_report['records'] is None or len(game_report['records']):
-        time.sleep(5)
+    while game_report['records'] is None or len(game_report['records']) == 0:
+        time.sleep(10)
         times += 1
         game_report = cms.game_report(end=end,
                                       limit=5,
                                       start=start,
                                       userId=f'SL3{username[switch_button]}', )
-        if times > 12:
-            raise ValueError('Too slow to load in report')
+        if times > 6:
+            raise ValueError(f'Too slow to load in report, it spend 60 seconds')
 
     return game_report
 

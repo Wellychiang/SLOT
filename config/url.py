@@ -27,6 +27,7 @@ class UrlCms:
         grp =                           txn_reports + pnl + 'grp'
         draw =                          txn_reports + pnl + 'draw'
         user =                          txn_reports + pnl + 'user'
+        vendor =                        txn_reports + pnl + 'vendor'
 
         self.newtokens =                cms + newtokens
         self.bet_details =              cms + txn_reports.strip('/')
@@ -45,6 +46,7 @@ class UrlCms:
         self.games_close_or_open =      cms + status
         self.game_report =              cms + user
         self.game_profit_report =       cms + game
+        self.profit_loss_report =       cms + vendor
 
     def url_login(self):
         return self.newtokens
@@ -96,6 +98,9 @@ class UrlCms:
 
     def url_game_profit_report(self):
         return self.game_profit_report
+
+    def url_profit_loss_report(self):
+        return self.profit_loss_report
 
 
 class UrlSle:
@@ -163,3 +168,23 @@ class UrlSle:
 
     def url_profile(self):
         return self.profile
+
+
+class UrlAe:
+
+    def __init_(self, env='stg'):
+
+        self.env = env
+
+        ae = f'https://ae-api.{env}devops.site/ae-ecp/api/v1/'
+
+        self.login = ae + 'login'
+
+        self.launch_game = 'https://ae.stgdevops.site/launchgame'
+
+
+    def url_login(self):
+        return self.login
+
+    def url_launch_game(self):
+        return self.launch_game

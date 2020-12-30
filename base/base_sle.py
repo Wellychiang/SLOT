@@ -56,7 +56,8 @@ class Sle(Base):
             times=1,                    # Bet how many times, like stake*1, this bet money is 10
             unit='DOLLAR',
             token=None,
-            more_data=None):
+            more_data=None,
+            vendor='MX2'):
 
         url = self.sle.url_txns()
 
@@ -73,7 +74,7 @@ class Sle(Base):
             'sec-fetch-site': 'same-site',
             'user-agent': 'Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 '
                           '(KHTML, like Gecko) Chrome/86.0.4240.193 Mobile Safari/537.36',
-            'x-vendor-id': 'MX2',
+            'x-vendor-id': vendor,
         }
 
         betString = betString.split(',')

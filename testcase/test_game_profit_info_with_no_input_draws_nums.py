@@ -32,7 +32,6 @@ def test_game_profit_info_with_no_input_draw_nums(gameId='NYSC30S',  # 空戰風
                                                   odds=1.98,
                                                   isSelfOpen=True,
                                                   ):
-    # TODO: 跑一次抓報表數據, 為之後驗證數據
     start, end = Base().start_and_end_time(now_month, now_day, now_month, now_day)
     original_report = cms.game_profit_report(start=start, end=end, gameId=f'{gameId}|{playType}')
 

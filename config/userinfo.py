@@ -152,3 +152,12 @@ class UserInfo:
 
     def sle_pwd(self):
         return self.sle_user_info[self.user]['pwd']
+
+    ae_user_info = {'welly': {'username': 'welly1',
+                              'pwd': 'ff9ff7ef892f14187c3dede2c848c94843e6e69e'}}
+
+    def ae_username(self):
+        return self.sle_user_info[self.user]['username']
+
+    def ae_pwd(self):
+        return self.sle_user_info[self.user]['pwd']

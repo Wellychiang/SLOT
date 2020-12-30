@@ -36,7 +36,6 @@ def test_info_correct_after_bet(username='welly1',
                                 lose_pl=-1,
                                 win_pl=919,
                                 ):
-    # TODO: 需增加 程式開獎的測試 case(單獨一個 case)
     start, end = Base().start_and_end_time(now_month, now_day, now_month, now_day)
 
     setup_prize_limit(gameId, playType)

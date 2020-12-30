@@ -687,3 +687,29 @@ class Cms(Base):
         log(f"Game profit report: {r.json()}")
 
         return r.json()
+
+    def profit_loss_report(self, username, start, end):
+        url = self.cms.url_profit_loss_report()
+        _, get_token = self.cms_login(username)
+
+        headers = {
+            'accept': '*/*',
+            'accept-language': 'zh-TW,zh;q=0.9,en-US;q=0.8,en;q=0.7',
+            'authorization': get_token['token'],
+            'origin': 'https://sle-bo.stgdevops.site',
+            'referer': 'https://sle-bo.stgdevops.site/',
+            'sec-fetch-dest': 'empty',
+            'sec-fetch-mode': 'cors',
+            'sec-fetch-site': 'same-site',
+            'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) '
+                          'Chrome/87.0.4280.88 Safari/537.36',
+        }
+        params = {
+            'start': start,
+            'end': end
+        }
+
+        r = self.s.get(url, headers=headers, params=params)
+        log(f"Profit loss report: {r.json()}")
+
+        return r.json()
