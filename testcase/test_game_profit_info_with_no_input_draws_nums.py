@@ -15,6 +15,7 @@ from .bet_base import wait_for_bet_and_return_previous_or_current
 
 
 @allure.feature(f"Scenario for search game profit info with no manual input lottery draw's nums")
+@allure.step('')
 def test_game_profit_info_with_no_input_draw_nums(gameId='NYSC30S',  # 空戰風雲
                                                   sleep_time=5,
                                                   playType='SIMPLE',

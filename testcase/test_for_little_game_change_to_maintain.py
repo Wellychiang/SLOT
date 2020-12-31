@@ -8,7 +8,8 @@ from .bet_base import now_month
 from .bet_base import now_day
 
 
-@allure.feature('Little game CMS change to maintain, check info correct')
+@allure.feature('Change little game to maintain and verify info.')
+@allure.step('')
 def test_verify_info_with_setting_maintain(little_game_init_button,
                                             creator='lgmaintain01',
                                             amount=100,

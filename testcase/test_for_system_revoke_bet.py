@@ -12,9 +12,8 @@ from .bet_base import now_day
 import os
 
 
-
-
 @allure.feature('Scenario for system revoke bet when game closed')
+@allure.step('')
 def test_system_revoke_bet_info(games_close_or_open_init,
                                 gameId='TXFFC',
                                 cms_username=ROOT_ACCOUNT,

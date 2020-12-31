@@ -8,6 +8,7 @@ from .bet_base import now_day
 
 
 @allure.feature('Scenario for transfer in and out check')
+@allure.step('')
 def test_for_transfer(username='welly1',
                       transfer_in_n_out_type='TRANSFER_IN,TRANSFER_OUT',
                       transfer_out_type='TRANSFER_OUT',

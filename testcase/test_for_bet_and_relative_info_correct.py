@@ -11,6 +11,7 @@ from .bet_base import wait_for_bet_and_return_previous_or_current
 
 
 @allure.feature("Scenario for bet and check relative account changes info")
+@allure.step('')
 def test_for_bet_relative_info(username='betrelative',
                                gameId='NYSSC1F',
                                betString='s5vary1,1',

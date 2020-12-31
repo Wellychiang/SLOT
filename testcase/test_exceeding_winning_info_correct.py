@@ -12,6 +12,7 @@ from .bet_base import wait_for_bet_and_return_previous_or_current
 
 
 @allure.feature("Scenario for check overwin's info correct or not")
+@allure.step('')
 def test_over_win_prize(username=('overwin01', 'overwin04', 'overwin03', 'yahoo'),
                         gameId='TXFFC',
                         playType='SIMPLE',
@@ -19,6 +20,9 @@ def test_over_win_prize(username=('overwin01', 'overwin04', 'overwin03', 'yahoo'
                         betString2='sum,small',
                         playRateId=18449,
                         prizeLimit=500,
+                        stake=500,
+                        playId=17,
+                        rebatePackage=1980,
                         cancel_win_prize_types='CANCEL_WIN_PRIZE',
                         win_prize_type='WIN_PRIZE',
                         over_win_prize_type='OVER_WIN_PRIZE',
@@ -33,12 +37,12 @@ def test_over_win_prize(username=('overwin01', 'overwin04', 'overwin03', 'yahoo'
 
     current_bet = wait_for_bet_and_return_previous_or_current(gameId, sleep_time=6)
     for i in range(2):
-        bet(gameId='TXFFC',
+        bet(gameId=gameId,
             betString=betString,
-            playId=17,
+            playId=playId,
             playRateId=playRateId,
-            rebatePackage=1980,
-            stake=500,
+            rebatePackage=rebatePackage,
+            stake=stake,
             token=token)
         betString = betString2
         playRateId += 1

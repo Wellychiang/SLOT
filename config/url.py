@@ -47,6 +47,7 @@ class UrlCms:
         self.game_report =              cms + user
         self.game_profit_report =       cms + game
         self.profit_loss_report =       cms + vendor
+        self.lg_profit_loss_report =    cms + report + pnl.strip('/')
 
     def url_login(self):
         return self.newtokens
@@ -101,6 +102,9 @@ class UrlCms:
 
     def url_profit_loss_report(self):
         return self.profit_loss_report
+
+    def url_lg_profit_loss_report(self):
+        return self.lg_profit_loss_report
 
 
 class UrlSle:
@@ -172,15 +176,16 @@ class UrlSle:
 
 class UrlAe:
 
-    def __init_(self, env='stg'):
+    def __init__(self, env='stg'):
 
         self.env = env
 
         ae = f'https://ae-api.{env}devops.site/ae-ecp/api/v1/'
 
-        self.login = ae + 'login'
+        games = 'games/AE_LOT/AE_LOT/Lobby/launch'
 
-        self.launch_game = 'https://ae.stgdevops.site/launchgame'
+        self.launch_game = ae + games
+        self.login = ae + 'login'
 
 
     def url_login(self):

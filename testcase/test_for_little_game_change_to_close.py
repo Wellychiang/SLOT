@@ -8,7 +8,8 @@ from .bet_base import now_month
 from .bet_base import now_day
 
 
-@allure.feature('Little game CMS change to close, check info correct')
+@allure.feature(f"Close little game to verify info. ")
+@allure.step('')
 def test_verify_info_with_setting_close(little_game_init_button,
                                            creator='lgmaintain02',
                                            amount=90,

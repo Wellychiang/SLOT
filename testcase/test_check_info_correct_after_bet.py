@@ -13,6 +13,7 @@ from .bet_base import wait_and_lottery_draw
 
 
 @allure.feature("Scenario with check info correct after bet in bet detail report")
+@allure.step('')
 def test_info_correct_after_bet(username='welly1',
                                 gameId='NYTHAIFFC',
                                 playType='STANDALONE',

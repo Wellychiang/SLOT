@@ -32,13 +32,13 @@ def test_three_options_to_search(amount=10,
                                                          report_end_month,
                                                          report_end_day)
 
-    log('\nVerify commission to equal 5%, if not , update to 5%')
+    log(f'\nVerify commission to equal {commission}%, if not , update to {commission}%')
     little_games = cms.little_game_get_or_patch(method='get')
 
     if 5 != little_games[0]['commission']:
-        status_code = cms.little_game_get_or_patch(method='patch', SC_commission=5)
+        status_code = cms.little_game_get_or_patch(method='patch', SC_commission=commission)
         if status_code != 204:
-            raise ValueError('Commission is not 5 and patch failed')
+            raise ValueError(f'Commission is not {commission} and patch failed')
     else:
         log('\nCommission success')
 

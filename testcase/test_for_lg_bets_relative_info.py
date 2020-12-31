@@ -9,6 +9,7 @@ from .bet_base import now_day
 
 
 @allure.feature("Scenario with bet's relative info")
+@allure.step('')
 def test_EC_CMS_transaction_record(creator='relativeinfo',
                                    player='relativeinfo1',
                                    amount=150,

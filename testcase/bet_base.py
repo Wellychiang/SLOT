@@ -29,6 +29,7 @@ def bet(gameId='NYSSC3F',
 
         log(f'\nCount down time is too short to verify, wait for the next lottery draw.\nCount down: {wait_time}')
         time.sleep(wait_time)
+        response = sle.active_and_previous_period(gameId)
 
     drawId = response['current']['drawId']
     status_code, response = sle.bet(drawId,

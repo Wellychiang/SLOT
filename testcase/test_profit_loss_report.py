@@ -5,8 +5,6 @@ from . import sle
 from . import time
 from . import pytest
 from . import log
-from .bet_base import bet
-from . import ROOT_ACCOUNT
 from .bet_base import for_loop_bet_and_verify
 from .bet_base import now_month
 from .bet_base import now_day
@@ -14,6 +12,7 @@ from .bet_base import wait_and_lottery_draw
 
 
 @allure.feature(f"Scenario for search game profit loss report after bet")
+@allure.step('')
 def test_game_profit_loss_report(username=('welly1',),
                                  result='000001|111|111|222|222|45',
                                  vendorId='MX2',
