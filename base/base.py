@@ -62,7 +62,7 @@ class Base:
         }
 
         r = self.s.post(url, headers=headers, json=data)
-        log(f'Response: {r.json()}')
+        log(f'Cms login: {r.json()}')
         return r.status_code, r.json()
 
     def sle_login(self, username='welly1'):
@@ -97,7 +97,7 @@ class Base:
         }
 
         r = self.s.post(url, headers=headers, json=data, verify=False)
-        log(f'Response: {r.json()}')
+        log(f'Sle login: {r.json()}')
         return r.status_code, r.json()
 
 
