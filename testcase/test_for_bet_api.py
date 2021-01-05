@@ -446,6 +446,9 @@ def test_betString_multi_content(token,
                                  rebatePackage=1980,
                                  stake=1,
                                  vendor='MX2'):
+    """
+    此用例為頭尾相同的違法投注, JIRA 的 [SLE] 快三點數和值 應阻擋違法投注 這張單
+    """
     for i in range(4):
         setting_status = cms.games_close_or_open(username=ROOT_ACCOUNT,
                                                  gameId=gameId[i],

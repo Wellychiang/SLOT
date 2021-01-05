@@ -2,6 +2,11 @@ from . import cms
 from . import sle
 from . import pytest
 
+"""
+可以用 @pytest.mark.run(order=1) 弄一個開啟所有遊戲的 session 級 setup
+插件為 pip install pytest-ordering (已安裝)
+"""
+
 
 @pytest.fixture()
 def token():

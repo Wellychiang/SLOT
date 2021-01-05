@@ -307,7 +307,6 @@ class Sle(Base):
         return r.status_code, r.json()
 
     def chase_bet(self,
-                  username='welly1',
                   gameId='NYK31F',
                   playType='STANDALONE',
                   betString='s3sum|3',
@@ -316,8 +315,8 @@ class Sle(Base):
                   rebatePackage=1980,
                   stake=1,
                   drawId=None,
-                  times=0,
-                  token='token'):
+                  token='token',
+                  vendorId='MX2'):
 
         url = self.sle.url_chase_bet()
 
@@ -333,6 +332,7 @@ class Sle(Base):
             'sec-fetch-site': 'same-site',
             'user-agent': 'Mozilla/5.0 (iPhone; CPU iPhone OS 13_2_3 like Mac OS X) AppleWebKit/605.1.15 '
                           '(KHTML, like Gecko) Version/13.0.3 Mobile/15E148 Safari/604.1',
+            'x-vendor-id': vendorId
         }
         data = {
                 "gameId": gameId,
@@ -351,17 +351,37 @@ class Sle(Base):
                     }
                 ],
                 "txns": [
-                    {
-                        "drawId": drawId,
-                        "times": 1
-                    },
 
                 ]
         }
-        if times != 0:
-            for i in range(times):
-                data['txns'].append(drawId + i + 1)
-        r = self.s.post(url, headers=headers, json=data)
-        log(f"Status code: {r.status_code}\nChase bet{r.json()}")
+        for draw in drawId:
+            data['txns'].append(draw)
 
-        return r.status_code, r.json()
+        r = self.s.post(url, headers=headers, json=data)
+        log(f"Status code: {r.status_code}")
+
+        return r.status_code
+
+    def retrieved_draw(self, gameId, token, drawCount):
+        url = self.sle.url_retrieved_draw(gameId)
+
+        headers = {
+            'accept': 'application/json, text/plain, */*',
+            'accept-language': 'zh-TW,zh;q=0.9,en-US;q=0.8,en;q=0.7',
+            'authorization': token,
+            'origin': 'https://mx2.stgdevops.site',
+            'referer': 'https://mx2.stgdevops.site/',
+            'sec-fetch-dest': 'empty',
+            'sec-fetch-mode': 'cors',
+            'sec-fetch-site': 'same-site',
+            'user-agent': 'Mozilla/5.0 (iPhone; CPU iPhone OS 13_2_3 like Mac OS X) AppleWebKit/605.1.15 '
+                          '(KHTML, like Gecko) Version/13.0.3 Mobile/15E148 Safari/604.1',
+
+        }
+        params = {
+            'drawcount': drawCount
+        }
+        r = self.s.get(url, headers=headers, params=params)
+        log(f"Retrieved draw: {r.json()}")
+
+        return r.json()

@@ -22,6 +22,7 @@ class UrlCms:
         MX2 =                           draws + 'MX2/'
         clear =                         draws + 'clear/'
         status =                        games + 'status/'
+        chase =                         txn_reports + 'chase'
 
         game =                          txn_reports + pnl + 'game'
         grp =                           txn_reports + pnl + 'grp'
@@ -48,6 +49,7 @@ class UrlCms:
         self.game_profit_report =       cms + game
         self.profit_loss_report =       cms + vendor
         self.lg_profit_loss_report =    cms + report + pnl.strip('/')
+        self.chase_report =             cms + chase
 
     def url_login(self):
         return self.newtokens
@@ -106,6 +108,9 @@ class UrlCms:
     def url_lg_profit_loss_report(self):
         return self.lg_profit_loss_report
 
+    def url_chase_report(self):
+        return self.chase_report
+
 
 class UrlSle:
 
@@ -135,7 +140,7 @@ class UrlSle:
         create =                            little_game + 'create'
         play =                              little_game + 'play'
         cancel =                            txns + 'cancel'
-        chase =                             txns + 'chase'
+        chase =                             txns + 'chase/'
 
         self.txns =                         sle_portal + txns.strip('/')
         self.active_and_previous_period =   sle_portal + active_and_previous
@@ -143,7 +148,8 @@ class UrlSle:
         self.little_game_play =             sle_portal + play
         self.transaction_record =           sle_portal + transaction_record
         self.cancel_bet =                   sle_portal + cancel
-        self.chase_bet =                    sle_portal + chase
+        self.chase_bet =                    sle_portal + chase.strip('/')
+        self.retrieved_draw =               sle_portal + chase + 'retrievedraw'
 
     def url_login(self):
         return self.login
@@ -177,6 +183,9 @@ class UrlSle:
 
     def url_chase_bet(self):
         return self.chase_bet
+
+    def url_retrieved_draw(self, gameId):
+        return self.retrieved_draw + '/' + gameId
 
 
 class UrlAe:
