@@ -73,14 +73,21 @@ def wait_for_the_game_profit_report(start, end, gameId, playType, original_repor
     profit_report = cms.game_profit_report(start=start, end=end, gameId=f'{gameId}|{playType}')
 
     times = 0
-    while profit_report['records'][0]['betCount'] == original_report['records'][0]['betCount']:
-        log(f'Records info is update now, wait a second')
-        times += 1
-        time.sleep(10)
-        profit_report = cms.game_profit_report(start=start, end=end, gameId=f'{gameId}|{playType}')
+    if len(original_report['records']) == 0:
+        while len(profit_report['records']) == len(original_report['records']):
+            log(f"Records info is update now, wait a second")
+            times += 1
+            time.sleep(10)
+            profit_report = cms.game_profit_report(start=start, end=end, gameId=f'{gameId}|{playType}')
+    else:
+        while profit_report['records'][0]['betCount'] == original_report['records'][0]['betCount']:
+            log(f'Records info is update now, wait a second')
+            times += 1
+            time.sleep(10)
+            profit_report = cms.game_profit_report(start=start, end=end, gameId=f'{gameId}|{playType}')
 
-        if times > 6:
-            raise ValueError(f"It's too slow to load in the game profit report")
+    if times > 6:
+        raise ValueError(f"It's too slow to load in the game profit report")
 
     profit_report = cms.game_profit_report(start=now_start_time, end=end, gameId=f'{gameId}|{playType}')
 

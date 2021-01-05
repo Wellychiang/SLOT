@@ -135,6 +135,7 @@ class UrlSle:
         create =                            little_game + 'create'
         play =                              little_game + 'play'
         cancel =                            txns + 'cancel'
+        chase =                             txns + 'chase'
 
         self.txns =                         sle_portal + txns.strip('/')
         self.active_and_previous_period =   sle_portal + active_and_previous
@@ -142,6 +143,7 @@ class UrlSle:
         self.little_game_play =             sle_portal + play
         self.transaction_record =           sle_portal + transaction_record
         self.cancel_bet =                   sle_portal + cancel
+        self.chase_bet =                    sle_portal + chase
 
     def url_login(self):
         return self.login
@@ -173,6 +175,9 @@ class UrlSle:
     def url_profile(self):
         return self.profile
 
+    def url_chase_bet(self):
+        return self.chase_bet
+
 
 class UrlAe:
 
@@ -184,8 +189,8 @@ class UrlAe:
 
         games = 'games/AE_LOT/AE_LOT/Lobby/launch'
 
-        self.launch_game = ae + games
-        self.login = ae + 'login'
+        self.launch_game =      ae + games
+        self.login =            ae + 'login'
 
 
     def url_login(self):

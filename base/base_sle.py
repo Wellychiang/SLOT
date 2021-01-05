@@ -256,7 +256,7 @@ class Sle(Base):
         }]
 
         r = self.s.put(url, headers=headers, json=data)
-        log(f"Response:{r.json()}\nStatus code: {r.status_code}")
+        log(f"Cancel bet:{r.json()}\nStatus code: {r.status_code}")
 
         return r.status_code, r.json()
 
@@ -302,6 +302,66 @@ class Sle(Base):
         }
 
         r = self.s.get(url, headers=headers)
-        log(f"Status code: {r.status_code}\nResponse{r.json()}")
+        log(f"Status code: {r.status_code}\nProfile{r.json()}")
+
+        return r.status_code, r.json()
+
+    def chase_bet(self,
+                  username='welly1',
+                  gameId='NYK31F',
+                  playType='STANDALONE',
+                  betString='s3sum|3',
+                  playId=30001,
+                  playRateId=14876,
+                  rebatePackage=1980,
+                  stake=1,
+                  drawId=None,
+                  times=0,
+                  token='token'):
+
+        url = self.sle.url_chase_bet()
+
+        headers = {
+            'accept': 'application/json, text/plain, */*',
+            'accept-language': 'zh-TW,zh;q=0.9,en-US;q=0.8,en;q=0.7',
+            'authorization': token,
+            'origin': 'https://mx2.stgdevops.site',
+            'referer': 'https://mx2.stgdevops.site/',
+            'content-type': 'application/json',
+            'sec-fetch-dest': 'empty',
+            'sec-fetch-mode': 'cors',
+            'sec-fetch-site': 'same-site',
+            'user-agent': 'Mozilla/5.0 (iPhone; CPU iPhone OS 13_2_3 like Mac OS X) AppleWebKit/605.1.15 '
+                          '(KHTML, like Gecko) Version/13.0.3 Mobile/15E148 Safari/604.1',
+        }
+        data = {
+                "gameId": gameId,
+                "platform": "Desktop",
+                "playType": playType,
+                "stopIfOpenNull": True,
+                "stopIfWin": True,
+                "chasePlans": [
+                    {
+                        "betString": betString,
+                        "playId": playId,
+                        "playRateId": playRateId,
+                        "rebatePackage": rebatePackage,
+                        "stake": stake,
+                        "unit": "DOLLAR"
+                    }
+                ],
+                "txns": [
+                    {
+                        "drawId": drawId,
+                        "times": 1
+                    },
+
+                ]
+        }
+        if times != 0:
+            for i in range(times):
+                data['txns'].append(drawId + i + 1)
+        r = self.s.post(url, headers=headers, json=data)
+        log(f"Status code: {r.status_code}\nChase bet{r.json()}")
 
         return r.status_code, r.json()
