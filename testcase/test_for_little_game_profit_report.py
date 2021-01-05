@@ -40,6 +40,8 @@ def test_little_game_profit_loss_report(amount=10,
     else:
         log('\nCommission success')
 
+    start = Base().return_now_start_time()
+
     _, get_token = sle.get_launch_token(creator)
     game_create = sle.little_game_create(token=get_token['token'],
                                          amount=amount,
@@ -56,7 +58,6 @@ def test_little_game_profit_loss_report(amount=10,
     pytest.assume(game_play_result['creatorPick'] == 'HEAD')
     pytest.assume(game_play_result['amountResult'] == -amount)
 
-    start = Base().return_now_start_time()
     report = wait_and_verify_lg_profit_loss_report(start, end=todays_end, username=ROOT_ACCOUNT)
 
     assert_lg_profit_loss_info(report,

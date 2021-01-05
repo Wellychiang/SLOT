@@ -36,6 +36,8 @@ def test_game_profit_loss_report(username=('welly1',),
                           gameId=gameId,
                           count_down_second=22)
 
+    now_start_time = Base().return_now_start_time()
+
     _, token = sle.get_launch_token(username[0])
     for_loop_bet_and_verify(token=token['token'],
                             gameId=gameId,
@@ -46,7 +48,7 @@ def test_game_profit_loss_report(username=('welly1',),
                             rebatePackage=rebatePackage,
                             stake=stake, )
 
-    now_start_time = Base().return_now_start_time()
+
     report = wait_for_game_profit_report_info_update(start, end, gameId, playType, origin_report, now_start_time)
 
     assert_the_game_profit_report_with_thai(report,

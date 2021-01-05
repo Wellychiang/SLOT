@@ -32,6 +32,8 @@ def test_profit_loss_report(username=ROOT_ACCOUNT,
                                            now_month,
                                            now_day)
 
+    start = Base().return_now_start_time()
+
     get_token = ae.get_launch_token(username=user[0])
     bet(gameId=gameId,
         betString=betString[0],
@@ -52,7 +54,6 @@ def test_profit_loss_report(username=ROOT_ACCOUNT,
         token=get_token['token'],
         vendor=vendor2)
 
-    start = Base().return_now_start_time()
     report = wait_for_reports_info_updated(username, start, end)
     assert_MX2_with_profit_loss_report(report,
                                        betUserCount=len(user),

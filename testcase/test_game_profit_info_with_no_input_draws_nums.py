@@ -38,6 +38,9 @@ def test_game_profit_info_with_no_input_draw_nums(gameId='NYSC30S',  # 空戰風
 
     wait_for_bet_and_return_previous_or_current(gameId, sleep_time)
 
+
+    now_start_time = Base().return_now_start_time()
+
     _, launch = sle.get_launch_token(username[0])
     for betString in betStrings:
         bet(gameId=gameId,
@@ -49,7 +52,6 @@ def test_game_profit_info_with_no_input_draw_nums(gameId='NYSC30S',  # 空戰風
             token=launch['token'],)
         playRateId = 12302
 
-    now_start_time = Base().return_now_start_time()
     report = wait_for_the_game_profit_report(start, end, gameId, playType, original_report, now_start_time)
 
     assert_the_game_profit_report_with_air_fight(report,

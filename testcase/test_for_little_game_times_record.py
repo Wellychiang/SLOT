@@ -35,7 +35,7 @@ def test_three_options_to_search(amount=10,
     log(f'\nVerify commission to equal {commission}%, if not , update to {commission}%')
     little_games = cms.little_game_get_or_patch(method='get')
 
-    if 5 != little_games[0]['commission']:
+    if commission != little_games[0]['commission']:
         status_code = cms.little_game_get_or_patch(method='patch', SC_commission=commission)
         if status_code != 204:
             raise ValueError(f'Commission is not {commission} and patch failed')
@@ -112,7 +112,7 @@ def assert_times_record_with_which_search(roomId=None,
                                            playerName=playerName,
                                            start=start,
                                            end=end)
-    record = records['records'][-1]
+    record = records['records'][0]
 
     log(record)
     pytest.assume(record['gameId'] == gameId)
