@@ -3,13 +3,15 @@ from . import Base
 from . import cms
 from . import pytest
 from . import sle
+from . import time
+from . import log
 from .bet_base import now_month
 from .bet_base import now_day
 
 
 @allure.feature('Scenario for transfer in and out check')
 @allure.step('')
-def test_for_transfer(username='welly1',
+def test_for_transfer(username='yahoo',
                       transfer_in_n_out_type='TRANSFER_IN,TRANSFER_OUT',
                       transfer_out_type='TRANSFER_OUT',
                       transfer_in_type='TRANSFER_IN',):
@@ -18,18 +20,25 @@ def test_for_transfer(username='welly1',
     _, profile = sle.profile(username)
     balance = profile['wallets'][0]['balance']
 
+    _, response = sle.get_launch_token(username)
+    origin_out = sle.transaction_record(response['token'], start, end, types=transfer_out_type)
+
     response = transfer_in_and_out(username)
-    in_total = ec_search_for_transfer_in_assert(token=response['token'],
-                                                start=start,
-                                                end=end,
-                                                types=transfer_in_type,
-                                                balance=balance)
 
     out_total = ec_search_for_transfer_out_assert(token=response['token'],
                                                   start=start,
                                                   end=end,
                                                   types=transfer_out_type,
-                                                  balance=balance)
+                                                  balance=balance,
+                                                  origin_record=origin_out)
+    in_total = ec_search_for_transfer_in_assert(token=response['token'],
+                                                start=start,
+                                                end=end,
+                                                types=transfer_in_type,
+                                                balance=balance,)
+
+
+
 
     in_and_out_total = ec_search_for_transfer_in_and_out_assert(token=response['token'],
                                                                 start=start,
@@ -66,6 +75,7 @@ def ec_search_for_transfer_in_assert(token, start, end, types, balance):
                                     end=end,
                                     types=types)
 
+
     data = record['data'][0]
     pytest.assume(int(data['txnAmt'] * 100) == int(balance * 100))
 
@@ -76,11 +86,18 @@ def ec_search_for_transfer_in_assert(token, start, end, types, balance):
     return record['total']
 
 
-def ec_search_for_transfer_out_assert(token, start, end, types, balance):
+def ec_search_for_transfer_out_assert(token, start, end, types, balance, origin_record):
     record = sle.transaction_record(token=token,
                                     start=start,
                                     end=end,
                                     types=types)
+    while record['total'] == origin_record['total']:
+        log(f"Wait for the report load")
+        time.sleep(10)
+        record = sle.transaction_record(token=token,
+                                        start=start,
+                                        end=end,
+                                        types=types)
 
     data = record['data'][0]
     pytest.assume(int(data['txnAmt'] * 100) == int(balance * 100))
@@ -89,7 +106,8 @@ def ec_search_for_transfer_out_assert(token, start, end, types, balance):
 
     pytest.assume(data['txnType'] == types)
     pytest.assume(data['in'] == False)
-    pytest.assume(str(data['afterBalance']) == f"{data['beforeBalance'] - float(balance):.4f}")
+    # pytest.assume(str(data['beforeBalance']) == str(balance))
+    pytest.assume(str(balance) in str(data['beforeBalance']))
 
     return record['total']
 
@@ -112,7 +130,7 @@ def ec_search_for_transfer_in_and_out_assert(token, start, end, types, balance):
 
     pytest.assume(data_out['txnType'] == types[12:])
     pytest.assume(data_out['in'] == False)
-    pytest.assume(str(data_out['afterBalance']) == f"{data_out['beforeBalance'] - float(balance):.4f}")
+    pytest.assume(str(balance) in str(data_out['beforeBalance']))
 
     return record['total']
 
@@ -139,7 +157,7 @@ def cms_search_for_transfer_in_and_out_assert(userId, start, end, types, balance
 
         pytest.assume(data['txnType'] == types)
         pytest.assume(data['in'] == False)
-        pytest.assume(str(data['afterBalance']) == f"{data['beforeBalance'] - float(balance):.4f}")
+        pytest.assume(str(balance) in str(data['beforeBalance']))
         assert record['total'] == sle_total
 
     else:

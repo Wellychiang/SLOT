@@ -262,7 +262,6 @@ class Sle(Base):
 
     def transfer_out(self, username='welly1'):
         url = self.sle.url_transfer_out()
-
         _, get_token = self.sle_login(username)
         headers = {
             'accept': 'application/json, text/plain, */*',

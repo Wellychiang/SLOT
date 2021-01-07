@@ -10,6 +10,16 @@ from .bet_base import bet
 bet_feature = 'Bet'
 
 
+@pytest.mark.run(order=1)
+def test_open_needed_game(gameIds=('NYSSC3F',), playType='SIMPLE', vendor='MX2'):
+    for gameId in gameIds:
+        cms.games_close_or_open(username=ROOT_ACCOUNT,
+                                gameId=gameId,
+                                gameStatus='ACTIVE',
+                                playType=playType,
+                                vendorId=vendor)
+
+
 @allure.feature('Cms')
 @pytest.mark.skip()
 def test_cms():
