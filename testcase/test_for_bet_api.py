@@ -478,6 +478,8 @@ def test_betString_multi_content(token,
                                     vendor=vendor)
 
         pytest.assume(status_code == 400)
+        if 'Argument error-> argument name: drawid, message: before cycle start time' in response['message']:
+            continue
         pytest.assume(response['message'] == 'Argument error-> argument name: betstring, message: invalid betstring:'
                                              f' multi content for game:{gameId[i]}')
 
