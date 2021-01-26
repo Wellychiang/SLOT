@@ -39,6 +39,8 @@ def test_game_profit_loss_report(username=('welly1',),
     now_start_time = Base().return_now_start_time()
 
     _, token = sle.get_launch_token(username[0])
+    if token.get('msg') == 'launch game fail':
+        raise ValueError('Get games launch token failed')
     for_loop_bet_and_verify(token=token['token'],
                             gameId=gameId,
                             playType=playType,
@@ -71,7 +73,7 @@ def test_game_profit_loss_report(username=('welly1',),
 def wait_for_game_profit_report_info_update(start, end, gameId, playType, origin_report, now_start_time):
     report = cms.game_profit_report(start=start, end=end, gameId=f'{gameId}|{playType}')
     times = 0
-    while report['records'][0]['betCount'] == origin_report['records'][0]['betCount']:
+    while report['records'][0]['betCount'] == origin_report['records'][0]['betCount'] or not report['records']:
         log(f'Record update now, wait a minute')
         times += 1
         time.sleep(10)

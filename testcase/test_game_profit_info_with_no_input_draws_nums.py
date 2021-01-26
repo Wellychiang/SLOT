@@ -42,15 +42,18 @@ def test_game_profit_info_with_no_input_draw_nums(gameId='NYSC30S',  # 空戰風
     now_start_time = Base().return_now_start_time()
 
     _, launch = sle.get_launch_token(username[0])
+    if token.get('msg') == 'launch game fail':
+        raise ValueError('Get games launch token failed')
     for betString in betStrings:
-        bet(gameId=gameId,
-            betString=betString,
-            playId=playId,  # 信用玩法依順序為17, 18, 19 .....(泰國彩不適用)
-            playRateId=playRateId,
-            rebatePackage=rebatePackage,
-            stake=stake,
-            token=launch['token'],)
+        _, response = bet(gameId=gameId,
+                            betString=betString,
+                            playId=playId,  # 信用玩法依順序為17, 18, 19 .....(泰國彩不適用)
+                            playRateId=playRateId,
+                            rebatePackage=rebatePackage,
+                            stake=stake,
+                            token=launch['token'],)
         playRateId = 12302
+
 
     report = wait_for_the_game_profit_report(start, end, gameId, playType, original_report, now_start_time)
 

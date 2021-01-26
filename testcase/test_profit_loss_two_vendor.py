@@ -35,6 +35,8 @@ def test_profit_loss_report(username=ROOT_ACCOUNT,
     start = Base().return_now_start_time()
 
     get_token = ae.get_launch_token(username=user[0])
+    if get_token.get('msg') == 'launch game fail':
+        raise ValueError('AE get launch token failed')
     bet(gameId=gameId,
         betString=betString[0],
         playId=playId,
@@ -45,6 +47,8 @@ def test_profit_loss_report(username=ROOT_ACCOUNT,
         vendor=vendor1)
 
     _, get_token = sle.get_launch_token(username=user[0])
+    if get_token.get('msg') == 'launch game fail':
+        raise ValueError('Get games launch failed')
     bet(gameId=gameId,
         betString=betString[0],
         playId=playId,
