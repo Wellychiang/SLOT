@@ -466,7 +466,7 @@ def test_betString_multi_content(token,
                                                  playType=playType,
                                                  vendorId=vendor)
         if setting_status != 204:
-            raise ValueError('Init game failed')
+            raise ValueError(f'Init game {gameId[i]} failed')
         status_code, response = bet(gameId=gameId[i],
                                     playType=playType,
                                     betString=betString[i],

@@ -11,6 +11,8 @@ from . import pytest
 @pytest.fixture()
 def token():
     _, get_token = sle.get_launch_token(username='welly1')
+    if get_token['token'].get('msg') == 'launch game fail':
+        raise ValueError('Launch game fail')
 
     return get_token['token']
 

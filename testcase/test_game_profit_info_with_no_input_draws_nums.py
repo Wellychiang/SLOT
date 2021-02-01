@@ -42,7 +42,7 @@ def test_game_profit_info_with_no_input_draw_nums(gameId='NYSC30S',  # 空戰風
     now_start_time = Base().return_now_start_time()
 
     _, launch = sle.get_launch_token(username[0])
-    if token.get('msg') == 'launch game fail':
+    if launch.get('msg') == 'launch game fail':
         raise ValueError('Get games launch token failed')
     for betString in betStrings:
         _, response = bet(gameId=gameId,

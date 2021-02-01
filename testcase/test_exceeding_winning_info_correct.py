@@ -124,6 +124,13 @@ def sle_cancel_win_prize_equal_zero(token, start, end, types):
 
 def sle_win_prize_search_and_display_500(token, start, end, types, amount):
     win_prize_record = sle.transaction_record(token, start, end, types)
+    limit_times = 0
+    while not win_prize_record['data']:
+        time.sleep('10')
+        win_prize_record = sle.transaction_record(token, start, end, types)
+        limit_times += 1
+        if limit_times = 5:
+            raise ValueError("Load time is more than 50 second.")
     data = win_prize_record['data'][0]
 
     pytest.assume(data['txnType'] == types)
