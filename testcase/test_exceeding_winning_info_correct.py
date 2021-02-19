@@ -126,7 +126,7 @@ def sle_win_prize_search_and_display_500(token, start, end, types, amount):
     win_prize_record = sle.transaction_record(token, start, end, types)
     limit_times = 0
     while not win_prize_record['data']:
-        time.sleep('10')
+        time.sleep(10)
         win_prize_record = sle.transaction_record(token, start, end, types)
         limit_times += 1
         if limit_times == 5:
