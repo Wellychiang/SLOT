@@ -41,7 +41,7 @@ def test_cms():
 
 @allure.feature(bet_feature)
 @allure.step('')
-@pytest.mark.Bet
+@pytest.mark.skip()
 def test_bet_for_rebate_packages(token, rebatePackages=(1980,
                                                         1979,
                                                         1981,
@@ -80,7 +80,7 @@ def test_bet_for_rebate_packages(token, rebatePackages=(1980,
 
 @allure.feature(bet_feature)
 @allure.step('')
-@pytest.mark.Bet
+@pytest.mark.skip()
 def test_bet_for_game_id(token, gameIds=('NYSSC3F', 'nyssc3f', '####', '', '1' * 20, '我是中文', ' ', 'english')):
     for gameId in gameIds:
         if gameId not in gameIds[:4]:
@@ -130,7 +130,7 @@ def test_bet_for_game_platform(token, platforms=('1' * 20, 'Hi,im welly', '我�
 
 @allure.feature(bet_feature)
 @allure.step('')
-@pytest.mark.Bet
+@pytest.mark.skip()
 def test_bet_for_game_platType(token, playTypes=('SIMPLE', '1' * 20, '####', '我是中文', '', ' ', 'english'), ):
     for playType in playTypes:
         if playType != playTypes[0]:
@@ -150,7 +150,7 @@ def test_bet_for_game_platType(token, playTypes=('SIMPLE', '1' * 20, '####', '�
 
 @allure.feature(bet_feature)
 @allure.step('')
-@pytest.mark.Bet
+@pytest.mark.skip()
 # sum|small = 16080, sum|big = 16790, sum|odd = 16792, sum|even = 16793
 def test_bet_for_game_betString(token, betStrings=('sum,small', '', '1' * 20, '####', '我是中文', ' ', 'english')):
     for betString in betStrings:
@@ -195,7 +195,7 @@ def test_bet_for_game_comment(token, comments=('1' * 99, '123', '#@$$%')):
 
 @allure.feature(bet_feature)
 @allure.step('')
-@pytest.mark.Bet
+@pytest.mark.skip()
 def test_bet_for_game_playId(token,
                              playIdd=range(1, 50),
                              playIds=(17, '', '1' * 20, '####', '我是中文', ' ', 'english')):
@@ -274,7 +274,7 @@ def test_bet_for_game_playId(token,
 
 @allure.feature(bet_feature)
 @allure.step('')
-@pytest.mark.Bet
+@pytest.mark.skip()
 def test_bet_for_game_playRateId(token,
                                  playRateIds=range(16080, 16090),
                                  playRateIdd=('', '1' * 20, '####', '我是中文', ' ', 'english')):
@@ -349,7 +349,7 @@ def test_bet_for_game_stake(token,
 
 @allure.feature(bet_feature)
 @allure.step('')
-@pytest.mark.Bet
+@pytest.mark.skip()
 def test_bet_for_game_times(token,
                             timeses=(3, '', ' ', '1' * 20, '####', '我是中文', 'english')):
     """if bet slip amount = 10, times = 3,  it will be 30 at last(10*3)"""
@@ -383,7 +383,7 @@ def test_bet_for_game_times(token,
 
 @allure.feature(bet_feature)
 @allure.step('')
-@pytest.mark.Bet
+@pytest.mark.skip()
 def test_bet_for_game_unit(token, units=('DOLLAR', '', ' ', '1' * 20, '####', '刀惹', 'english'.upper())):
     for unit in units:
         if unit != units[0]:
@@ -404,7 +404,7 @@ def test_bet_for_game_unit(token, units=('DOLLAR', '', ' ', '1' * 20, '####', '�
 
 @allure.feature(bet_feature)
 @allure.step('')
-@pytest.mark.Bet
+@pytest.mark.skip()
 def bet_for_two_bet_slit(token,
                          gameId='NYSSC3F',
                          playType='SIMPLE',
@@ -445,7 +445,7 @@ def bet_for_two_bet_slit(token,
 
 @allure.feature(f"Scenario for betString's multi content")
 @allure.step
-@pytest.mark.Bet
+@pytest.mark.skip()
 def test_betString_multi_content(token,
                                  gameId=('NYK31F', 'NYSSC15F', 'HKHSIL', 'SUPERYK'),
                                  playType='STANDALONE',

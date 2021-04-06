@@ -48,7 +48,7 @@ def test_over_win_prize(username=('overwin01', 'overwin04', 'overwin03', 'yahoo'
         playRateId += 1
         time.sleep(1)
 
-    time.sleep(30)  # 太接近預設的開獎會失敗, so 睡30秒
+    time.sleep(30)  # 太接近預設的開獎會失敗, 所以睡30秒
 
     draw_lottery(gameId=gameId,
                  start=start,
@@ -176,7 +176,7 @@ def cms_draw_null_search_two_equal_500(start, end, userId, types, amount):
         times += 1
         time.sleep(sleep_second)
         record = cms.transaction_record(userId=userId, start=start, end=end, types=types)
-        if times > 8:
+        if times > 12:
             raise ValueError(f"CMS's transaction record not found, spend time: {times} times * {sleep_second} second")
 
     data1 = record['data'][0]
