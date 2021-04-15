@@ -358,6 +358,8 @@ class Sle(Base):
 
         r = self.s.post(url, headers=headers, json=data)
         log(f"Status code: {r.status_code}")
+        if r.status_code == 500:
+            raise ValueError(f'Chase bet failed: 500')
 
         return r.status_code
 

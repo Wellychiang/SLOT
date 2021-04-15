@@ -117,7 +117,7 @@ class Cms(Base):
             data['vendorIds'] = ["MX2"]
 
         r = self.s.patch(url, headers=headers, json=data)
-        log(f"Status code: {r.status_code}")
+        log(f"Draw null's Status code: {r.status_code}")
 
         return r.status_code
 
@@ -155,7 +155,7 @@ class Cms(Base):
         }
 
         r = self.s.post(url, headers=headers, json=data)
-        log(r.status_code)
+        log(f"Lottery draw's status code: {r.status_code}")
 
         return r.status_code
 

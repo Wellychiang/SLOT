@@ -77,7 +77,10 @@ def verify_chase_report(report,
                         totalStake,
                         userId,
                         vendorId):
-    report = report['data'][0]
+    try:
+        report = report['data'][0]
+    except IndexError:
+        raise ValueError('No data in report')
 
     pytest.assume(report['betCategory'] == betCategory)
     pytest.assume(report['betName'] == betName)
