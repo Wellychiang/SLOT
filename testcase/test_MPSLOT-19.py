@@ -11,7 +11,7 @@ from .bet_base import now_day
 from .bet_base import wait_and_lottery_draw
 
 
-@allure.feature(f"Scenario for search game profit loss report after bet")
+@allure.feature(f"Scenario for search  Thai happy game profit loss report after bet")
 @allure.step('')
 def test_game_profit_loss_report(username=('welly1',),
                                  result='000001|111|111|222|222|45',

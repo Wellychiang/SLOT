@@ -12,7 +12,7 @@ from .bet_base import now_month
 from .bet_base import now_day
 
 
-@allure.feature(f"Scenario for verify two vendor's bet in profit loss.")
+@allure.feature(f"Scenario for verify two vendor's bet in profit loss report.")
 @allure.step('')
 def test_profit_loss_report(username=ROOT_ACCOUNT,
                             user=('welly1',),

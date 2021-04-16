@@ -13,7 +13,7 @@ from .bet_base import now_day
 from .bet_base import wait_and_lottery_draw
 
 
-@allure.feature('Scenario for search specify user game report')
+@allure.feature('Scenario for search specify player with user game report')
 @allure.step('')
 def test_search_user_game_report(username=('gamereport01', 'gamereport02', 'gamereport03', 'gamereport04'),
                                  vendorId='MX2',
