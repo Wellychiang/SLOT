@@ -117,7 +117,7 @@ class Cms(Base):
             data['vendorIds'] = ["MX2"]
 
         r = self.s.patch(url, headers=headers, json=data)
-        log(f"Draw null's Status code: {r.status_code}")
+        log(f"Draw's status code: {r.status_code}\nHeaders: {r.headers}")
 
         return r.status_code
 
