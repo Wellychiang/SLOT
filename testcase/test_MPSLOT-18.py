@@ -11,7 +11,7 @@ from .bet_base import now_day
 from .bet_base import wait_and_lottery_draw
 
 
-@allure.feature('Scenario for bet and single profitloss report')
+@allure.feature('Scenario for bet and single period profitloss report')
 @allure.step('')
 def test_bet_search_and_verify_report(username='spreport01',
                                       result='000123,111,111,222,222,45',

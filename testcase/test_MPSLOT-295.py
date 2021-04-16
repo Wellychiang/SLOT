@@ -11,7 +11,7 @@ from .bet_base import now_day
 from .bet_base import wait_and_lottery_draw
 
 
-@allure.feature('Scenario for bet happythai and classification report')
+@allure.feature('Scenario for check specify member in classification report')
 @allure.step('')
 def test_winning_both(username=('autowelly001', 'clsreport01', 'clsreport04', 'yahoo'),
                       result='410112,317,058,233,205,05',
@@ -53,8 +53,7 @@ def test_winning_both(username=('autowelly001', 'clsreport01', 'clsreport04', 'y
                                  how_many_wins=how_many_wins)
 
 
-
-@allure.feature('Scenario for bet and classification report')
+@allure.feature('Scenario for check specify member in classification report')
 @allure.step('')
 def test_winning_one_draw(username=('autowelly002', 'clsreport02', 'clsreport05'),
                           result='410112,317,058,233,205,05',  # 自行開獎結果

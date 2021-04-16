@@ -11,7 +11,7 @@ from .bet_base import now_day
 from .bet_base import wait_for_bet_and_return_previous_or_current
 
 
-@allure.feature("Scenario for times record's three options")
+@allure.feature("Scenario for little game's time record's three options")
 @allure.step('')
 def test_three_options_to_search(amount=10,
                                  commission=5,

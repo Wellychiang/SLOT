@@ -10,7 +10,7 @@ from .bet_base import now_month
 from .bet_base import now_day
 
 
-@allure.feature("Scenario for little game's profit loss report")
+@allure.feature("Scenario for check little game's profit loss report")
 @allure.step('')
 def test_little_game_profit_loss_report(amount=10,
                                          commission=3.3,
