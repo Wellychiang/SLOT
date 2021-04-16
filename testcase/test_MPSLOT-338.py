@@ -8,7 +8,7 @@ from .bet_base import now_month
 from .bet_base import now_day
 
 
-@allure.feature("Scenario for check little game's specify member HL bet and member report")
+@allure.feature("Scenario for use lg's member report to search specify member")
 @allure.step('')
 def test_member_search_success_normally(creator=('memberreport1', 'memberreport2', 'memberreport3'),
                                         player='memberreport',
