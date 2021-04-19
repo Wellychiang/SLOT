@@ -459,7 +459,7 @@ class Cms(Base):
         }
 
         r = self.s.get(url, headers=headers, params=params)
-        log(f"\nTransaction record: {r.json()}")
+        log(f"\nCms transaction record: {r.json()}")
 
         return r.json()
 

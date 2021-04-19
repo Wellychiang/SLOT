@@ -61,6 +61,7 @@ class UserInfo:
     overwin01 = 'overwin01'
     overwin04 = 'overwin04'
     overwin03 = 'overwin03'
+    overwin05 = 'overwin05'
     betrelative = 'betrelative'
     gamereport01 = 'gamereport01'
     gamereport02 = 'gamereport02'
@@ -135,6 +136,8 @@ class UserInfo:
                                  'pwd': '00b498c6078cd0ad6497aae97495745585912ee9'},
                      overwin03: {'username': overwin03,
                                  'pwd': 'd08abfa32d58e34063243165faab39bfe5b85555'},
+                     overwin05: {'username': overwin05,
+                                 'pwd': '64f23268dd0439f89f67b520b733d2f9f477f39c'},
                      betrelative: {'username': betrelative,
                                    'pwd': '9eb54dd6e74c0ecd36db48cbc71d02acf52dd73b'},
                      gamereport01: {'username': gamereport01,

@@ -99,7 +99,10 @@ def continue_or_switch_user(username, start, end, types):
 
     while record['total'] != 0:
         switch_button += 1
-        record = cms.transaction_record(userId=f"SL3{username[switch_button]}", start=start, end=end, types=types)
+        try:
+            record = cms.transaction_record(userId=f"SL3{username[switch_button]}", start=start, end=end, types=types)
+        except IndexError as e:
+            raise IndexError("Some reason caused user is not enough")
 
     log(f"Use user: {username[switch_button]}")
     _, token = sle.get_launch_token(username[switch_button])

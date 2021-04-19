@@ -219,7 +219,7 @@ class Sle(Base):
         }
 
         r = self.s.get(url, headers=headers, params=params)
-        log(f"\rTransaction record: {r.json()}")
+        log(f"\rSle transaction record: {r.json()}")
 
         return r.json()
 
