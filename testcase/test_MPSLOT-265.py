@@ -165,8 +165,11 @@ def cms_win_prize_search_and_display_500(start, end, userId, types, amount):
 
 def cms_cancel_win_prize_search_equal_500(start, end, userId, types, amount):
     record = cms.transaction_record(userId=userId, start=start, end=end, types=types)
-    data = record['data'][0]
+    while record['total'] == 0:
+        time.sleep(5)
+        record = cms.transaction_record(userId=userId, start=start, end=end, types=types)
 
+    data = record['data'][0]
     pytest.assume(data['txnType'] == types)
     pytest.assume(data['in'] == False)
     pytest.assume(data['userId'] == userId)
