@@ -74,7 +74,10 @@ def test_over_win_prize(username=('overwin01', 'overwin04', 'overwin03', 'yahoo'
                  method='null')
 
     time.sleep(3)
-
+    try:
+        cms.transaction_record(userId=None, start=start, end=end, types=over_win_prize_type)
+    except ValueError as e:
+        print()
     cms_over_win_prize_minus(start, end, userId=None, types=over_win_prize_type)
 
     cms_cancel_win_prize_search_equal_500(start,
