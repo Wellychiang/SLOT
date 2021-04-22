@@ -61,7 +61,11 @@ class Base:
             'vendorId': vndorid,
         }
 
-        r = self.s.post(url, headers=headers, json=data)
+        try:
+            r = self.s.post(url, headers=headers, json=data)
+        except Exception as e:
+            raise ValueError(f'Cms login failed: {e}.')
+
         log(f'Cms login: {r.json()}')
         return r.status_code, r.json()
 
@@ -95,8 +99,11 @@ class Base:
             'loginname': loginname,
             'loginpassword': pwd,
         }
+        try:
+            r = self.s.post(url, headers=headers, json=data, verify=False)
+        except Exception as e:
+            raise ValueError(f'Sle login failed: {e}.')
 
-        r = self.s.post(url, headers=headers, json=data, verify=False)
         log(f'Sle login: {r.json()}')
         return r.status_code, r.json()
 
@@ -132,7 +139,11 @@ class Base:
             'portalid': "EC_DESKTOP",
         }
 
-        r = self.s.post(url, headers=headers, json=data, verify=False)
+        try:
+            r = self.s.post(url, headers=headers, json=data, verify=False)
+        except Exception as e:
+            raise ValueError(f'Ae login failed: {e}.')
+
         log(f"Ae login: {r.json()}")
         return r.status_code, r.json()
 
