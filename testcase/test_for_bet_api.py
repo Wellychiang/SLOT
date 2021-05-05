@@ -445,7 +445,7 @@ def bet_for_two_bet_slit(token,
 
 @allure.feature(f"Scenario for betString's multi content")
 @allure.step
-@pytest.mark.skip()
+@pytest.mark.skip('wait a minutes')
 def test_betString_multi_content(token,
                                  gameId=('NYK31F', 'NYSSC15F', 'HKHSIL', 'SUPERYK'),
                                  playType='STANDALONE',
