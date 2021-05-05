@@ -36,7 +36,7 @@ class Sle(Base):
         }
 
         r = self.s.put(url, headers=headers, json=data)
-        log(f"\nGet game's launch token:\n{r.json()}")
+        log(f"Get game's launch token:\n{r.json()}")
         time.sleep(1)
 
         return r.status_code, r.json()
@@ -99,7 +99,7 @@ class Sle(Base):
             data['txns'].append(more_data)
 
         r = self.s.post(url, headers=headers, json=data, verify=False)
-        log(f'\nBet:\n{r.json()}')
+        log(f'Bet: {r.json()}')
 
         return r.status_code, r.json()
 
@@ -109,7 +109,7 @@ class Sle(Base):
 
         r = self.s.get(url)
 
-        log(f"\nActive and previous period:\n{r.json()}")
+        log(f"Active and previous period: {r.json()}")
         return r.json()
 
     def little_game_create(self,

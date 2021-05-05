@@ -6,6 +6,7 @@ from . import sle
 from . import time
 from . import ROOT_ACCOUNT
 from .bet_base import bet
+import time
 
 bet_feature = 'Bet'
 
@@ -444,8 +445,7 @@ def bet_for_two_bet_slit(token,
 
 
 @allure.feature(f"Scenario for betString's multi content")
-@allure.step
-@pytest.mark.skip('wait a minutes')
+@allure.step('')
 def test_betString_multi_content(token,
                                  gameId=('NYK31F', 'NYSSC15F', 'HKHSIL', 'SUPERYK'),
                                  playType='STANDALONE',
@@ -478,10 +478,9 @@ def test_betString_multi_content(token,
                                     vendor=vendor)
 
         pytest.assume(status_code == 400)
-        if 'Argument error-> argument name: drawid, message: before cycle start time' in response['message']:
-            continue
-        pytest.assume(response['message'] == 'Argument error-> argument name: betstring, message: invalid betstring:'
-                                             f' multi content for game:{gameId[i]}')
+        pytest.assume(response['message'] == 'Argument invalid-> argument name: betstring, message: invalid betstring: '
+                                             f'multi content for game:{gameId[i]}')
+        time.sleep(1)
 
 
 if __name__ == '__main__':

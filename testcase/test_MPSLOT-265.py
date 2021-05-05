@@ -102,6 +102,7 @@ def continue_or_switch_user(username, start, end, types):
 
     while record['total'] != 0:
         switch_button += 1
+        time.sleep(1)
         try:
             record = cms.transaction_record(userId=f"SL3{username[switch_button]}", start=start, end=end, types=types)
         except IndexError as e:
